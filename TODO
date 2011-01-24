@@ -1,0 +1,28 @@
+====
+TODO
+====
+
+This is todo file for python-systemd.
+
+CODE
+====
+
+ * Pass some methods(__properties) to a more generic class(systemd.core.Core).
+
+ * Filter signals and only update properties that realy was updated.
+
+ * Improve the exceptions mechanism.
+
+TESTS
+=====
+
+ * Improve tests, some tests like start, stop, reload and restart should check
+   the timestamp or other property to ensure the unit was correct started,
+   stoped, reloaded or restarted.
+
+ * Tests like get_unit_by_pid and get_unit need a existent PID or unit to be
+   tested, how to ensure the tests always get a valid PID and unit.
+
+ * How to test functions like reexecute, reload, reset_failed, reset_failed_unit,
+   set_environment, start_unit_replace, subscribe, unset_environment, reexecute
+   unsubscribe, 

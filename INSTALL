@@ -1,0 +1,12 @@
+=======
+Install
+=======
+
+basicaly run python setup.py install.
+
+Requirements
+============
+
+ * pyside
+ * qt4
+

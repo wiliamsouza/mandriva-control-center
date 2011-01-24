@@ -1,0 +1,8 @@
+include INSTALL
+include LICENSE
+include MANIFEST.in
+include README
+include AUTHORS
+include TODO
+recursive-include docs *
+prune docs/_build
