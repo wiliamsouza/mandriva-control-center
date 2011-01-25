@@ -1,4 +1,0 @@
-[D-BUS Service]
-Name=com.mandriva.mcc2.SystemServices
-Exec=/home/wiliam/dev/mandriva-control-center/mcc2/backends/system_services/system-services-mechanism.py
-User=root

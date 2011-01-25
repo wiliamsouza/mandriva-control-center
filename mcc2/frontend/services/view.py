@@ -15,9 +15,9 @@ from PySide import QtCore
 
 bus = dbus.SystemBus()
 proxy = bus.get_object(
-    'com.mandriva.mcc2.SystemServices',
-    '/com/mandriva/mcc2/SystemServices')
-interface = dbus.Interface(proxy, 'com.mandriva.mcc2.SystemServices')
+    'com.mandriva.mcc2.Services',
+    '/com/mandriva/mcc2/Services')
+interface = dbus.Interface(proxy, 'com.mandriva.mcc2.Services')
 
 class ServiceController(QtCore.QObject):
     @QtCore.Slot(QtCore.QObject)
@@ -33,7 +33,7 @@ class ServiceController(QtCore.QObject):
         except dbus.exceptions.DBusException, error:
             if error.get_dbus_name() == "org.freedesktop.DBus.Error.NoReply":
                 print "timed out"
-            if error.get_dbus_name() == "com.mandriva.mcc2.SystemServices.Error.NotAuthorized":
+            if error.get_dbus_name() == "com.mandriva.mcc2.Services.Error.NotAuthorized":
                 print 'Not Authorized'
 
     @QtCore.Slot(QtCore.QObject)
@@ -45,7 +45,7 @@ class ServiceController(QtCore.QObject):
         except dbus.exceptions.DBusException, error:
             if error.get_dbus_name() == "org.freedesktop.DBus.Error.NoReply":
                 print "Timed out"
-            if error.get_dbus_name() == "com.mandriva.mcc2.SystemServices.Error.NotAuthorized":
+            if error.get_dbus_name() == "com.mandriva.mcc2.Services.Error.NotAuthorized":
                 print 'Not Authorized'
 
     @QtCore.Slot(QtCore.QObject)
@@ -57,7 +57,7 @@ class ServiceController(QtCore.QObject):
         except dbus.exceptions.DBusException, error:
             if error.get_dbus_name() == "org.freedesktop.DBus.Error.NoReply":
                 print "timed out"
-            if error.get_dbus_name() == "com.mandriva.mcc2.SystemServices.Error.NotAuthorized":
+            if error.get_dbus_name() == "com.mandriva.mcc2.Services.Error.NotAuthorized":
                 print 'Not Authorized'
 
 
@@ -79,7 +79,7 @@ service_model = ServiceModel(services)
 rc = view.rootContext()
 rc.setContextProperty('serviceController', service_controller)
 rc.setContextProperty('serviceModel', service_model)
-view.setSource('SystemServices.qml')
+view.setSource('Services.qml')
 window.setCentralWidget(view)
 window.show()
 app.exec_()

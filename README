@@ -7,15 +7,15 @@ Mandriva Control Center
 Basic usage
 ===========
 
-1. Edit file mcc2/backends/system_services/com.mandriva.mcc2.SystemServices.service
+1. Edit file mcc2/backends/services/com.mandriva.mcc2.Services.service
 and change the follow line:
 
-Exec=/home/wiliam/dev/mandriva-control-center/mcc2/backends/system_services/system-services-mechanism.py
+Exec=/home/wiliam/dev/mcc2/mcc2/backends/services/services-mechanism.py
 
-Copy this file to /usr/share/dbus-1/system-services/
+Copy this file to /usr/share/dbus-1/services/
 
-2. Copy mcc2/backends/system_services/com.mandriva.mcc2.systemservices.policy 
+2. Copy mcc2/backends/services/com.mandriva.mcc2.services.policy 
 to /usr/share/polkit-1/actions/
 
-3. Copy mcc2/backends/system_services/com.mandriva.mcc2.SystemServices.conf
+3. Copy mcc2/backends/services/com.mandriva.mcc2.Services.conf
 to /etc/dbus-1/system.d/

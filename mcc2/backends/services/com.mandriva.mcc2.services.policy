@@ -6,8 +6,8 @@
   <vendor>Mandriva Linux</vendor>
   <vendor_url>http://www.mandriva.com</vendor_url>
 
-   <action id="com.mandriva.mcc2.systemservices.start">
-    <description>Start System Service</description>
+   <action id="com.mandriva.mcc2.services.start">
+    <description>Start a Service</description>
     <message>Authentication is required to start system service</message>
     <defaults>
       <allow_any>no</allow_any>
@@ -16,8 +16,8 @@
     </defaults>
   </action>
 
-  <action id="com.mandriva.mcc2.systemservices.stop">
-    <description>Stop System Service</description>
+  <action id="com.mandriva.mcc2.services.stop">
+    <description>Stop a Service</description>
     <message>Authentication is required to stop system service</message>
     <defaults>
       <allow_any>no</allow_any>
@@ -26,8 +26,8 @@
     </defaults>
   </action>
  
-  <action id="com.mandriva.mcc2.systemservices.restart">
-    <description>Restart System Service</description>
+  <action id="com.mandriva.mcc2.services.restart">
+    <description>Restart a Service</description>
     <message>Authentication is required to restart system service</message>
     <defaults>
       <allow_any>no</allow_any>
@@ -36,8 +36,8 @@
     </defaults>
   </action>
 
-  <action id="com.mandriva.mcc2.systemservices.list">
-    <description>List System Service</description>
+  <action id="com.mandriva.mcc2.services.list">
+    <description>List Services</description>
     <message>Authentication is required to list services</message>
     <defaults>
       <allow_any>no</allow_any>
@@ -46,8 +46,8 @@
     </defaults>
   </action>
 
-  <action id="com.mandriva.mcc2.systemservices.service_details">
-    <description>System Service Details</description>
+  <action id="com.mandriva.mcc2.services.service_details">
+    <description>Show Service Details</description>
     <message>Authentication is required to list services</message>
     <defaults>
       <allow_any>no</allow_any>

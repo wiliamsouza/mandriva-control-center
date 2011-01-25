@@ -4,9 +4,9 @@ Usage
 import dbus
 bus = dbus.SystemBus()
 proxy = bus.get_object(
-    'com.mandriva.mcc2.SystemServices',
-    '/com/mandriva/mcc2/SystemServices')
-interface = dbus.Interface(proxy, 'com.mandriva.mcc2.SystemServices')
+    'com.mandriva.mcc2.Services',
+    '/com/mandriva/mcc2/Services')
+interface = dbus.Interface(proxy, 'com.mandriva.mcc2.Services')
 
 # Don't ask for password
 print interface.list()
@@ -15,3 +15,5 @@ print interface.list()
 print interface.restart('crond.service', 'fail')
 print interface.start('crond.service', 'fail')
 print interface.stop('crond.service', 'fail')
+
+For more examples see examples/ folder.

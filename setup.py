@@ -43,4 +43,3 @@ setup(name='mcc2',
                    'Programming Language :: Python',
                    'Topic :: Libraries :: Python Modules',]
       )
-
