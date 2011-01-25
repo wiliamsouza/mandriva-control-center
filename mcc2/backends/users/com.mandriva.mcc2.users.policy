@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC
+ "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+<policyconfig>
+  <vendor>Mandriva Linux</vendor>
+  <vendor_url>http://www.mandriva.com</vendor_url>
+
+  <action id="com.mandriva.mcc2.users.AddGroup">
+    <description>Add Group</description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+  </action>
+<!--
+  <action id="com.mandriva.mcc2.users.AddUser">
+    <description>Add User</description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+
+  <action id="com.mandriva.mcc2.users.CreateHome">
+    <description>Create Home</description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+
+  <action id="com.mandriva.mcc2.users.CreateMail">
+    <description>Create Mail</description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+
+  <action id="com.mandriva.mcc2.users.DeleteGroup">
+    <description>Delete Group</description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+
+  <action id="com.mandriva.mcc2.users.DeleteUser">
+    <description>Delete User</description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+  -->
+  <action id="com.mandriva.mcc2.users.Groups">
+    <description>Enumerate Groups</description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+
+  <action id="com.mandriva.mcc2.users.GroupsByUser">
+    <description>Enumerate Groups by User</description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+
+  <action id="com.mandriva.mcc2.users.GroupsFull">
+    <description>Enumerate Groups Full</description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+
+  <action id="com.mandriva.mcc2.users.Users">
+    <description>Enumerate Users</description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+
+  <action id="com.mandriva.mcc2.users.UsersByGroup">
+    <description>Enumerate Groups by User</description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+
+  <action id="com.mandriva.mcc2.users.UsersFull">
+    <description></description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+</policyconfig>

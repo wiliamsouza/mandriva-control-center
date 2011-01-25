@@ -144,16 +144,16 @@ class Services(dbus.service.Object):
         (is_auth, _, details) = policekit_interface.CheckAuthorization(
             subject, action, detail, flags, cancellation, timeout=600)
         if not is_auth:
-            error = 'com.mandriva.mcc2.Services.Error.NotAuthorized'
-            raise dbus.DBusException, error
+            msg = 'com.mandriva.mcc2.Services.Error.NotAuthorized'
+            raise dbus.DBusException, msg
 
     def run(self):
         self._loop.run()
 
     @classmethod
     def main(cls):
-        service = cls()
+        services = cls()
         try:
-            service.run()
+            services.run()
         except KeyboardInterrupt:
             pass
