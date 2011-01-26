@@ -6,7 +6,7 @@
   <vendor>Mandriva Linux</vendor>
   <vendor_url>http://www.mandriva.com</vendor_url>
 
-  <action id="org.mandrivalinux.mcc2.users.AddGroup">
+  <action id="org.mandrivalinux.mcc2.users.addgroup">
     <description>Add Group</description>
     <message>Authentication is required</message>
     <defaults>
@@ -15,58 +15,60 @@
       <allow_active>auth_admin</allow_active>
     </defaults>
   </action>
-<!--
-  <action id="org.mandrivalinux.mcc2.users.AddUser">
+
+  <action id="org.mandrivalinux.mcc2.users.adduser">
     <description>Add User</description>
     <message>Authentication is required</message>
     <defaults>
       <allow_any>no</allow_any>
       <allow_inactive>no</allow_inactive>
-      <allow_active>yes</allow_active>
+      <allow_active>auth_admin</allow_active>
     </defaults>
   </action>
 
-  <action id="org.mandrivalinux.mcc2.users.CreateHome">
+<!--
+  <action id="org.mandrivalinux.mcc2.users.createhome">
     <description>Create Home</description>
     <message>Authentication is required</message>
     <defaults>
       <allow_any>no</allow_any>
       <allow_inactive>no</allow_inactive>
-      <allow_active>yes</allow_active>
+      <allow_active>auth_admin</allow_active>
     </defaults>
   </action>
 
-  <action id="org.mandrivalinux.mcc2.users.CreateMail">
+  <action id="org.mandrivalinux.mcc2.users.createmail">
     <description>Create Mail</description>
     <message>Authentication is required</message>
     <defaults>
       <allow_any>no</allow_any>
       <allow_inactive>no</allow_inactive>
-      <allow_active>yes</allow_active>
+      <allow_active>auth_admin</allow_active>
     </defaults>
   </action>
+  -->
 
-  <action id="org.mandrivalinux.mcc2.users.DeleteGroup">
+  <action id="org.mandrivalinux.mcc2.users.deletegroup">
     <description>Delete Group</description>
     <message>Authentication is required</message>
     <defaults>
       <allow_any>no</allow_any>
       <allow_inactive>no</allow_inactive>
-      <allow_active>yes</allow_active>
+      <allow_active>auth_admin</allow_active>
     </defaults>
   </action>
 
-  <action id="org.mandrivalinux.mcc2.users.DeleteUser">
+  <action id="org.mandrivalinux.mcc2.users.deleteuser">
     <description>Delete User</description>
     <message>Authentication is required</message>
     <defaults>
       <allow_any>no</allow_any>
       <allow_inactive>no</allow_inactive>
-      <allow_active>yes</allow_active>
+      <allow_active>auth_admin</allow_active>
     </defaults>
   </action>
-  -->
-  <action id="org.mandrivalinux.mcc2.users.Groups">
+
+  <action id="org.mandrivalinux.mcc2.users.groups">
     <description>Enumerate Groups</description>
     <message>Authentication is required</message>
     <defaults>
@@ -76,7 +78,7 @@
     </defaults>
   </action>
 
-  <action id="org.mandrivalinux.mcc2.users.GroupsByUser">
+  <action id="org.mandrivalinux.mcc2.users.groupsbyuser">
     <description>Enumerate Groups by User</description>
     <message>Authentication is required</message>
     <defaults>
@@ -86,7 +88,7 @@
     </defaults>
   </action>
 
-  <action id="org.mandrivalinux.mcc2.users.GroupsFull">
+  <action id="org.mandrivalinux.mcc2.users.groupsfull">
     <description>Enumerate Groups Full</description>
     <message>Authentication is required</message>
     <defaults>
@@ -96,7 +98,7 @@
     </defaults>
   </action>
 
-  <action id="org.mandrivalinux.mcc2.users.Users">
+  <action id="org.mandrivalinux.mcc2.users.users">
     <description>Enumerate Users</description>
     <message>Authentication is required</message>
     <defaults>
@@ -106,7 +108,7 @@
     </defaults>
   </action>
 
-  <action id="org.mandrivalinux.mcc2.users.UsersByGroup">
+  <action id="org.mandrivalinux.mcc2.users.usersbygroup">
     <description>Enumerate Groups by User</description>
     <message>Authentication is required</message>
     <defaults>
@@ -116,7 +118,7 @@
     </defaults>
   </action>
 
-  <action id="org.mandrivalinux.mcc2.users.UsersFull">
+  <action id="org.mandrivalinux.mcc2.users.usersfull">
     <description></description>
     <message>Authentication is required</message>
     <defaults>
