@@ -1,4 +1,4 @@
 [D-BUS Service]
-Name=com.mandriva.mcc2.Users
+Name=org.mandrivalinux.mcc2.Users
 Exec=/home/wiliam/dev/mcc2/mcc2/backends/users/users-mechanism.py
 User=root

@@ -9,12 +9,12 @@ class Services(dbus.service.Object):
     def __init__(self):
         self.__bus = dbus.SystemBus()
         bus_name = dbus.service.BusName(
-            "com.mandriva.mcc2.Services",
+            "org.mandrivalinux.mcc2.Services",
             bus=self.__bus)
         dbus.service.Object.__init__(
             self,
             bus_name,
-            "/com/mandriva/mcc2/Services")
+            "/org/mandrivalinux/mcc2/Services")
         self.__systemd_proxy = self.__bus.get_object(
             'org.freedesktop.systemd1',
             '/org/freedesktop/systemd1')
@@ -24,12 +24,12 @@ class Services(dbus.service.Object):
 
         self._loop = gobject.MainLoop()
 
-    @dbus.service.method("com.mandriva.mcc2.Services",
+    @dbus.service.method("org.mandrivalinux.mcc2.Services",
                          in_signature='ss',
                          out_signature='o',
                          sender_keyword='sender',
                          connection_keyword='connection')
-    def start(self, name, mode, sender, connection):
+    def Start(self, name, mode, sender, connection):
         """Start unit.
         
         @param name: Unit name (ie: network.service).
@@ -40,15 +40,15 @@ class Services(dbus.service.Object):
         @rtype: L{systemd.job.Job}
         """
         self.check_authorization(sender, connection,
-            'com.mandriva.mcc2.services.start')
+            'org.mandrivalinux.mcc2.services.start')
         return self.__systemd_interface.StartUnit(name, mode)
 
-    @dbus.service.method("com.mandriva.mcc2.Services",
+    @dbus.service.method("org.mandrivalinux.mcc2.Services",
                          in_signature='ss',
                          out_signature='o',
                          sender_keyword='sender',
                          connection_keyword='connection')
-    def stop(self, name, mode, sender, connection):
+    def Stop(self, name, mode, sender, connection):
         """Stop unit.
         
         @param name: Unit name (ie: network.service).
@@ -59,15 +59,15 @@ class Services(dbus.service.Object):
         @rtype: L{systemd.job.Job}
         """
         self.check_authorization(sender, connection,
-            'com.mandriva.mcc2.services.stop')
+            'org.mandrivalinux.mcc2.services.stop')
         return self.__systemd_interface.StopUnit(name, mode)
 
-    @dbus.service.method("com.mandriva.mcc2.Services",
+    @dbus.service.method("org.mandrivalinux.mcc2.Services",
                          in_signature='ss',
                          out_signature='o',
                          sender_keyword='sender',
                          connection_keyword='connection')
-    def restart(self, name, mode, sender, connection):
+    def Restart(self, name, mode, sender, connection):
         """Restart unit.
         
         @param name: Unit name (ie: network.service).
@@ -78,12 +78,12 @@ class Services(dbus.service.Object):
         @rtype:
         """
         self.check_authorization(sender, connection,
-            'com.mandriva.mcc2.services.restart')
+            'org.mandrivalinux.mcc2.services.restart')
         return self.__systemd_interface.RestartUnit(name, mode)
 
-    @dbus.service.method("com.mandriva.mcc2.Services",
+    @dbus.service.method("org.mandrivalinux.mcc2.Services",
                          out_signature='a(ssssssouso)')
-    def list(self):
+    def List(self):
         """List all units, inactive units too.
         
         @raise dbus.DBusException.
@@ -92,10 +92,10 @@ class Services(dbus.service.Object):
         """
         return self.__systemd_interface.ListUnits()
 
-    @dbus.service.method("com.mandriva.mcc2.Services",
+    @dbus.service.method("org.mandrivalinux.mcc2.Services",
                          in_signature='s',
                          out_signature='a{sv}')
-    def service_details(self, path):
+    def ServiceDetails(self, path):
         unit_proxy = self.__bus.get_object(
             'org.freedesktop.systemd1',
             path)
@@ -144,7 +144,7 @@ class Services(dbus.service.Object):
         (is_auth, _, details) = policekit_interface.CheckAuthorization(
             subject, action, detail, flags, cancellation, timeout=600)
         if not is_auth:
-            msg = 'com.mandriva.mcc2.Services.Error.NotAuthorized'
+            msg = 'org.mandrivalinux.mcc2.Services.Error.NotAuthorized'
             raise dbus.DBusException, msg
 
     def run(self):

@@ -6,7 +6,7 @@
   <vendor>Mandriva Linux</vendor>
   <vendor_url>http://www.mandriva.com</vendor_url>
 
-  <action id="com.mandriva.mcc2.users.AddGroup">
+  <action id="org.mandrivalinux.mcc2.users.AddGroup">
     <description>Add Group</description>
     <message>Authentication is required</message>
     <defaults>
@@ -16,7 +16,7 @@
     </defaults>
   </action>
 <!--
-  <action id="com.mandriva.mcc2.users.AddUser">
+  <action id="org.mandrivalinux.mcc2.users.AddUser">
     <description>Add User</description>
     <message>Authentication is required</message>
     <defaults>
@@ -26,7 +26,7 @@
     </defaults>
   </action>
 
-  <action id="com.mandriva.mcc2.users.CreateHome">
+  <action id="org.mandrivalinux.mcc2.users.CreateHome">
     <description>Create Home</description>
     <message>Authentication is required</message>
     <defaults>
@@ -36,7 +36,7 @@
     </defaults>
   </action>
 
-  <action id="com.mandriva.mcc2.users.CreateMail">
+  <action id="org.mandrivalinux.mcc2.users.CreateMail">
     <description>Create Mail</description>
     <message>Authentication is required</message>
     <defaults>
@@ -46,7 +46,7 @@
     </defaults>
   </action>
 
-  <action id="com.mandriva.mcc2.users.DeleteGroup">
+  <action id="org.mandrivalinux.mcc2.users.DeleteGroup">
     <description>Delete Group</description>
     <message>Authentication is required</message>
     <defaults>
@@ -56,7 +56,7 @@
     </defaults>
   </action>
 
-  <action id="com.mandriva.mcc2.users.DeleteUser">
+  <action id="org.mandrivalinux.mcc2.users.DeleteUser">
     <description>Delete User</description>
     <message>Authentication is required</message>
     <defaults>
@@ -66,7 +66,7 @@
     </defaults>
   </action>
   -->
-  <action id="com.mandriva.mcc2.users.Groups">
+  <action id="org.mandrivalinux.mcc2.users.Groups">
     <description>Enumerate Groups</description>
     <message>Authentication is required</message>
     <defaults>
@@ -76,7 +76,7 @@
     </defaults>
   </action>
 
-  <action id="com.mandriva.mcc2.users.GroupsByUser">
+  <action id="org.mandrivalinux.mcc2.users.GroupsByUser">
     <description>Enumerate Groups by User</description>
     <message>Authentication is required</message>
     <defaults>
@@ -86,7 +86,7 @@
     </defaults>
   </action>
 
-  <action id="com.mandriva.mcc2.users.GroupsFull">
+  <action id="org.mandrivalinux.mcc2.users.GroupsFull">
     <description>Enumerate Groups Full</description>
     <message>Authentication is required</message>
     <defaults>
@@ -96,7 +96,7 @@
     </defaults>
   </action>
 
-  <action id="com.mandriva.mcc2.users.Users">
+  <action id="org.mandrivalinux.mcc2.users.Users">
     <description>Enumerate Users</description>
     <message>Authentication is required</message>
     <defaults>
@@ -106,7 +106,7 @@
     </defaults>
   </action>
 
-  <action id="com.mandriva.mcc2.users.UsersByGroup">
+  <action id="org.mandrivalinux.mcc2.users.UsersByGroup">
     <description>Enumerate Groups by User</description>
     <message>Authentication is required</message>
     <defaults>
@@ -116,7 +116,7 @@
     </defaults>
   </action>
 
-  <action id="com.mandriva.mcc2.users.UsersFull">
+  <action id="org.mandrivalinux.mcc2.users.UsersFull">
     <description></description>
     <message>Authentication is required</message>
     <defaults>

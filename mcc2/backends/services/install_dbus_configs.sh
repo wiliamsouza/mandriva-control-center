@@ -1,10 +1,19 @@
 #!/bin/sh
 
-echo 'com.mandriva.mcc2.Services.service'
-cp com.mandriva.mcc2.Services.service /usr/share/dbus-1/system-services/com.mandriva.mcc2.Services.service
+SERVICE_DIR='/usr/share/dbus-1/system-services/'
+SERVICE_NAME='org.mandrivalinux.mcc2.Services.service'
 
-echo 'com.mandriva.mcc2.services.policy'
-cp com.mandriva.mcc2.services.policy /usr/share/polkit-1/actions/com.mandriva.mcc2.services.policy
+POLICY_DIR='/usr/share/polkit-1/actions/'
+POLICY_NAME='org.mandrivalinux.mcc2.services.policy'
 
-echo 'com.mandriva.mcc2.Services.conf'
-cp com.mandriva.mcc2.Services.conf /etc/dbus-1/system.d/com.mandriva.mcc2.Services.conf
+CONFIG_DIR='/etc/dbus-1/system.d/'
+CONFIG_NAME='org.mandrivalinux.mcc2.Services.conf'
+
+echo $SERVICE_DIR$SERVICE_NAME
+cp $SERVICE_NAME $SERVICE_DIR
+
+echo $POLICY_DIR$POLICY_NAME
+cp $POLICY_NAME $POLICY_DIR
+
+echo $CONFIG_DIR$CONFIG_NAME
+cp $CONFIG_NAME $CONFIG_DIR
