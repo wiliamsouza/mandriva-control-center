@@ -6,6 +6,9 @@ dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
 import libuser
 
+MAX_USERNAME_LENGTH = libuser.UT_NAMESIZE - 1
+MAX_GROUPNAME_LENGTH = libuser.UT_NAMESIZE - 1
+
 class Users(dbus.service.Object):
     def __init__(self):
         self.__bus = dbus.SystemBus()
@@ -16,21 +19,29 @@ class Users(dbus.service.Object):
             self,
             bus_name,
             "/org/mandrivalinux/mcc2/Users")
-
         self._loop = gobject.MainLoop()
-
         self.__libuser = libuser.admin()
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
-                         in_signature='s',
-                         out_signature='a{sv}',
+                         in_signature='si',
+                         out_signature='i',
                          sender_keyword='sender',
                          connection_keyword='connection')
-    def AddGroup(self, group, sender, connection):
+    def AddGroup(self, name, gid, sender, connection):
+        """Add Group.
+        
+        @param name: Group name
+        @param gid: Group ID
+        
+        @raise dbus.DBusException:
+        
+        @rtype: The GID from recently created Group.
+        """
         self.check_authorization(sender, connection,
             'org.mandrivalinux.mcc2.users.addgroup')
-        init_group = self.__libuser.initGroup(group)
+        init_group = self.__libuser.initGroup(name)
+        init_group.set(libuser.GIDNUMBER, gid)
         try:
             self.__libuser.addGroup(init_group)
         except RuntimeError, error:
@@ -39,32 +50,55 @@ class Users(dbus.service.Object):
             if str(error) == 'entry already present in file':
                 msg = 'org.mandrivalinux.mcc2.Users.Error.GroupAlreadyExist'
             raise dbus.DBusException, msg
-        group_entity = self.__libuser.lookupGroupByName(group)
+        group_entity = self.__libuser.lookupGroupByName(name)
         gid = group_entity.get(libuser.GIDNUMBER)[0]
-        name = group_entity.get(libuser.GROUPNAME)[0]
-        return {'gid': gid, 'name': name}
+        return dbus.Int32(gid)
 
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
-                         in_signature='s',
-                         out_signature='a{sv}',
+                         in_signature='a{sv}',
+                         out_signature='i',
                          sender_keyword='sender',
                          connection_keyword='connection')
-    def AddUser(self, user, sender, connection):
+    def AddUser(self, user_info, sender, connection):
+        """Add User.
+        
+        @param user_info: {
+                            'full_name': 'John Doe',
+                            'login': 'john',
+                            'shell': '/bin/bash',
+                            'uid': 666,
+                            'gid': 666,
+                            'create_home': True,
+                            'home_directory': '/home/john',
+                            'password': 'secret'
+                        }
+        
+        @raise dbus.DBusException:
+        
+        @rtype: The UID from recently created User.
+        """
         self.check_authorization(sender, connection,
             'org.mandrivalinux.mcc2.users.adduser')
-        init_user = self.__libuser.initUser(user)
+        user_entity = self.__libuser.initUser(user_info['login'])
+        user_entity.set(libuser.GECOS, [user_info['full_name']])
+        user_entity.set(libuser.GIDNUMBER, [user_info['gid']])
+        user_entity.set(libuser.UIDNUMBER, [user_info['uid']])
+        user_entity.set(libuser.HOMEDIRECTORY, [user_info['home_directory']])
+        user_entity.set(libuser.LOGINSHELL, [user_info['shell']])
         try:
-            self.__libuser.addUser(init_user)
+            self.__libuser.addUser(
+                user_entity,
+                mkhomedir = user_info['create_home'])
         except RuntimeError, error:
             msg = 'org.mandrivalinux.mcc2.Users.Error.AddUserFailed'
             # FIXME: What's the others libuser errors?
             if str(error) == 'entry already present in file':
                 msg = 'org.mandrivalinux.mcc2.Users.Error.UserAlreadyExist'
             raise dbus.DBusException, msg
-        user_entity = self.__libuser.lookupUserByName(user)
+        self.__libuser.setpassUser(user_entity, user_info['password'], 0)
+        user_entity = self.__libuser.lookupUserByName(user_info['login'])
         uid = user_entity.get(libuser.UIDNUMBER)[0]
-        name = user_entity.get(libuser.USERNAME)[0]
-        return {'uid': uid, 'name': name}
+        return dbus.Int32(uid)
 
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
                          in_signature='s',
@@ -83,7 +117,7 @@ class Users(dbus.service.Object):
         except RuntimeError, error:
             msg = 'org.mandrivalinux.mcc2.Users.Error.DeleteGroupFailed'
             raise dbus.DBusException, msg
-        return {'gid': gid, 'name': name}
+        return {'gid': dbus.String(gid), 'name': dbus.String(name)}
 
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
                          in_signature='s',
@@ -102,7 +136,7 @@ class Users(dbus.service.Object):
         except RuntimeError, error:
             msg = 'org.mandrivalinux.mcc2.Users.Error.DeleteUserFailed'
             raise dbus.DBusException, msg
-        return {'uid': uid, 'name': name}
+        return {'uid': dbus.String(uid), 'name': dbus.String(name)}
 
     #TODO: Rename to ListGroups
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
@@ -117,11 +151,11 @@ class Users(dbus.service.Object):
     def GroupsByUser(self, user):
         return self.__libuser.enumerateGroupsByUser(user)
 
-    #FIXME: Remove this method should be used only internaly
-    @dbus.service.method("org.mandrivalinux.mcc2.Users",
-                         out_signature='as')
-    def GroupsFull(self):
-        return self.__libuser.enumerateGroupsByUser()
+    #This method should be used only internaly
+    #@dbus.service.method("org.mandrivalinux.mcc2.Users",
+    #                     out_signature='as')
+    #def GroupsFull(self):
+    #    return self.__libuser.enumerateGroupsFull()
 
     #TODO: Rename to ListUsers
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
@@ -133,14 +167,41 @@ class Users(dbus.service.Object):
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
                          in_signature='s',
                          out_signature='as')
-    def UsersByGroup(self, user):
-        return self.__libuser.enumerateUsersByGroup(user)
+    def UsersByGroup(self, group):
+        return self.__libuser.enumerateUsersByGroup(group)
 
-    #FIXME: Remove this method should be used only internaly
+    #This method should be used only internaly
+    #@dbus.service.method("org.mandrivalinux.mcc2.Users",
+    #                     out_signature='as')
+    #def UsersFull(self):
+    #    return self.__libuser.enumerateUsersFull()
+
+    @dbus.service.method("org.mandrivalinux.mcc2.Users",
+                         out_signature='i')
+    def FirstUnusedGid(self):
+        return dbus.Int32(self.__libuser.getFirstUnusedGid())
+
+    @dbus.service.method("org.mandrivalinux.mcc2.Users",
+                         out_signature='i')
+    def FirstUnusedUid(self):
+        return dbus.Int32(self.__libuser.getFirstUnusedGid())
+
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
                          out_signature='as')
-    def UsersFull(self):
-        return self.__libuser.enumerateUsersFull()
+    def UserShells(self):
+        return self.__libuser.getUserShells()
+
+    #@dbus.service.method("org.mandrivalinux.mcc2.Users",
+    #                     in_signature='s',
+    #                     out_signature='s')
+    #def ModifyGroup(self):
+    #    pass
+
+    #@dbus.service.method("org.mandrivalinux.mcc2.Users",
+    #                     in_signature='s',
+    #                     out_signature='s')
+    #def ModifyUser(self):
+    #    pass
 
     def check_authorization(self, sender, connection, action):
         """Check policykit authorization.

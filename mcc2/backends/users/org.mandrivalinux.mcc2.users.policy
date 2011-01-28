@@ -87,7 +87,7 @@
       <allow_active>yes</allow_active>
     </defaults>
   </action>
-
+<!--
   <action id="org.mandrivalinux.mcc2.users.groupsfull">
     <description>Enumerate Groups Full</description>
     <message>Authentication is required</message>
@@ -97,7 +97,7 @@
       <allow_active>yes</allow_active>
     </defaults>
   </action>
-
+-->
   <action id="org.mandrivalinux.mcc2.users.users">
     <description>Enumerate Users</description>
     <message>Authentication is required</message>
@@ -117,9 +117,40 @@
       <allow_active>yes</allow_active>
     </defaults>
   </action>
-
+<!--
   <action id="org.mandrivalinux.mcc2.users.usersfull">
     <description></description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+  -->
+
+  <action id="org.mandrivalinux.mcc2.users.firstunusedgid">
+    <description>First Unused Group ID</description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+
+  <action id="org.mandrivalinux.mcc2.users.firstunuseduid">
+    <description>First Unused User ID</description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+
+  <action id="org.mandrivalinux.mcc2.users.usershells">
+    <description>List User Shells</description>
     <message>Authentication is required</message>
     <defaults>
       <allow_any>no</allow_any>

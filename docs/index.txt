@@ -1,0 +1,49 @@
+.. Mandriva Control Center documentation master file, created by
+   sphinx-quickstart on Fri Jan 28 14:20:33 2011.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to Mandriva Control Center's documentation!
+===================================================
+
+.. rubric:: Describe mandriva control center here.
+
+
+.. toctree::
+   :maxdepth: 2
+
+Getting help
+============
+
+Having trouble? We'd like to help!
+
+* Try the :doc:`FAQ <faq/index>` -- it's got answers to many common questions.
+
+* Looking for specific information? Try the :ref:`genindex` or:ref:`modindex`.
+
+* Search for information in the `archives of the mandriva-cooker mailing list`_, or
+  `post a question`_.
+
+* Ask a question in the `#mcc2 IRC channel`_, or search the `IRC logs`_ to see
+  if it's been asked before.
+
+* Report bugs with Mcc2 in our `ticket tracker`_.
+
+.. _archives of the mandriva-cooker mailing list: http://www.mandriva.com/
+.. _post a question: http://forun.mandriva.com/
+.. _#mcc2 IRC channel: irc://irc.freenode.net/mcc2
+.. _IRC logs: http://www.mandriva.com/
+.. _ticket tracker: http://qa.mandriva.com/
+
+Guides
+======
+
+* :doc:`User guide<user/index>`
+* :doc:`Developer guide<developer/index>`
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
