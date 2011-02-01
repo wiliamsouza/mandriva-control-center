@@ -158,4 +158,84 @@
       <allow_active>yes</allow_active>
     </defaults>
   </action>
+
+  <action id="org.mandrivalinux.mcc2.users.groupislocked">
+    <description>Check if group is locked</description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+
+  <action id="org.mandrivalinux.mcc2.users.lockgroup">
+    <description>Lock Group</description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+  </action>
+
+  <action id="org.mandrivalinux.mcc2.users.unlockgroup">
+    <description>Unlock Group</description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+  </action>
+
+  <action id="org.mandrivalinux.mcc2.users.userisLocked">
+    <description>Check if user is locked</description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+
+  <action id="org.mandrivalinux.mcc2.users.lockuser">
+    <description>Lock User</description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+  </action>
+
+  <action id="org.mandrivalinux.mcc2.users.unlockuser">
+    <description>Unlock User</description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+  </action>
+
+  <action id="org.mandrivalinux.mcc2.users.modifygroup">
+    <description>Modify Group</description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+  </action>
+
+  <action id="org.mandrivalinux.mcc2.users.modifyuser">
+    <description>Modify User</description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+  </action>
 </policyconfig>

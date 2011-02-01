@@ -9,8 +9,8 @@ interface = dbus.Interface(proxy, 'org.mandrivalinux.mcc2.Users')
 gid = interface.AddGroup('john', 666)
 
 user_info = {
-    'full_name': 'John Doe',
-    'login': 'john',
+    'fullname': 'John Doe',
+    'username': 'john',
     'shell': '/bin/bash',
     'uid': 666,
     'gid': gid,
