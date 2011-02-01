@@ -625,7 +625,6 @@ class Users(dbus.service.Object):
     @classmethod
     def main(cls):
         users = cls()
-
         try:
             users.run()
         except KeyboardInterrupt:

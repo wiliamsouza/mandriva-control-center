@@ -4,25 +4,29 @@ import dbus.service
 import dbus.mainloop.glib
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
-
 class Services(dbus.service.Object):
     def __init__(self):
         self.__bus = dbus.SystemBus()
+
         bus_name = dbus.service.BusName(
             "org.mandrivalinux.mcc2.Services",
             bus=self.__bus)
+
         dbus.service.Object.__init__(
             self,
             bus_name,
             "/org/mandrivalinux/mcc2/Services")
+
         self.__systemd_proxy = self.__bus.get_object(
             'org.freedesktop.systemd1',
             '/org/freedesktop/systemd1')
+
         self.__systemd_interface = dbus.Interface(
             self.__systemd_proxy,
             'org.freedesktop.systemd1.Manager')
 
         self._loop = gobject.MainLoop()
+
 
     @dbus.service.method("org.mandrivalinux.mcc2.Services",
                          in_signature='ss',
@@ -33,15 +37,17 @@ class Services(dbus.service.Object):
         """Start unit.
         
         @param name: Unit name (ie: network.service).
-        @param mode: Must be one of fail or replace.
-        
-        @raise SystemdError: Raised when no unit is found with the given name.
-        
-        @rtype: L{systemd.job.Job}
+        @param mode: Must be one of "fail" or "replace".
+
+        @raise dbus.DBusException:
+
+        @rtype dbus.Interface: Job path.
         """
         self.check_authorization(sender, connection,
             'org.mandrivalinux.mcc2.services.start')
+
         return self.__systemd_interface.StartUnit(name, mode)
+
 
     @dbus.service.method("org.mandrivalinux.mcc2.Services",
                          in_signature='ss',
@@ -52,15 +58,17 @@ class Services(dbus.service.Object):
         """Stop unit.
         
         @param name: Unit name (ie: network.service).
-        @param mode:  Must be one of fail or replace.
+        @param mode:  Must be one of "fail" or "replace".
         
-        @raise SystemdError: Raised when no unit is found with the given name.
+        @raise dbus.DBusException:
         
-        @rtype: L{systemd.job.Job}
+        @rtype dbus.Interface: Job path.
         """
         self.check_authorization(sender, connection,
             'org.mandrivalinux.mcc2.services.stop')
+
         return self.__systemd_interface.StopUnit(name, mode)
+
 
     @dbus.service.method("org.mandrivalinux.mcc2.Services",
                          in_signature='ss',
@@ -71,15 +79,17 @@ class Services(dbus.service.Object):
         """Restart unit.
         
         @param name: Unit name (ie: network.service).
-        @param mode: Must be one of fail, replace or isolate.
+        @param mode: Must be one of "fail", "replace" or "isolate".
         
         @raise dbus.DBusException
         
-        @rtype:
+        @rtype dbus.Interface: Job path.
         """
         self.check_authorization(sender, connection,
             'org.mandrivalinux.mcc2.services.restart')
+
         return self.__systemd_interface.RestartUnit(name, mode)
+
 
     @dbus.service.method("org.mandrivalinux.mcc2.Services",
                          out_signature='a(ssssssouso)')
@@ -88,23 +98,31 @@ class Services(dbus.service.Object):
         
         @raise dbus.DBusException.
         
-        @rtype:
+        @rtype dbus.Array:
         """
         return self.__systemd_interface.ListUnits()
+
 
     @dbus.service.method("org.mandrivalinux.mcc2.Services",
                          in_signature='s',
                          out_signature='a{sv}')
     def ServiceDetails(self, path):
+        """Services Detail.
+        
+        @param path: Unit path.
+        
+        @raise dbus.DBusException.
+        
+        @rtype dbus.Array:
+        """
         unit_proxy = self.__bus.get_object(
             'org.freedesktop.systemd1',
             path)
-        #unit_interface = dbus.Interface(
-        #    unit_proxy,
-        #    'org.freedesktop.systemd1.Unit',)
+
         properties_interface = dbus.Interface(
             unit_proxy,
             'org.freedesktop.DBus.Properties')
+
         return properties_interface.GetAll('org.freedesktop.systemd1.Unit')
 
 
@@ -120,9 +138,11 @@ class Services(dbus.service.Object):
         dbus_proxy = connection.get_object(
             'org.freedesktop.DBus',
             '/org/freedesktop/DBus/Bus')
+
         dbus_interface = dbus.Interface(
             dbus_proxy,
             'org.freedesktop.DBus')
+
         pid = dbus_interface.GetConnectionUnixProcessID(sender)
 
         policekit_proxy = self.__bus.get_object(
@@ -138,17 +158,22 @@ class Services(dbus.service.Object):
             {'pid': dbus.UInt32(pid, variant_level=1),
              'start-time': dbus.UInt64(0, variant_level=1)}
         )
+
         detail = {'':''}
         flags = dbus.UInt32(1)
         cancellation = ''
+
         (is_auth, _, details) = policekit_interface.CheckAuthorization(
             subject, action, detail, flags, cancellation, timeout=600)
+
         if not is_auth:
             msg = 'org.mandrivalinux.mcc2.Services.Error.NotAuthorized'
             raise dbus.DBusException, msg
 
+
     def run(self):
         self._loop.run()
+
 
     @classmethod
     def main(cls):
