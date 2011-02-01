@@ -15,9 +15,9 @@ from PySide import QtCore
 
 bus = dbus.SystemBus()
 proxy = bus.get_object(
-    'com.mandriva.mcc2.Services',
-    '/com/mandriva/mcc2/Services')
-interface = dbus.Interface(proxy, 'com.mandriva.mcc2.Services')
+    'org.mandrivalinux.mcc2.Services',
+    '/org/mandrivalinux/mcc2/Services')
+interface = dbus.Interface(proxy, 'org.mandrivalinux.mcc2.Services')
 
 class ServiceController(QtCore.QObject):
     @QtCore.Slot(QtCore.QObject)
@@ -29,11 +29,11 @@ class ServiceController(QtCore.QObject):
         service = service.property('text')
         print 'Starting', service
         try:
-            interface.start(service, 'fail')
+            interface.Start(service, 'fail')
         except dbus.exceptions.DBusException, error:
             if error.get_dbus_name() == "org.freedesktop.DBus.Error.NoReply":
                 print "timed out"
-            if error.get_dbus_name() == "com.mandriva.mcc2.Services.Error.NotAuthorized":
+            if error.get_dbus_name() == "org.mandrivalinux.mcc2.Services.Error.NotAuthorized":
                 print 'Not Authorized'
 
     @QtCore.Slot(QtCore.QObject)
@@ -41,11 +41,11 @@ class ServiceController(QtCore.QObject):
         service = service.property('text')
         print 'Stoping:', service
         try:
-            interface.stop(service, 'fail')
+            interface.Stop(service, 'fail')
         except dbus.exceptions.DBusException, error:
             if error.get_dbus_name() == "org.freedesktop.DBus.Error.NoReply":
                 print "Timed out"
-            if error.get_dbus_name() == "com.mandriva.mcc2.Services.Error.NotAuthorized":
+            if error.get_dbus_name() == "org.mandrivalinux.mcc2.Services.Error.NotAuthorized":
                 print 'Not Authorized'
 
     @QtCore.Slot(QtCore.QObject)
@@ -53,11 +53,11 @@ class ServiceController(QtCore.QObject):
         service = service.property('text')
         print 'Restarting:', service
         try:
-            interface.restart(service, 'fail')
+            interface.Restart(service, 'fail')
         except dbus.exceptions.DBusException, error:
             if error.get_dbus_name() == "org.freedesktop.DBus.Error.NoReply":
                 print "timed out"
-            if error.get_dbus_name() == "com.mandriva.mcc2.Services.Error.NotAuthorized":
+            if error.get_dbus_name() == "org.mandrivalinux.mcc2.Services.Error.NotAuthorized":
                 print 'Not Authorized'
 
 
@@ -69,8 +69,8 @@ view.setViewport(widget)
 view.setResizeMode(QtDeclarative.QDeclarativeView.SizeRootObjectToView)
 
 services = []
-for service in interface.list():
-    details = interface.service_details(service[6])
+for service in interface.List():
+    details = interface.ServiceDetails(service[6])
     services.append(ServiceWrapper(details))
 
 service_controller = ServiceController()
