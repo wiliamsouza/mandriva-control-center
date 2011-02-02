@@ -1,4 +1,4 @@
 [D-BUS Service]
 Name=org.mandrivalinux.mcc2.Services
-Exec=/home/wiliam/dev/mcc2/mcc2/backends/services/services-mechanism.py
+Exec=/usr/share/mcc2/bin/services-mechanism.py
 User=root
