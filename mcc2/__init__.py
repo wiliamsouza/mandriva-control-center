@@ -10,3 +10,6 @@ def get_version():
         if VERSION[3] != 'final':
             version = '%s %s %s' % (version, VERSION[3], VERSION[4])
     return version
+
+from backends import *
+from frontends import *
