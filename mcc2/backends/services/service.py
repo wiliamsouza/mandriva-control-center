@@ -4,6 +4,8 @@ import dbus.service
 import dbus.mainloop.glib
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
+#__all__ = ['Services']
+
 class Services(dbus.service.Object):
     def __init__(self):
         self.__bus = dbus.SystemBus()

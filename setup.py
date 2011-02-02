@@ -39,7 +39,7 @@ setup(name='mcc2',
       classifiers=['Development Status :: 1 - Planning',
                    'Intended Audience :: Developers',
                    'License :: ',
-		   'Operating System :: POSIX :: Linux',
+                    'Operating System :: POSIX :: Linux',
                    'Programming Language :: Python',
                    'Topic :: Libraries :: Python Modules',]
       )
