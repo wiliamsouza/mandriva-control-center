@@ -1,0 +1,19 @@
+.. _getting-started:
+
+Getting Started
+===============
+
+xxxx
+
+Installing software
+-------------------
+
+xxx
+
+Users and Groups
+----------------
+
+xxx
+
+System Services
+---------------

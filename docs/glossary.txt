@@ -1,0 +1,10 @@
+.. _glossary:
+
+Glossary
+========
+
+.. glossary::
+   :sorted:
+
+   MCC2
+     Mandriva Control Center 2.

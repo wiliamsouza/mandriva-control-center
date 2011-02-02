@@ -1,0 +1,27 @@
+========
+Overview
+========
+
+This section provides a brief overview. Without going too much into detail,
+it outlines the most important aspects of the :term:`MCC2` architecture.
+
+Design philosophies
+===================
+
+The main design is to split :term:`MCC2` basicaly in user interface
+and :term:`Bus` interfaces methods.
+
+Frontend
+--------
+This part will be build using `QT4`_ more exacly `Qt Quick`_ using
+`PySide`_ bindings.
+
+Backend
+-------
+The implementation of this part will be in top of `D-Bus`_ and `PolicyKit`_.
+
+.. _PySide: http://www.pyside.org/
+.. _QT4: http://qt.nokia.com/products/
+.. _Qt Quick: http://qt.nokia.com/products/qt-quick/
+.. D-Bus: http://www.freedesktop.org/wiki/Software/dbus
+.. PolicyKit: http://www.freedesktop.org/wiki/Software/PolicyKit

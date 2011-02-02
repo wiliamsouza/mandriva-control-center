@@ -9,17 +9,23 @@ Welcome to Mandriva Control Center's documentation!
 .. rubric:: Describe mandriva control center here.
 
 
+Developer guide
+===============
+
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
+
+   overview
+   getting_started
 
 Getting help
 ============
 
 Having trouble? We'd like to help!
 
-* Try the :doc:`FAQ <faq/index>` -- it's got answers to many common questions.
+* Try the :doc:`FAQ <faq>` -- it's got answers to many common questions.
 
-* Looking for specific information? Try the :ref:`genindex` or:ref:`modindex`.
+* Looking for specific information? Try the :ref:`genindex`.
 
 * Search for information in the `archives of the mandriva-cooker mailing list`_, or
   `post a question`_.
@@ -35,15 +41,9 @@ Having trouble? We'd like to help!
 .. _IRC logs: http://www.mandriva.com/
 .. _ticket tracker: http://qa.mandriva.com/
 
-Guides
-======
-
-* :doc:`User guide<user/index>`
-* :doc:`Developer guide<developer/index>`
-
 Indices and tables
 ==================
 
+* :ref:`glossary`
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
