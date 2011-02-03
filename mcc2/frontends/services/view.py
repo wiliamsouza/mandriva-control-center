@@ -60,26 +60,29 @@ class ServiceController(QtCore.QObject):
             if error.get_dbus_name() == "org.mandrivalinux.mcc2.Services.Error.NotAuthorized":
                 print 'Not Authorized'
 
+def start():
+    app = QtGui.QApplication(sys.argv)
+    window = QtGui.QMainWindow()
+    view = QtDeclarative.QDeclarativeView()
+    widget = QtGui.QWidget()
+    view.setViewport(widget)
+    view.setResizeMode(QtDeclarative.QDeclarativeView.SizeRootObjectToView)
 
-app = QtGui.QApplication(sys.argv)
-window = QtGui.QMainWindow()
-view = QtDeclarative.QDeclarativeView()
-widget = QtGui.QWidget()
-view.setViewport(widget)
-view.setResizeMode(QtDeclarative.QDeclarativeView.SizeRootObjectToView)
+    services = []
+    for service in interface.List():
+        details = interface.ServiceDetails(service[6])
+        services.append(ServiceWrapper(details))
 
-services = []
-for service in interface.List():
-    details = interface.ServiceDetails(service[6])
-    services.append(ServiceWrapper(details))
+    service_controller = ServiceController()
+    service_model = ServiceModel(services)
 
-service_controller = ServiceController()
-service_model = ServiceModel(services)
+    rc = view.rootContext()
+    rc.setContextProperty('serviceController', service_controller)
+    rc.setContextProperty('serviceModel', service_model)
+    view.setSource('/usr/share/mcc2/mcc2/frontends/services/qml/Services.qml')
+    window.setCentralWidget(view)
+    window.show()
+    app.exec_()
 
-rc = view.rootContext()
-rc.setContextProperty('serviceController', service_controller)
-rc.setContextProperty('serviceModel', service_model)
-view.setSource('Services.qml')
-window.setCentralWidget(view)
-window.show()
-app.exec_()
+if __name__ == '__main__':
+    start()

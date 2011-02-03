@@ -7,7 +7,18 @@ This is todo file for Mandriva Control Center 2
 CODE
 ====
 
- * 
+Backend
+-------
+ 
+ * Add a common policykit authentication for privileged method execution
+   then user can't enter the root passwors for each privileged task for
+   a sort period of time. By now the user may enter the root password for
+   stop, restar and start services we should change that.
+
+Frontend
+--------
+
+ *
 
 TESTS
 =====
