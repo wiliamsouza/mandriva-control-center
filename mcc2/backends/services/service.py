@@ -4,7 +4,7 @@ import dbus.service
 import dbus.mainloop.glib
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
-#__all__ = ['Services']
+__all__ = ['Services']
 
 class Services(dbus.service.Object):
     def __init__(self):
@@ -19,15 +19,31 @@ class Services(dbus.service.Object):
             bus_name,
             "/org/mandrivalinux/mcc2/Services")
 
-        self.__systemd_proxy = self.__bus.get_object(
-            'org.freedesktop.systemd1',
-            '/org/freedesktop/systemd1')
+        self.is_systemd_running = False
 
-        self.__systemd_interface = dbus.Interface(
-            self.__systemd_proxy,
-            'org.freedesktop.systemd1.Manager')
+        try:
+            self.__systemd_proxy = self.__bus.get_object(
+                'org.freedesktop.systemd1',
+                '/org/freedesktop/systemd1')
+
+            self.__systemd_interface = dbus.Interface(
+                self.__systemd_proxy,
+                'org.freedesktop.systemd1.Manager')
+
+            self.is_systemd_running = True
+
+        except dbus.exceptions.DBusException, error:
+            # If systemd is not running don`t raise an exception,
+            # all bus method may use self.is_systemd_running and raise
+            # org.mandrivalinux.mcc2.Services.Error.SystemdNotRunning
+            systemd_error = 'org.freedesktop.DBus.Error.Spawn.ChildExited'
+            if error.get_dbus_name() == systemd_error:
+                pass
 
         self._loop = gobject.MainLoop()
+        self.msg = {
+            'not_running':'org.mandrivalinux.mcc2.Services.Error.SystemdNotRunning'
+            }
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Services",
@@ -45,6 +61,9 @@ class Services(dbus.service.Object):
 
         @rtype dbus.Interface: Job path.
         """
+        if not self.is_systemd_running:
+            raise dbus.DBusException, self.msg['not_running']
+
         self.check_authorization(sender, connection,
             'org.mandrivalinux.mcc2.services.start')
 
@@ -66,6 +85,9 @@ class Services(dbus.service.Object):
         
         @rtype dbus.Interface: Job path.
         """
+        if not self.is_systemd_running:
+            raise dbus.DBusException, self.msg['not_running']
+
         self.check_authorization(sender, connection,
             'org.mandrivalinux.mcc2.services.stop')
 
@@ -87,6 +109,9 @@ class Services(dbus.service.Object):
         
         @rtype dbus.Interface: Job path.
         """
+        if not self.is_systemd_running:
+            raise dbus.DBusException, self.msg['not_running']
+
         self.check_authorization(sender, connection,
             'org.mandrivalinux.mcc2.services.restart')
 
@@ -102,6 +127,9 @@ class Services(dbus.service.Object):
         
         @rtype dbus.Array:
         """
+        if not self.is_systemd_running:
+            raise dbus.DBusException, self.msg['not_running']
+
         return self.__systemd_interface.ListUnits()
 
 
@@ -117,6 +145,9 @@ class Services(dbus.service.Object):
         
         @rtype dbus.Array:
         """
+        if not self.is_systemd_running:
+            raise dbus.DBusException, self.msg['not_running']
+
         unit_proxy = self.__bus.get_object(
             'org.freedesktop.systemd1',
             path)
@@ -170,7 +201,7 @@ class Services(dbus.service.Object):
 
         if not is_auth:
             msg = 'org.mandrivalinux.mcc2.Services.Error.NotAuthorized'
-            raise dbus.DBusException, msg
+            raise dbus.exceptions.DBusException, msg
 
 
     def run(self):

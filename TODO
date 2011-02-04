@@ -15,6 +15,8 @@ Backend
    a sort period of time. By now the user may enter the root password for
    stop, restar and start services we should change that.
 
+ * Add an exception handler to dbus connection in all classes.
+
 Frontend
 --------
 
