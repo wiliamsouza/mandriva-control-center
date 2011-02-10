@@ -16,11 +16,20 @@ Backend
    stop, restar and start services we should change that.
 
  * Add an exception handler to dbus connection in all classes.
+ 
+ * Add backends dbus interface method stop.
+ 
+ * Add support to rpm stop dbus interfaces when updating or removing packages.
 
 Frontend
 --------
 
  *
+
+RPM
+---
+
+ *   
 
 TESTS
 =====

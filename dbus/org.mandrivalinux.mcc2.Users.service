@@ -1,4 +1,4 @@
 [D-BUS Service]
 Name=org.mandrivalinux.mcc2.Users
-Exec=/usr/share/mcc2/bin/users-mechanism.py
+Exec=/usr/share/mandriva/bin/users-mechanism.py
 User=root

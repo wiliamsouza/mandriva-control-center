@@ -6,9 +6,9 @@ proxy = bus.get_object(
 interface = dbus.Interface(proxy, 'org.mandrivalinux.mcc2.Users')
 
 user_info = {
-    'old_username': 'john',
+    'username': 'john',
+    'new_username': 'johns',
     'fullname': 'Johns Does',
-    'username': 'johns',
     'shell': '/bin/bash',
     'uid': 666,
     'gid': 666,
@@ -21,9 +21,6 @@ user_info = {
     #'shadow_inactive': -1,
     #'shadow_last_change': 'YYYY-MM-DD'
     }
-        
-
-
 
 result = interface.ModifyUser(user_info)
 print result   

@@ -5,4 +5,5 @@ include README
 include AUTHORS
 include TODO
 recursive-include docs *
+recursive-include examples *
 prune docs/_build

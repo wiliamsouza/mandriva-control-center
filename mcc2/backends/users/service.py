@@ -33,18 +33,18 @@ class Users(dbus.service.Object):
 
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
                          in_signature='si',
-                         out_signature='i',
+                         out_signature='t',
                          sender_keyword='sender',
                          connection_keyword='connection')
     def AddGroup(self, groupname, gid, sender, connection):
         """Add Group.
         
-        @param name: Group name
+        @param groupname: Group name
         @param gid: Group ID
         
         @raise dbus.DBusException:
         
-        @rtype dbus.Int32: The GID from recently created Group.
+        @rtype dbus.Int64: The GID from recently created Group.
         """
         self.check_authorization(sender, connection,
             'org.mandrivalinux.mcc2.users.addgroup')
@@ -66,12 +66,12 @@ class Users(dbus.service.Object):
         group_entity = self.__libuser.lookupGroupByName(groupname)
         gid = group_entity.get(libuser.GIDNUMBER)[0]
 
-        return dbus.Int32(gid)
+        return dbus.Int64(gid)
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
                          in_signature='a{sv}',
-                         out_signature='i',
+                         out_signature='t',
                          sender_keyword='sender',
                          connection_keyword='connection')
     def AddUser(self, user_info, sender, connection):
@@ -101,7 +101,7 @@ class Users(dbus.service.Object):
 
         @raise dbus.DBusException:
 
-        @rtype dbus.Int32: The UID from recently created User.
+        @rtype dbus.Int64: The UID from recently created User.
         """
         self.check_authorization(sender, connection,
             'org.mandrivalinux.mcc2.users.adduser')
@@ -131,10 +131,9 @@ class Users(dbus.service.Object):
         user_entity = self.__libuser.lookupUserByName(user_info['username'])
         uid = user_entity.get(libuser.UIDNUMBER)[0]
 
-        return dbus.Int32(uid)
+        return dbus.Int64(uid)
 
 
-    #TODO: Change the return type to dbus.Array
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
                          in_signature='s',
                          out_signature='a{sv}',
@@ -147,7 +146,7 @@ class Users(dbus.service.Object):
         
         @raise dbus.DBusException:
         
-        @rtype: dbus.Array: Recent removed group id and name.
+        @rtype: dbus.Dictionary: Recent removed group id and groupname.
         """
         self.check_authorization(sender, connection,
             'org.mandrivalinux.mcc2.users.deletegroup')
@@ -164,11 +163,13 @@ class Users(dbus.service.Object):
             msg = 'org.mandrivalinux.mcc2.Users.Error.DeleteGroupFailed'
             raise dbus.DBusException, msg
 
-        return {'gid': dbus.String(gid), 'name': dbus.String(name)}
+        return dbus.Dictionary(
+            {
+            'gid': dbus.Int64(gid),
+            'groupname': dbus.String(name)
+            }, signature=dbus.Signature('sv'))
 
 
-    #TODO: Include options to remove home and mail folder,
-    # change the return type to dbus.Array
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
                          in_signature='s',
                          out_signature='a{sv}',
@@ -181,7 +182,7 @@ class Users(dbus.service.Object):
         
         @raise dbus.DBusException:
         
-        @rtype: dbus.Array: Recent removed user id and name.
+        @rtype: dbus.Dictionary: Recent removed user id and groupname.
         """
         self.check_authorization(sender, connection,
             'org.mandrivalinux.mcc2.users.deleteuser')
@@ -197,13 +198,16 @@ class Users(dbus.service.Object):
             msg = 'org.mandrivalinux.mcc2.Users.Error.DeleteUserFailed'
             raise dbus.DBusException, msg
 
-        return {'uid': dbus.String(uid), 'name': dbus.String(name)}
+        return dbus.Dictionary(
+            {
+            'uid': dbus.Int64(uid),
+            'username': dbus.String(username)
+            }, signature=dbus.Signature('sv'))
 
 
-    #TODO: Rename to ListGroups
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
                          out_signature='as')
-    def Groups(self):
+    def ListGroups(self):
         """List All Groups.
         
         @raise dbus.DBusException:
@@ -213,11 +217,10 @@ class Users(dbus.service.Object):
         return self.__libuser.enumerateGroups()
 
 
-    #TODO: Rename to ListGroupsByUser
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
                          in_signature='s',
                          out_signature='as')
-    def GroupsByUser(self, username):
+    def ListGroupsByUser(self, username):
         """List Group by User.
         
         @param username: User name.
@@ -236,10 +239,9 @@ class Users(dbus.service.Object):
     #    return self.__libuser.enumerateGroupsFull()
 
 
-    #TODO: Rename to ListUsers
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
                          out_signature='as')
-    def Users(self):
+    def ListUsers(self):
         """List All Users.
         
         @raise dbus.DBusException:
@@ -249,11 +251,10 @@ class Users(dbus.service.Object):
         return self.__libuser.enumerateUsers()
 
 
-    #TODO: Rename to ListUsersByGroup
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
                          in_signature='s',
                          out_signature='as')
-    def UsersByGroup(self, groupname):
+    def ListUsersByGroup(self, groupname):
         """List Users by Group.
         
         @param groupname: Group name.
@@ -273,19 +274,19 @@ class Users(dbus.service.Object):
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
-                         out_signature='i')
+                         out_signature='t')
     def FirstUnusedGid(self):
         """First Unused Gid.
         
         @raise dbus.DBusException:
         
-        @rtype: dbus.Int32:
+        @rtype: dbus.Int32: First unused gid.
         """
-        return dbus.Int32(self.__libuser.getFirstUnusedGid())
+        return dbus.Int64(self.__libuser.getFirstUnusedGid())
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
-                         out_signature='i')
+                         out_signature='t')
     def FirstUnusedUid(self):
         """First Unused Uid.
         
@@ -293,13 +294,12 @@ class Users(dbus.service.Object):
         
         @rtype: dbus.Int32:
         """
-        return dbus.Int32(self.__libuser.getFirstUnusedGid())
+        return dbus.Int64(self.__libuser.getFirstUnusedUid())
 
 
-    #TODO: Rename to ListUserShells
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
                          out_signature='as')
-    def UserShells(self):
+    def ListUserShells(self):
         """List Shell available.
         
         @raise dbus.DBusException:
@@ -322,7 +322,7 @@ class Users(dbus.service.Object):
         @rtype: dbus.Int32, 1 locked or 0 unlocked.
         """
         group_entity = self.__libuser.lookupGroupByName(group)
-
+        
         return dbus.Int32(self.__libuser.groupIsLocked(group_entity))
 
 
@@ -431,7 +431,6 @@ class Users(dbus.service.Object):
         return dbus.Int32(self.__libuser.unlockUser(user_entity))
 
 
-    #TODO: Add support to change group name.
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
                          in_signature='a{sv}',
                          out_signature='i',
@@ -464,6 +463,9 @@ class Users(dbus.service.Object):
         group_entity = self.__libuser.lookupGroupByName(group_info['groupname'])
         group_entity.set(libuser.MEMBERNAME, group_info['members'])
 
+        if group_info.has_key('new_groupname'):
+            group_entity.set(libuser.GROUPNAME, group_info['new_groupname'])
+
         return dbus.Int32(self.__libuser.modifyGroup(group_entity))
 
 
@@ -488,9 +490,9 @@ class Users(dbus.service.Object):
         
         Example:
         user_info = {
-                'old_username': 'john'
+                'username': 'john'
+                'new_username': 'johns',
                 'fullname': 'Johns Does',
-                'username': 'johns',
                 'shell': '/bin/bash',
                 'uid': 666,
                 'gid': 666,
@@ -513,13 +515,18 @@ class Users(dbus.service.Object):
         self.check_authorization(sender, connection,
             'org.mandrivalinux.mcc2.users.modifyuser')
 
-        user_entity = self.__libuser.lookupUserByName(user_info['old_username'])
-        user_entity.set(libuser.USERNAME, [user_info['username']])
+        user_entity = self.__libuser.lookupUserByName(user_info['username'])
         user_entity.set(libuser.GECOS, [user_info['fullname']])
+        
+        #TODO: Check if uid and gid can be converted to int()
+        # if not raise an error
         user_entity.set(libuser.GIDNUMBER, [user_info['gid']])
         user_entity.set(libuser.UIDNUMBER, [user_info['uid']])
         user_entity.set(libuser.HOMEDIRECTORY, [user_info['home_directory']])
         user_entity.set(libuser.LOGINSHELL, [user_info['shell']])
+
+        if user_info.has_key('new_username'):
+            user_entity.set(libuser.USERNAME, [user_info['new_username']])
 
         if user_info.has_key('shadow_expire'):
             year = None

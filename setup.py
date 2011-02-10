@@ -30,7 +30,7 @@ for dirpath, dirnames, filenames in os.walk('mcc2/'):
             
 data_files = [
     ('/usr/bin/', glob.glob('bin/mcc2*')),
-    ('/usr/share/mcc2/bin/', glob.glob('bin/*-mechanism.py')),
+    ('/usr/share/mandriva/bin/', glob.glob('bin/*-mechanism.py')),
     ('/usr/share/dbus-1/system-services/', glob.glob('dbus/*.service')),
     ('/etc/dbus-1/system.d/', glob.glob('dbus/*.conf')),
     ('/usr/share/polkit-1/actions/', glob.glob('policykit/*.policy'))]

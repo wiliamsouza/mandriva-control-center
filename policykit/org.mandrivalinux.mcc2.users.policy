@@ -68,7 +68,7 @@
     </defaults>
   </action>
 
-  <action id="org.mandrivalinux.mcc2.users.groups">
+  <action id="org.mandrivalinux.mcc2.users.listgroups">
     <description>Enumerate Groups</description>
     <message>Authentication is required</message>
     <defaults>
@@ -78,7 +78,7 @@
     </defaults>
   </action>
 
-  <action id="org.mandrivalinux.mcc2.users.groupsbyuser">
+  <action id="org.mandrivalinux.mcc2.users.listgroupsbyuser">
     <description>Enumerate Groups by User</description>
     <message>Authentication is required</message>
     <defaults>
@@ -98,7 +98,7 @@
     </defaults>
   </action>
 -->
-  <action id="org.mandrivalinux.mcc2.users.users">
+  <action id="org.mandrivalinux.mcc2.users.listusers">
     <description>Enumerate Users</description>
     <message>Authentication is required</message>
     <defaults>
@@ -108,7 +108,7 @@
     </defaults>
   </action>
 
-  <action id="org.mandrivalinux.mcc2.users.usersbygroup">
+  <action id="org.mandrivalinux.mcc2.users.listusersbygroup">
     <description>Enumerate Groups by User</description>
     <message>Authentication is required</message>
     <defaults>
@@ -149,7 +149,7 @@
     </defaults>
   </action>
 
-  <action id="org.mandrivalinux.mcc2.users.usershells">
+  <action id="org.mandrivalinux.mcc2.users.listusershells">
     <description>List User Shells</description>
     <message>Authentication is required</message>
     <defaults>

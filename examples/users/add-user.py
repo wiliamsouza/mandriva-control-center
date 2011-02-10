@@ -20,4 +20,4 @@ user_info = {
     }
 
 result = interface.AddUser(user_info)
-print result   
+print result

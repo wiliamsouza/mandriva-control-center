@@ -1,4 +1,4 @@
 [D-BUS Service]
 Name=org.mandrivalinux.mcc2.Services
-Exec=/usr/share/mcc2/bin/services-mechanism.py
+Exec=/usr/share/mandriva/bin/services-mechanism.py
 User=root

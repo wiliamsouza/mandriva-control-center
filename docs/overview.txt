@@ -23,5 +23,31 @@ The implementation of this part will be in top of `D-Bus`_ and `PolicyKit`_.
 .. _PySide: http://www.pyside.org/
 .. _QT4: http://qt.nokia.com/products/
 .. _Qt Quick: http://qt.nokia.com/products/qt-quick/
-.. D-Bus: http://www.freedesktop.org/wiki/Software/dbus
-.. PolicyKit: http://www.freedesktop.org/wiki/Software/PolicyKit
+.. _D-Bus: http://www.freedesktop.org/wiki/Software/dbus
+.. _PolicyKit: http://www.freedesktop.org/wiki/Software/PolicyKit
+
+Files and Folders
+=================
+
+/usr/bin:
+    * mcc2
+    * mcc2-services
+    * mcc2-users
+    * mcc2-boot
+    * mcc2-sshd
+
+/usr/share/mcc2:
+    * bin
+    * mcc2
+
+/etc/dbus-1/system.d/:
+    * org.mandrivalinux.mcc2.Services.conf
+    * org.mandrivalinux.mcc2.Users.conf
+
+/usr/share/dbus-1/:
+    * org.mandrivalinux.mcc2.Services.service
+    * org.mandrivalinux.mcc2.Users.service
+
+/usr/share/polkit-1/actions/:
+    * org.mandrivalinux.mcc2.services.policy
+    * org.mandrivalinux.mcc2.users.policy

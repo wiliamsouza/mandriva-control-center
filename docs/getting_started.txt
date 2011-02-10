@@ -1,19 +1,69 @@
 .. _getting-started:
 
+===============
 Getting Started
 ===============
 
-xxxx
+Mandriva control center export the following d-bus interfaces to interact with
+the system wide configurations:
+
+    * org.mandrivalinux.org.mcc2.users
+    * org.mandrivalinux.org.mcc2.services
 
 Installing software
--------------------
+===================
 
-xxx
+From source code:
+
+    python setup.py install
 
 Users and Groups
-----------------
+================
 
-xxx
+Let's learn by example.
+
+Here's a quick examples, how to use org.mandrivalinux.org.mcc2.users d-bus
+interfaces::
+
+    # Connecting to the Bus
+    >>> import dbus
+    >>> bus = dbus.SystemBus()
+
+    # Proxy object
+    >>> proxy = bus.get_object(
+    ...     'org.mandrivalinux.mcc2.Users',
+    ...     '/org/mandrivalinux/mcc2/Users')
+
+    # 
+    >>> interface = dbus.Interface(proxy, 'org.mandrivalinux.mcc2.Users')
+    >>> for user in interface.Users():
+    ...     print user
+    
+
+
+
+
+
+
 
 System Services
----------------
+===============
+
+.. admonition:: Mac OS X permissions
+
+   If you're using Mac OS X, you may see the message "permission denied" when
+   you try to run ``django-admin.py startproject``. This is because, on
+   Unix-based systems like OS X, a file must be marked as "executable" before it
+   can be run as a program. To do this, open Terminal.app and navigate (using
+   the ``cd`` command) to the directory where :doc:`django-admin.py
+   </ref/django-admin>` is installed, then run the command
+   ``chmod +x django-admin.py``.
+
+.. note::
+
+    You'll need to avoid naming projects after built-in Python or Django
+    components. In particular, this means you should avoid using names like
+    ``django`` (which will conflict with Django itself) or ``test`` (which
+    conflicts with a built-in Python package).
+
+

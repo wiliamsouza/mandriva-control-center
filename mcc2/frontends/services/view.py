@@ -79,7 +79,7 @@ def start():
     rc = view.rootContext()
     rc.setContextProperty('serviceController', service_controller)
     rc.setContextProperty('serviceModel', service_model)
-    view.setSource('/usr/share/mcc2/mcc2/frontends/services/qml/Services.qml')
+    view.setSource('/usr/share/mandriva/mcc2/frontends/services/qml/Services.qml')
     window.setCentralWidget(view)
     window.show()
     app.exec_()
