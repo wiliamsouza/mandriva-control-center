@@ -37,9 +37,12 @@ rm -rf %{buildroot}
 %{_bindir}/mcc2
 %{_bindir}/mcc2-services
 %{_sysconfdir}/dbus-1/system.d/org.mandrivalinux.mcc2.Services.conf
+%{_sysconfdir}/dbus-1/system.d/org.mandrivalinux.mcc2.Sshd.conf
 %{_sysconfdir}/dbus-1/system.d/org.mandrivalinux.mcc2.Users.conf
 %{_datadir}/dbus-1/system-services/org.mandrivalinux.mcc2.Services.service
+%{_datadir}/dbus-1/system-services/org.mandrivalinux.mcc2.Sshd.service
 %{_datadir}/dbus-1/system-services/org.mandrivalinux.mcc2.Users.service
 %{_datadir}/polkit-1/actions/org.mandrivalinux.mcc2.services.policy
+%{_datadir}/polkit-1/actions/org.mandrivalinux.mcc2.sshd.policy
 %{_datadir}/polkit-1/actions/org.mandrivalinux.mcc2.users.policy
 %{_datadir}/mandriva/*

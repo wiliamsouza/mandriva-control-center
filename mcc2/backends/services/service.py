@@ -2,6 +2,7 @@ import gobject
 import dbus
 import dbus.service
 import dbus.mainloop.glib
+
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
 __all__ = ['Services']

@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=org.mandrivalinux.mcc2.Sshd
+Exec=/usr/share/mandriva/bin/sshd-mechanism.py
+User=root

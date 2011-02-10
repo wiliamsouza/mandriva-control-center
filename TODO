@@ -21,6 +21,9 @@ Backend
  
  * Add support to rpm stop dbus interfaces when updating or removing packages.
 
+ * Merge sshd key options because it's only used in sshd_config to ensure
+   line not be more than 80 characters.
+ 
 Frontend
 --------
 

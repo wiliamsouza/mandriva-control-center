@@ -25,13 +25,14 @@ class SshdConfig:
         
         @param option: String with the option name
         @type option: String
-        ''' 
+        '''
+        value = None
         if option == 'Match':
-            return None
-        for option in self.augparser.options:
-            if option.name == option:
-                value = str(option)
             return value
+        for o in self.augparser.options:
+            if o.name == option:
+                value = str(o)
+        return value
     
     def get_options_as_str(self):
         '''Get all options in the config file as a string
