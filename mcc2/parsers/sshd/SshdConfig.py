@@ -19,7 +19,10 @@ class SshdConfig:
         self.sshd_config_path = sshd_config_path
         self.augparser = SshdAugConfigParser(self.sshd_config_path,flags=flags)
         self.augparser.parse()
-          
+    
+    def remove_option(self,option):
+        return self.augparser.remove_option(option)
+           
     def get_option_value(self,option):
         '''Get the value of a SSHD option
         

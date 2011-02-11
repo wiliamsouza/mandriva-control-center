@@ -110,6 +110,27 @@ class SshdAugConfigParser(object):
             elif option.split("/")[-1][:5] == 'Match':
                 self.__parse_matchblock(option)
 
+    def remove_option(self,option):
+        #TODO: remember position to insert    
+        if not option.path:
+            option.path = "/files/etc/ssh/sshd_config/"+option.name+"[*]/"            
+            
+        if isinstance(option,MccMultiValueOption):
+            if option.name == "Subsystem":
+                self.aug.remove(option.path)
+            else:
+                #option.path = "/files/etc/ssh/sshd_config/"+option.name+"[%s]/"%str(opt_num)
+                self.aug.remove("/files/etc/ssh/sshd_config/"+option.name+"[*]")
+        else:
+            self.aug.remove(option.path)
+
+        try:
+            self.aug.save()
+        except IOError:
+            print "Error saving config file"
+            #print self.aug.get("/augeas/files/etc/ssh/sshd_config/error/message")
+            return -1
+           
     def set_option(self,option):    
         """Set an option using a MCCOption"""
         #TODO: remember position to insert    
