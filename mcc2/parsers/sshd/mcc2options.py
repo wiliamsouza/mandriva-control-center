@@ -42,16 +42,25 @@ class MccSshdMatchOption:
     
 class MccOption:
     
-    def __init__(self,name,value="",path=None):
+    def __init__(self,name,value="",path=None,num = "1"):
         self.name = name
         self.value = value
         self.path = path
-        
+        self.num = num
     def set_value(self,value):
         self.value = value
     
+    def set_num(self,num):
+        self.num = num
+    
+    def get_num(self):
+        return self.num
+    
     def get_value(self):
         return self.value
+    
+    def get_name(self):
+        return self.name
     
     def __str__(self):
         return self.value
@@ -67,7 +76,7 @@ class MccMultiValueOption:
         self.values = values
         
     def get_values(self):
-        return self.value
+        return self.values
     
     def set_value(self,index,value):
         self.values[index] = value
@@ -77,6 +86,9 @@ class MccMultiValueOption:
         
     def get_value(self,index):
         return self.values[index]
+    
+    def get_name(self):
+        return self.name
     
     def __str__(self):
         ret = ''

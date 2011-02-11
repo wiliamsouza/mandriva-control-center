@@ -26,6 +26,15 @@ class SshdAugConfigParser(object):
         """Return a list of childs of this option if any"""
         return self.aug.match(option+'/*')
     
+    def __option_exist(self,opt_name):
+        """Check if an option already exist in the list and return
+        it if yes
+        """
+        for opt in self.options:
+            if opt.get_name() == opt_name:
+                return opt
+        return None
+            
     def __process_multivalue_option(self,option,dup):
         """Process any multivalue option
         
@@ -34,11 +43,20 @@ class SshdAugConfigParser(object):
         @type dup: Boolean
         
         """
+        merge_option = None
         if dup:
             opt_name = option.split("/")[-1].split("[")[0]
+            for opt in self.options:
+                if opt.get_name() == opt_name:
+                    merge_option = opt
         else:
             opt_name = option.split("/")[-1]
-        multi_option = MccMultiValueOption(opt_name,[],option)
+            
+        if not merge_option:
+            multi_option = MccMultiValueOption(opt_name,[],option)
+        else:
+            multi_option = merge_option
+            
         childs = self.__option_has_child(option)
         if childs:
             for child in childs:
@@ -48,11 +66,12 @@ class SshdAugConfigParser(object):
         else:
             multi_option.add_value(self.aug.get(option))
             
-        self.options.append(multi_option)
-    
+        if not merge_option:
+            self.options.append(multi_option)
+
     def __parse_matchblock(self,matchblock):
         """Parse a matchblock and save its options"""
-        #TODO: dup option inside match block
+        #TODO: check if is permited dup option inside match block
         cond = self.aug.match(matchblock+'/Condition/*')
         if not cond:
             return
@@ -66,35 +85,55 @@ class SshdAugConfigParser(object):
     
     def parse(self):
         """Parse sshd_config file"""
-        #tree = self.aug.match('/files/sshd_config/*')
         tree = self.aug.match('/files/etc/ssh/sshd_config/*')
         for option in tree:
+            opt_num = 1
             if option.split("/")[-1][0] != '#' and option.split("/")[-1][:5] != 'Match': # exclude comments
-                if option.split("/")[-1][-1] == ']':
-                    self.__process_multivalue_option(option,True)
-                elif self.__option_has_child(option):
+                    #if option.split("/")[-1][-1] == ']':
+                if self.__option_has_child(option):
+                    if option.split("/")[-1][-1] == ']':
+                        self.__process_multivalue_option(option,True)
+                    else:
                         self.__process_multivalue_option(option,False)
-                elif option.split("/")[-1] in SSHDOptions.options_list:
-                    self.options.append(MccOption(option.split("/")[-1],self.aug.get(option),
-                                                  option))
+                else:
+                    if option.split("/")[-1][-1] == ']':
+                        opt_name = option.split("/")[-1].split("[")[0]
+                        opt_num =  option.split("/")[-1].split("[")[1].split("]")[0]
+                    else:
+                        opt_name = option.split("/")[-1] 
+
+                    if opt_name in SSHDOptions.options_list:
+                        self.options.append(MccOption(opt_name,self.aug.get(option),option,opt_num))
+                    else:
+                        print "Unknow option read from file"
+                        
             elif option.split("/")[-1][:5] == 'Match':
                 self.__parse_matchblock(option)
 
     def set_option(self,option):    
-        """Set an option using a MCCOption"""    
+        """Set an option using a MCCOption"""
+        #TODO: remember position to insert    
+        opt_num = 1
         if not option.path:
-            if option.split("/")[-1][-1] == "]":
-                option.path = "/files/etc/ssh/sshd_config/"+option.name+"[last()+1]"
-            else:
-                option.path = "/files/etc/ssh/sshd_config/"+option.name
-                
+            option.path = "/files/etc/ssh/sshd_config/"+option.name+"[last()]/"            
+            
         if isinstance(option,MccMultiValueOption):
             if option.name == "Subsystem":
                 self.aug.set(option.path, option.get_value(0))
                 self.aug.set(option.path+str(option.get_value(0)), option.get_value(1))
             else:
+                option.path = "/files/etc/ssh/sshd_config/"+option.name+"[%s]/"%str(opt_num)
+                self.aug.remove("/files/etc/ssh/sshd_config/"+option.name+"[*]")
+                #self.aug.
                 values = option.get_values()
+                value_len = 0
                 for value,num in  map(None,values,range(1,len(values)+1)):
+                    value_len += len(value)
+                    if value_len >= 60:
+                        opt_num += 1
+                        value_len = 0
+                        option.path = "/files/etc/ssh/sshd_config/"+option.name+"[%s]/"%str(opt_num)
+                    print "setting %s to %s"%(option.path+str(num),value)
                     self.aug.set(option.path+str(num),value)
         else:
             self.aug.set(option.path,option.get_value())
@@ -103,6 +142,7 @@ class SshdAugConfigParser(object):
             self.aug.save()
         except IOError:
             print "Error saving config file"
+            #print self.aug.get("/augeas/files/etc/ssh/sshd_config/error/message")
             return -1
     
     def set_match_option(self,option):
