@@ -36,7 +36,21 @@ class SshdConfig:
             if o.name == option:
                 value = str(o)
         return value
-    
+
+
+    def get_option(self, option):
+        '''Get Option
+        
+        @param option: String with the option name
+        
+        @type MccOption
+        '''
+        value = None
+        for o in self.augparser.options:
+            if o.name == option:
+                value = o
+        return value
+
     def get_options_as_str(self):
         '''Get all options in the config file as a string
         '''
@@ -47,7 +61,7 @@ class SshdConfig:
             else:
                 options.append((option.name,str(option)))   
         return options
-    
+
     def get_match_blocks_as_str(self):
         '''Get all match blocks as a string
         '''

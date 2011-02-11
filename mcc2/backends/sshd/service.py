@@ -29,13 +29,32 @@ class Sshd(dbus.service.Object):
                          in_signature='s',
                          out_signature='s')
     def OptionValue(self, option):
-        return self.__sshd.get_option_value(option)
+        value = self.__sshd.get_option_value(option)
+        if not value:
+            msg = 'org.mandrivalinux.mcc2.Sshd.Error.OptionNotFound'
+            raise dbus.exceptions.DBusException, msg
+        return value
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Sshd",
                          out_signature='a(ss)')
     def ListOptions(self):
         return self.__sshd.get_options_as_str()
+
+
+    @dbus.service.method("org.mandrivalinux.mcc2.Sshd",
+                         in_signature='s',
+                         out_signature='s')
+    def RemoveOption(self, option):
+        opt = self.__sshd.get_option(option)
+        if not opt:
+            msg = 'org.mandrivalinux.mcc2.Sshd.Error.OptionNotFound'
+            raise dbus.exceptions.DBusException, msg
+        result = self.__sshd.remove_option(opt)
+        if result == -1:
+            msg = 'org.mandrivalinux.mcc2.Sshd.Error.OptionRemoveError'
+            raise dbus.exceptions.DBusException, msg
+        return option
 
 
     def check_authorization(self, sender, connection, action):
