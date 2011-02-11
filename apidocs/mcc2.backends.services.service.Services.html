@@ -1,0 +1,276 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <title>mcc2.backends.services.service.Services : API documentation</title>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+    <link href="apidocs.css" type="text/css" rel="stylesheet" />
+    
+    
+  </head>
+  <body>
+    <h1 class="class">m.b.s.s.Services(<span title="dbus.service.Object">dbus.service.Object</span>) : class documentation</h1>
+    <p>
+      <span id="part">Part of <a href="mcc2.html">mcc2</a>.<a href="mcc2.backends.html">backends</a>.<a href="mcc2.backends.services.html">services</a>.<a href="mcc2.backends.services.service.html">service</a></span>
+      
+      <a href="classIndex.html#mcc2.backends.services.service.Services">View In Hierarchy</a>
+    </p>
+    <div>
+      
+    </div>
+    <div class="undocumented">No class docstring</div>
+
+    
+    
+    <div id="splitTables">
+      <table class="children sortable" id="id28">
+  
+  
+<tr class="method">
+    
+    
+    <td>Method</td>
+    <td><a href="mcc2.backends.services.service.Services.html#__init__">__init__</a></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="method">
+    
+    
+    <td>Method</td>
+    <td><a href="mcc2.backends.services.service.Services.html#Start">Start</a></td>
+    <td><span>Start unit.</span></td>
+  </tr><tr class="method">
+    
+    
+    <td>Method</td>
+    <td><a href="mcc2.backends.services.service.Services.html#Stop">Stop</a></td>
+    <td><span>Stop unit.</span></td>
+  </tr><tr class="method">
+    
+    
+    <td>Method</td>
+    <td><a href="mcc2.backends.services.service.Services.html#Restart">Restart</a></td>
+    <td><span>Restart unit.</span></td>
+  </tr><tr class="method">
+    
+    
+    <td>Method</td>
+    <td><a href="mcc2.backends.services.service.Services.html#List">List</a></td>
+    <td><span>List all units, inactive units too.</span></td>
+  </tr><tr class="method">
+    
+    
+    <td>Method</td>
+    <td><a href="mcc2.backends.services.service.Services.html#ServiceDetails">ServiceDetails</a></td>
+    <td><span>Services Detail.</span></td>
+  </tr><tr class="method">
+    
+    
+    <td>Method</td>
+    <td><a href="mcc2.backends.services.service.Services.html#check_authorization">check_authorization</a></td>
+    <td><span>Check policykit authorization.</span></td>
+  </tr><tr class="method">
+    
+    
+    <td>Method</td>
+    <td><a href="mcc2.backends.services.service.Services.html#run">run</a></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="classmethod">
+    
+    
+    <td>Class Method</td>
+    <td><a href="mcc2.backends.services.service.Services.html#main">main</a></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr>
+  
+</table>
+      
+      
+    </div>
+    
+    
+    
+
+    <div class="function">
+  <a name="mcc2.backends.services.service.Services.__init__">
+    
+  </a>
+  <a name="__init__">
+    
+  </a>
+  <div class="functionHeader">
+    
+    def
+    __init__(self):
+    
+  </div>
+  <div class="functionBody">
+    
+    <div class="undocumented">Undocumented</div>
+  </div>
+</div><div class="function">
+  <a name="mcc2.backends.services.service.Services.Start">
+    
+  </a>
+  <a name="Start">
+    
+  </a>
+  <div class="functionHeader">
+    @dbus.service.method('org.mandrivalinux.mcc2.Services', 'ss', 'o', 'sender', 'connection')<br />
+    def
+    Start(self, name, mode, sender, connection):
+    
+  </div>
+  <div class="functionBody">
+    
+    <div>Start unit.<table class="fieldTable"><tr class="fieldStart"><td class="fieldName">Parameters</td><td class="fieldArg">name</td><td>Unit name (ie: network.service).
+</td></tr><tr><td></td><td class="fieldArg">mode</td><td>Must be one of &quot;fail&quot; or &quot;replace&quot;.
+</td></tr><tr class="fieldStart"><td class="fieldName">Returns</td><td colspan="2"> (type: Job path.
+)</td></tr><tr class="fieldStart"><td class="fieldName">Raises</td><td class="fieldArg">dbus.DBusException</td><td></td></tr></table></div>
+  </div>
+</div><div class="function">
+  <a name="mcc2.backends.services.service.Services.Stop">
+    
+  </a>
+  <a name="Stop">
+    
+  </a>
+  <div class="functionHeader">
+    @dbus.service.method('org.mandrivalinux.mcc2.Services', 'ss', 'o', 'sender', 'connection')<br />
+    def
+    Stop(self, name, mode, sender, connection):
+    
+  </div>
+  <div class="functionBody">
+    
+    <div>Stop unit.<table class="fieldTable"><tr class="fieldStart"><td class="fieldName">Parameters</td><td class="fieldArg">name</td><td>Unit name (ie: network.service).
+</td></tr><tr><td></td><td class="fieldArg">mode</td><td>Must be one of &quot;fail&quot; or &quot;replace&quot;.
+</td></tr><tr class="fieldStart"><td class="fieldName">Returns</td><td colspan="2"> (type: Job path.
+)</td></tr><tr class="fieldStart"><td class="fieldName">Raises</td><td class="fieldArg">dbus.DBusException</td><td></td></tr></table></div>
+  </div>
+</div><div class="function">
+  <a name="mcc2.backends.services.service.Services.Restart">
+    
+  </a>
+  <a name="Restart">
+    
+  </a>
+  <div class="functionHeader">
+    @dbus.service.method('org.mandrivalinux.mcc2.Services', 'ss', 'o', 'sender', 'connection')<br />
+    def
+    Restart(self, name, mode, sender, connection):
+    
+  </div>
+  <div class="functionBody">
+    
+    <pre>Restart unit.
+
+@param name: Unit name (ie: network.service).
+@param mode: Must be one of "fail", "replace" or "isolate".
+
+@raise dbus.DBusException
+
+@rtype dbus.Interface: Job path.</pre>
+  </div>
+</div><div class="function">
+  <a name="mcc2.backends.services.service.Services.List">
+    
+  </a>
+  <a name="List">
+    
+  </a>
+  <div class="functionHeader">
+    @dbus.service.method('org.mandrivalinux.mcc2.Services', 'a(ssssssouso)')<br />
+    def
+    List(self):
+    
+  </div>
+  <div class="functionBody">
+    
+    <pre>List all units, inactive units too.
+
+@raise dbus.DBusException.
+
+@rtype dbus.Array:</pre>
+  </div>
+</div><div class="function">
+  <a name="mcc2.backends.services.service.Services.ServiceDetails">
+    
+  </a>
+  <a name="ServiceDetails">
+    
+  </a>
+  <div class="functionHeader">
+    @dbus.service.method('org.mandrivalinux.mcc2.Services', 's', 'a{sv}')<br />
+    def
+    ServiceDetails(self, path):
+    
+  </div>
+  <div class="functionBody">
+    
+    <pre>Services Detail.
+
+@param path: Unit path.
+
+@raise dbus.DBusException.
+
+@rtype dbus.Array:</pre>
+  </div>
+</div><div class="function">
+  <a name="mcc2.backends.services.service.Services.check_authorization">
+    
+  </a>
+  <a name="check_authorization">
+    
+  </a>
+  <div class="functionHeader">
+    
+    def
+    check_authorization(self, sender, connection, action):
+    
+  </div>
+  <div class="functionBody">
+    
+    <div>Check policykit authorization.<table class="fieldTable"><tr class="fieldStart"><td class="fieldName">Parameters</td><td class="fieldArg">sender</td><td></td></tr><tr><td></td><td class="fieldArg">connection</td><td></td></tr><tr><td></td><td class="fieldArg">action</td><td></td></tr><tr class="fieldStart"><td class="fieldName">Raises</td><td class="fieldArg">dbus.DBusException</td><td>SystemServices.Error.NotAuthorized.
+</td></tr></table></div>
+  </div>
+</div><div class="function">
+  <a name="mcc2.backends.services.service.Services.run">
+    
+  </a>
+  <a name="run">
+    
+  </a>
+  <div class="functionHeader">
+    
+    def
+    run(self):
+    
+  </div>
+  <div class="functionBody">
+    
+    <div class="undocumented">Undocumented</div>
+  </div>
+</div><div class="function">
+  <a name="mcc2.backends.services.service.Services.main">
+    
+  </a>
+  <a name="main">
+    
+  </a>
+  <div class="functionHeader">
+    @classmethod<br />
+    def
+    main(cls):
+    
+  </div>
+  <div class="functionBody">
+    
+    <div class="undocumented">Undocumented</div>
+  </div>
+</div>
+    <address>
+      <a href="index.html">API Documentation</a> for mcc2, generated by <a href="http://codespeak.net/~mwh/pydoctor/">pydoctor</a> at 2011-02-11 10:31:44.
+    </address>
+  </body>
+</html>

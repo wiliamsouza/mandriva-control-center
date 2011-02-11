@@ -1,0 +1,212 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <title>mcc2.parsers.sshd.SshdConfig.SshdConfig : API documentation</title>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+    <link href="apidocs.css" type="text/css" rel="stylesheet" />
+    
+    
+  </head>
+  <body>
+    <h1 class="class">m.p.s.S.SshdConfig : class documentation</h1>
+    <p>
+      <span id="part">Part of <a href="mcc2.html">mcc2</a>.<a href="mcc2.parsers.html">parsers</a>.<a href="mcc2.parsers.sshd.html">sshd</a>.<a href="mcc2.parsers.sshd.SshdConfig.html">SshdConfig</a></span>
+      
+      <a href="classIndex.html#mcc2.parsers.sshd.SshdConfig.SshdConfig">View In Hierarchy</a>
+    </p>
+    <div>
+      
+    </div>
+    <div>Class to control sshd configuration<table class="fieldTable"></table></div>
+
+    
+    
+    <div id="splitTables">
+      <table class="children sortable" id="id22">
+  
+  
+<tr class="method">
+    
+    
+    <td>Method</td>
+    <td><a href="mcc2.parsers.sshd.SshdConfig.SshdConfig.html#__init__">__init__</a></td>
+    <td><span>Constructor</span></td>
+  </tr><tr class="method">
+    
+    
+    <td>Method</td>
+    <td><a href="mcc2.parsers.sshd.SshdConfig.SshdConfig.html#get_option_value">get_option_value</a></td>
+    <td><span>Get the value of a SSHD option</span></td>
+  </tr><tr class="method">
+    
+    
+    <td>Method</td>
+    <td><a href="mcc2.parsers.sshd.SshdConfig.SshdConfig.html#get_options_as_str">get_options_as_str</a></td>
+    <td><span>Get all options in the config file as a string</span></td>
+  </tr><tr class="method">
+    
+    
+    <td>Method</td>
+    <td><a href="mcc2.parsers.sshd.SshdConfig.SshdConfig.html#get_match_blocks_as_str">get_match_blocks_as_str</a></td>
+    <td><span>Get all match blocks as a string</span></td>
+  </tr><tr class="method">
+    
+    
+    <td>Method</td>
+    <td><a href="mcc2.parsers.sshd.SshdConfig.SshdConfig.html#get_options">get_options</a></td>
+    <td><span>Get all options as MCCOptions</span></td>
+  </tr><tr class="method">
+    
+    
+    <td>Method</td>
+    <td><a href="mcc2.parsers.sshd.SshdConfig.SshdConfig.html#get_match_blocks">get_match_blocks</a></td>
+    <td><span>Get all match blocks as MCCSshdMatchOptions</span></td>
+  </tr><tr class="method">
+    
+    
+    <td>Method</td>
+    <td><a href="mcc2.parsers.sshd.SshdConfig.SshdConfig.html#set_option">set_option</a></td>
+    <td><span>Set the value of an option using a MCCOption</span></td>
+  </tr>
+  
+</table>
+      
+      
+    </div>
+    
+    
+    
+
+    <div class="function">
+  <a name="mcc2.parsers.sshd.SshdConfig.SshdConfig.__init__">
+    
+  </a>
+  <a name="__init__">
+    
+  </a>
+  <div class="functionHeader">
+    
+    def
+    __init__(self, sshd_config_path=None, flags=0):
+    
+  </div>
+  <div class="functionBody">
+    
+    <div>Constructor<table class="fieldTable"><tr class="fieldStart"><td class="fieldName">Parameters</td><td class="fieldArg">sshd_config_path</td><td>base path where look for /etc/ssh/sshd_config
+</td></tr><tr><td></td><td class="fieldArg">flags</td><td>Flags to pass to augeas
+</td></tr></table></div>
+  </div>
+</div><div class="function">
+  <a name="mcc2.parsers.sshd.SshdConfig.SshdConfig.get_option_value">
+    
+  </a>
+  <a name="get_option_value">
+    
+  </a>
+  <div class="functionHeader">
+    
+    def
+    get_option_value(self, option):
+    
+  </div>
+  <div class="functionBody">
+    
+    <div>Get the value of a SSHD option<table class="fieldTable"><tr class="fieldStart"><td class="fieldName">Parameters</td><td class="fieldArg">option</td><td>String with the option name
+ (type: String
+)</td></tr></table></div>
+  </div>
+</div><div class="function">
+  <a name="mcc2.parsers.sshd.SshdConfig.SshdConfig.get_options_as_str">
+    
+  </a>
+  <a name="get_options_as_str">
+    
+  </a>
+  <div class="functionHeader">
+    
+    def
+    get_options_as_str(self):
+    
+  </div>
+  <div class="functionBody">
+    
+    <div>Get all options in the config file as a string<table class="fieldTable"></table></div>
+  </div>
+</div><div class="function">
+  <a name="mcc2.parsers.sshd.SshdConfig.SshdConfig.get_match_blocks_as_str">
+    
+  </a>
+  <a name="get_match_blocks_as_str">
+    
+  </a>
+  <div class="functionHeader">
+    
+    def
+    get_match_blocks_as_str(self):
+    
+  </div>
+  <div class="functionBody">
+    
+    <div>Get all match blocks as a string<table class="fieldTable"></table></div>
+  </div>
+</div><div class="function">
+  <a name="mcc2.parsers.sshd.SshdConfig.SshdConfig.get_options">
+    
+  </a>
+  <a name="get_options">
+    
+  </a>
+  <div class="functionHeader">
+    
+    def
+    get_options(self):
+    
+  </div>
+  <div class="functionBody">
+    
+    <div>Get all options as MCCOptions<table class="fieldTable"></table></div>
+  </div>
+</div><div class="function">
+  <a name="mcc2.parsers.sshd.SshdConfig.SshdConfig.get_match_blocks">
+    
+  </a>
+  <a name="get_match_blocks">
+    
+  </a>
+  <div class="functionHeader">
+    
+    def
+    get_match_blocks(self):
+    
+  </div>
+  <div class="functionBody">
+    
+    <div>Get all match blocks as MCCSshdMatchOptions<table class="fieldTable"></table></div>
+  </div>
+</div><div class="function">
+  <a name="mcc2.parsers.sshd.SshdConfig.SshdConfig.set_option">
+    
+  </a>
+  <a name="set_option">
+    
+  </a>
+  <div class="functionHeader">
+    
+    def
+    set_option(self, option):
+    
+  </div>
+  <div class="functionBody">
+    
+    <div>Set the value of an option using a MCCOption<table class="fieldTable"><tr class="fieldStart"><td class="fieldName">Parameters</td><td class="fieldArg">option</td><td>option to be set in the config file
+ (type: MCCOption, MCCMultiValueOption
+)</td></tr></table></div>
+  </div>
+</div>
+    <address>
+      <a href="index.html">API Documentation</a> for mcc2, generated by <a href="http://codespeak.net/~mwh/pydoctor/">pydoctor</a> at 2011-02-11 10:31:44.
+    </address>
+  </body>
+</html>

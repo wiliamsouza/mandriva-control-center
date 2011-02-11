@@ -101,7 +101,7 @@ class Users(dbus.service.Object):
 
         @raise dbus.DBusException:
 
-        @rtype dbus.Int64: The UID from recently created User.
+        @return dbus.Int64: The UID from recently created User.
         """
         self.check_authorization(sender, connection,
             'org.mandrivalinux.mcc2.users.adduser')
