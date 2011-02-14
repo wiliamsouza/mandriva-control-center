@@ -5,6 +5,8 @@ import dbus.mainloop.glib
 
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
+from mcc2.backends.policykit import check_authorization
+
 __all__ = ['Services']
 
 class Services(dbus.service.Object):
@@ -65,7 +67,7 @@ class Services(dbus.service.Object):
         if not self.is_systemd_running:
             raise dbus.DBusException, self.msg['not_running']
 
-        self.check_authorization(sender, connection,
+        check_authorization(sender, connection,
             'org.mandrivalinux.mcc2.services.start')
 
         return self.__systemd_interface.StartUnit(name, mode)
@@ -89,7 +91,7 @@ class Services(dbus.service.Object):
         if not self.is_systemd_running:
             raise dbus.DBusException, self.msg['not_running']
 
-        self.check_authorization(sender, connection,
+        check_authorization(sender, connection,
             'org.mandrivalinux.mcc2.services.stop')
 
         return self.__systemd_interface.StopUnit(name, mode)
@@ -113,7 +115,7 @@ class Services(dbus.service.Object):
         if not self.is_systemd_running:
             raise dbus.DBusException, self.msg['not_running']
 
-        self.check_authorization(sender, connection,
+        check_authorization(sender, connection,
             'org.mandrivalinux.mcc2.services.restart')
 
         return self.__systemd_interface.RestartUnit(name, mode)
@@ -158,51 +160,6 @@ class Services(dbus.service.Object):
             'org.freedesktop.DBus.Properties')
 
         return properties_interface.GetAll('org.freedesktop.systemd1.Unit')
-
-
-    def check_authorization(self, sender, connection, action):
-        """Check policykit authorization.
-        
-        @param sender:
-        @param connection:
-        @param action:
-        
-        @raise dbus.DBusException: SystemServices.Error.NotAuthorized.
-        """
-        dbus_proxy = connection.get_object(
-            'org.freedesktop.DBus',
-            '/org/freedesktop/DBus/Bus')
-
-        dbus_interface = dbus.Interface(
-            dbus_proxy,
-            'org.freedesktop.DBus')
-
-        pid = dbus_interface.GetConnectionUnixProcessID(sender)
-
-        policekit_proxy = self.__bus.get_object(
-            'org.freedesktop.PolicyKit1',
-            '/org/freedesktop/PolicyKit1/Authority')
-
-        policekit_interface = dbus.Interface(
-            policekit_proxy,
-            'org.freedesktop.PolicyKit1.Authority')
-
-        subject = (
-            'unix-process',
-            {'pid': dbus.UInt32(pid, variant_level=1),
-             'start-time': dbus.UInt64(0, variant_level=1)}
-        )
-
-        detail = {'':''}
-        flags = dbus.UInt32(1)
-        cancellation = ''
-
-        (is_auth, _, details) = policekit_interface.CheckAuthorization(
-            subject, action, detail, flags, cancellation, timeout=600)
-
-        if not is_auth:
-            msg = 'org.mandrivalinux.mcc2.Services.Error.NotAuthorized'
-            raise dbus.exceptions.DBusException, msg
 
 
     def run(self):
