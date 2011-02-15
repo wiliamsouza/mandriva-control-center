@@ -139,7 +139,7 @@ class SshdAugConfigParser(object):
         #TODO: remember position to insert    
         opt_num = 1
         if not option.path:
-            option.path = "/files/etc/ssh/sshd_config/"+option.name+"[last()]/"            
+            option.path = "/files/etc/ssh/sshd_config/"+option.name+"[%s]/"%option.get_num()            
             
         if isinstance(option,MccMultiValueOption):
             if option.name == "Subsystem":
