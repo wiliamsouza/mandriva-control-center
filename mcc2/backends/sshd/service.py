@@ -67,8 +67,8 @@ class Sshd(dbus.service.Object):
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Sshd",
-                         in_signature='svi',
-                         out_signature='s',
+                         in_signature='svs',
+                         out_signature='i',
                          sender_keyword='sender',
                          connection_keyword='connection')
     def AddOption(self, option, value, number, sender, connection):
@@ -84,6 +84,7 @@ class Sshd(dbus.service.Object):
         else:
             msg = 'org.mandrivalinux.mcc2.Sshd.Error.UnsupportedType'
             raise dbus.exceptions.DBusException, msg
+        return self.__sshd.set_option(opt)
 
 
     def run(self):
