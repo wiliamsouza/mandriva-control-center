@@ -98,7 +98,9 @@ class SshdConfig:
         @param option: option to be set in the config file
         @type option: MCCOption, MCCMultiValueOption
         '''
+        ret = -1
         if isinstance(option, MccMultiValueOption) or isinstance(option, MccOption):
-            self.augparser.set_option(option)
+            ret = self.augparser.set_option(option)
         elif isinstance(option,MccSshdMatchOption):
-            self.augparser.set_match_option(option)
+            ret = self.augparser.set_match_option(option)
+        return ret

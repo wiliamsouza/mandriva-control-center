@@ -132,6 +132,7 @@ class SshdAugConfigParser(object):
             #print self.aug.get("/augeas/files/etc/ssh/sshd_config/error/message")
             return -1
         self.parse()
+        return 0
         
     def set_option(self,option):    
         """Set an option using a MCCOption"""
@@ -168,9 +169,18 @@ class SshdAugConfigParser(object):
             #print self.aug.get("/augeas/files/etc/ssh/sshd_config/error/message")
             return -1
         self.parse()
+        return 0
         
     def set_match_option(self,option):
         """Set a match Block using a MCCSshdMatchOptions"""
         self.aug.set(option.condition.path, option.condition.value)
         for setting in option.settings:
             self.aug.set(setting.path, setting.value)
+        try:
+            self.aug.save()
+        except IOError:
+            print "Error saving config file"
+            #print self.aug.get("/augeas/files/etc/ssh/sshd_config/error/message")
+            return -1
+        self.parse()
+        return 0
