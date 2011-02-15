@@ -23,7 +23,10 @@ Backend
 
  * Merge sshd key options because it's only used in sshd_config to ensure
    line not be more than 80 characters.
- 
+
+ * Rename sshd HostKey protocol version 2 to HostKeyRSA and HostKeyDSA to avoid
+   confusion.
+
 Frontend
 --------
 

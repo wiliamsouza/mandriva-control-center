@@ -26,8 +26,18 @@
     </defaults>
   </action>
 
-  <action id="org.mandrivalinux.mcc2.services.removeoption">
-    <description>Remove option</description>
+  <action id="org.mandrivalinux.mcc2.sshd.deleteoption">
+    <description>Remove Option</description>
+    <message>Authentication is required to remove sshd option</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+  </action>
+
+  <action id="org.mandrivalinux.mcc2.sshd.addoption">
+    <description>Add Option</description>
     <message>Authentication is required to remove sshd option</message>
     <defaults>
       <allow_any>no</allow_any>

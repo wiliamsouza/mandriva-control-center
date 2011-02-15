@@ -23,7 +23,7 @@ class SshdConfig:
     def remove_option(self,option):
         return self.augparser.remove_option(option)
            
-    def get_option_value(self,option):
+    def get_option_value(self, option, number):
         '''Get the value of a SSHD option
         
         @param option: String with the option name
@@ -33,12 +33,12 @@ class SshdConfig:
         if option == 'Match':
             return value
         for o in self.augparser.options:
-            if o.name == option:
+            if o.name == option and o.get_num() == number:
                 value = str(o)
         return value
 
 
-    def get_option(self, option):
+    def get_option(self, option, number):
         '''Get Option
         
         @param option: String with the option name
@@ -47,7 +47,7 @@ class SshdConfig:
         '''
         value = None
         for o in self.augparser.options:
-            if o.name == option:
+            if o.name == option and o.get_num() == number:
                 value = o
         return value
 
@@ -59,7 +59,8 @@ class SshdConfig:
             if option.name == 'Match':
                 pass
             else:
-                options.append((option.name,str(option)))   
+                options.append((option.name, str(option), option.get_num()))
+
         return options
 
     def get_match_blocks_as_str(self):

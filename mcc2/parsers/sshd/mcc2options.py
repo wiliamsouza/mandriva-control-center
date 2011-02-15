@@ -54,7 +54,7 @@ class MccOption:
         self.num = num
     
     def get_num(self):
-        return self.num
+        return str(self.num)
     
     def get_value(self):
         return self.value
@@ -89,7 +89,10 @@ class MccMultiValueOption:
     
     def get_name(self):
         return self.name
-    
+
+    def get_num(self):
+        return ''
+
     def __str__(self):
         ret = ''
         for value in self.values:
