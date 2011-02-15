@@ -85,6 +85,7 @@ class SshdAugConfigParser(object):
     
     def parse(self):
         """Parse sshd_config file"""
+        self.options=[]
         tree = self.aug.match('/files/etc/ssh/sshd_config/*')
         for option in tree:
             opt_num = 1
@@ -130,7 +131,8 @@ class SshdAugConfigParser(object):
             print "Error saving config file"
             #print self.aug.get("/augeas/files/etc/ssh/sshd_config/error/message")
             return -1
-           
+        self.parse()
+        
     def set_option(self,option):    
         """Set an option using a MCCOption"""
         #TODO: remember position to insert    
@@ -165,7 +167,8 @@ class SshdAugConfigParser(object):
             print "Error saving config file"
             #print self.aug.get("/augeas/files/etc/ssh/sshd_config/error/message")
             return -1
-    
+        self.parse()
+        
     def set_match_option(self,option):
         """Set a match Block using a MCCSshdMatchOptions"""
         self.aug.set(option.condition.path, option.condition.value)
