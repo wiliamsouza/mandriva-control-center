@@ -77,10 +77,10 @@ class Sshd(dbus.service.Object):
         opt = None
         if isinstance(value, dbus.Array):
             print 'Creating MccMultiValueOption'
-            opt = MccMultiValueOption(option, value)
+            opt = MccMultiValueOption(name = option,value = value)
         elif isinstance(value, dbus.String):
             print 'Creating MccOption'
-            opt = MccOption(option, value, number)
+            opt = MccOption(name=option,value = value,num = number)
         else:
             msg = 'org.mandrivalinux.mcc2.Sshd.Error.UnsupportedType'
             raise dbus.exceptions.DBusException, msg
