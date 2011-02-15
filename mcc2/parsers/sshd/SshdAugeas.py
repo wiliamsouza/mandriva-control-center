@@ -139,14 +139,14 @@ class SshdAugConfigParser(object):
         #TODO: remember position to insert    
         opt_num = 1
         if not option.path:
-            option.path = "/files/etc/ssh/sshd_config/"+option.name+"[%s]/"%option.get_num()            
+            option.path = "/files/etc/ssh/sshd_config/"+option.name+"[%s]"%option.get_num()            
             
         if isinstance(option,MccMultiValueOption):
             if option.name == "Subsystem":
                 self.aug.set(option.path, option.get_value(0))
                 self.aug.set(option.path+str(option.get_value(0)), option.get_value(1))
             else:
-                option.path = "/files/etc/ssh/sshd_config/"+option.name+"[%s]/"%str(opt_num)
+                option.path = "/files/etc/ssh/sshd_config/"+option.name+"[%s]"%str(opt_num)
                 self.aug.remove("/files/etc/ssh/sshd_config/"+option.name+"[*]")
                 #self.aug.
                 values = option.get_values()
@@ -156,7 +156,7 @@ class SshdAugConfigParser(object):
                     if value_len >= 60:
                         opt_num += 1
                         value_len = 0
-                        option.path = "/files/etc/ssh/sshd_config/"+option.name+"[%s]/"%str(opt_num)
+                        option.path = "/files/etc/ssh/sshd_config/"+option.name+"[%s]"%str(opt_num)
                     print "setting %s to %s"%(option.path+str(num),value)
                     self.aug.set(option.path+str(num),value)
         else:
