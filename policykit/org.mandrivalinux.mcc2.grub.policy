@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC
+ "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+<policyconfig>
+  <vendor>Mandriva Linux</vendor>
+  <vendor_url>http://www.mandriva.com</vendor_url>
+<!--
+  <action id="org.mandrivalinux.mcc2.grub.optionvalue">
+    <description>Option Value</description>
+    <message>Authentication is required</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+
+  <action id="org.mandrivalinux.mcc2.grub.deleteoption">
+    <description>Remove Option</description>
+    <message>Authentication is required to remove sshd option</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+  </action>
+  -->
+</policyconfig>

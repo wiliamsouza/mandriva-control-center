@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=org.mandrivalinux.mcc2.Grub
+Exec=/usr/share/mandriva/bin/grub-mechanism.py
+User=root
