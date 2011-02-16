@@ -27,6 +27,9 @@ Backend
  * Rename sshd HostKey protocol version 2 to HostKeyRSA and HostKeyDSA to avoid
    confusion.
 
+ * Check if d-bus interface is running before start to avoid have to instance
+   running.
+
 Frontend
 --------
 
