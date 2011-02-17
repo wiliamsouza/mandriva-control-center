@@ -37,21 +37,26 @@ class Grub(dbus.service.Object):
 
     @dbus.service.method("org.mandrivalinux.mcc2.Grub",
                          in_signature='s',
-                         out_signature='i')
-    def SetDefaultBoot(self, name):
+                         out_signature='i',
+                         sender_keyword='sender',
+                         connection_keyword='connection')
+    def ChangeDefaultBoot(self, name, sender, connection):
         """
-        Set the default booted option to name.
+        Change the default booted option to name.
     
         -1 set it to savedefault.
         Return 0 if successful.
         Return 1 if failed.
         """
+        check_authorization(sender, connection,
+            'org.mandrivalinux.mcc2.grub.rootpassword')
+
         return self.__grub.set_default_boot(name)
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Grub",
                          out_signature='v')
-    def GetDefaultBoot(self):
+    def DefaultBoot(self):
         """Return the name of the default booted option.
         
         Return -1 if it is savedefault.
@@ -61,69 +66,89 @@ class Grub(dbus.service.Object):
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Grub",
-                         in_signature='i')
-    def SetTimeout(self, timeout):
-        """Set the timeout in seconds used in the Grub menu.
+                         in_signature='i',
+                         sender_keyword='sender',
+                         connection_keyword='connection')
+    def ChangeTimeout(self, timeout, sender, connection):
+        """Change the timeout in seconds used in the Grub menu.
         active = bool whether timeout is used
         timeout = number of seconds
         """
+        check_authorization(sender, connection,
+            'org.mandrivalinux.mcc2.grub.rootpassword')
+
         self.__grub.set_timeout(timeout)
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Grub",
                          out_signature='i')
-    def GetTimeout(self):
+    def Timeout(self):
         """Return the timeout in seconds used for Grub menu"""
         return self.__grub.get_timeout()
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Grub",
-                         in_signature='i')
-    def SetVgaCode(self, vga):
-        """Set the resolution based on Grub vga code
+                         in_signature='i',
+                         sender_keyword='sender',
+                         connection_keyword='connection')
+    def ChangeVgaCode(self, vga, sender, connection):
+        """Change the resolution based on Grub vga code
         vga = integer, grub vga code
         """
+        check_authorization(sender, connection,
+            'org.mandrivalinux.mcc2.grub.rootpassword')
+
         self.__grub.set_vga_code(vga)
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Grub",
                          out_signature='i')
-    def GetVgaCode(self):
+    def VgaCode(self):
         """Return the Grub vga code used, as integer"""
         return self.__grub.get_vga_code()
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Grub",
-                         in_signature='b')
-    def SetPasswordProtection(self, active):
-        """Set whether the Grub menu is password protected
+                         in_signature='b',
+                         sender_keyword='sender',
+                         connection_keyword='connection')
+    def ChangePasswordProtection(self, active, sender, connection):
+        """Change whether the Grub menu is password protected
         
         @param active: boolean
         
         @return dbus.Bollean
         """
+        check_authorization(sender, connection,
+            'org.mandrivalinux.mcc2.grub.rootpassword')
+
         self.__grub.set_password_protection(active)
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Grub",
                          out_signature='b')
-    def GetPasswordProtection(self):
+    def PasswordProtection(self):
         """Boolean, returns whether the Grub menu is password protected"""
         return self.__grub.get_password_protection()
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Grub",
-                         in_signature='b')
-    def SetProtectRescueMode(self, active):
-        """Set whether the alternate boot option is password protected
+                         in_signature='b',
+                         sender_keyword='sender',
+                         connection_keyword='connection')
+    def ChangeProtectRescueMode(self, active, sender, connection):
+        """Change whether the alternate boot option is password protected
         active = boolean
         """
-        self.__grub.Set_protect_rescuemode(active)
+        check_authorization(sender, connection,
+            'org.mandrivalinux.mcc2.grub.rootpassword')
+
+        self.__grub.Change_protect_rescuemode(active)
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Grub",
                          out_signature='b')
-    def GetProtectRescueMode(self):
+    def ProtectRescueMode(self):
         """Boolean, returns whether the alternate boot option
         is password protected
         """
@@ -131,30 +156,40 @@ class Grub(dbus.service.Object):
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Grub",
-                         in_signature='b')
-    def SetProtectOldMode(self, active):
-        """Set whether old boot options are password protected
+                         in_signature='b',
+                         sender_keyword='sender',
+                         connection_keyword='connection')
+    def ChangeProtectOldMode(self, active, sender, connection):
+        """Change whether old boot options are password protected
         active = boolean
         """
-        self.__grub.Set_protect_oldmode(active)
+        check_authorization(sender, connection,
+            'org.mandrivalinux.mcc2.grub.rootpassword')
+
+        self.__grub.Change_protect_oldmode(active)
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Grub",
                          out_signature='b')
-    def GetProtectOldMode(self):
+    def ProtectOldMode(self):
         """Boolean, returns whether old boot options are password protected"""
         return self.__grub.get_protect_oldmode()
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Grub",
-                         out_signature='sb')
-    def UpdatePassword(self, password, active):
-        """Set password for grub menu, and whether
+                         out_signature='sb',
+                         sender_keyword='sender',
+                         connection_keyword='connection')
+    def UpdatePassword(self, password, active, sender, connection):
+        """Change password for grub menu, and whether
         password protection is active
         
         active = boolean
         password = string, must be at least four characters
         """
+        check_authorization(sender, connection,
+            'org.mandrivalinux.mcc2.grub.rootpassword')
+
         self.__grub.update_password(password, active)
 
 

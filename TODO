@@ -30,6 +30,8 @@ Backend
  * Check if d-bus interface is running before start to avoid have to instance
    running.
 
+ * Make policykit authorization type be configurable for all methods that use it.
+
 Frontend
 --------
 
