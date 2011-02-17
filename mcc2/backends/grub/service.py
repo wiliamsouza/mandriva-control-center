@@ -93,6 +93,71 @@ class Grub(dbus.service.Object):
         return self.__grub.get_vga_code()
 
 
+    @dbus.service.method("org.mandrivalinux.mcc2.Grub",
+                         in_signature='b')
+    def SetPasswordProtection(self, active):
+        """Set whether the Grub menu is password protected
+        
+        @param active: boolean
+        
+        @return dbus.Bollean
+        """
+        self.__grub.set_password_protection(active)
+
+
+    @dbus.service.method("org.mandrivalinux.mcc2.Grub",
+                         out_signature='b')
+    def GetPasswordProtection(self):
+        """Boolean, returns whether the Grub menu is password protected"""
+        return self.__grub.get_password_protection()
+
+
+    @dbus.service.method("org.mandrivalinux.mcc2.Grub",
+                         in_signature='b')
+    def SetProtectRescueMode(self, active):
+        """Set whether the alternate boot option is password protected
+        active = boolean
+        """
+        self.__grub.Set_protect_rescuemode(active)
+
+
+    @dbus.service.method("org.mandrivalinux.mcc2.Grub",
+                         out_signature='b')
+    def GetProtectRescueMode(self):
+        """Boolean, returns whether the alternate boot option
+        is password protected
+        """
+        return self.__grub.get_protect_rescuemode()
+
+
+    @dbus.service.method("org.mandrivalinux.mcc2.Grub",
+                         in_signature='b')
+    def SetProtectOldMode(self, active):
+        """Set whether old boot options are password protected
+        active = boolean
+        """
+        self.__grub.Set_protect_oldmode(active)
+
+
+    @dbus.service.method("org.mandrivalinux.mcc2.Grub",
+                         out_signature='b')
+    def GetProtectOldMode(self):
+        """Boolean, returns whether old boot options are password protected"""
+        return self.__grub.get_protect_oldmode()
+
+
+    @dbus.service.method("org.mandrivalinux.mcc2.Grub",
+                         out_signature='sb')
+    def UpdatePassword(self, password, active):
+        """Set password for grub menu, and whether
+        password protection is active
+        
+        active = boolean
+        password = string, must be at least four characters
+        """
+        self.__grub.update_password(password, active)
+
+
     def run(self):
         self.__loop.run()
 
