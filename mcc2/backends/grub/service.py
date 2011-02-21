@@ -197,6 +197,13 @@ class Grub(dbus.service.Object):
         self.__grub.update_password(password, active)
 
 
+    @dbus.service.method('org.mandrivalinux.mcc2.Grub',
+                         sender_keyword='sender',
+                         connection_keyword='connection')
+    def StopInterface(self, sender, connection):
+        self.__loop.quit()
+
+
     def run(self):
         self.__loop.run()
 

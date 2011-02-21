@@ -600,6 +600,13 @@ class Users(dbus.service.Object):
         return self.__libuser.modifyUser(user_entity)
 
 
+    @dbus.service.method('org.mandrivalinux.mcc2.Users',
+                         sender_keyword='sender',
+                         connection_keyword='connection')
+    def StopInterface(self, sender, connection):
+        self.__loop.quit()
+
+
     def run(self):
         self._loop.run()
 

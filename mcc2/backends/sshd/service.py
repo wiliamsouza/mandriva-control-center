@@ -95,6 +95,13 @@ class Sshd(dbus.service.Object):
         return 1
 
 
+    @dbus.service.method('org.mandrivalinux.mcc2.Sshd',
+                         sender_keyword='sender',
+                         connection_keyword='connection')
+    def StopInterface(self, sender, connection):
+        self.__loop.quit()
+
+
     def run(self):
         self.__loop.run()
 

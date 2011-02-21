@@ -170,6 +170,13 @@ class Services(dbus.service.Object):
         return properties_interface.GetAll('org.freedesktop.systemd1.Unit')
 
 
+    @dbus.service.method('org.mandrivalinux.mcc2.Services',
+                         sender_keyword='sender',
+                         connection_keyword='connection')
+    def StopInterface(self, sender, connection):
+        self.__loop.quit()
+
+
     def run(self):
         self.__loop.run()
 
