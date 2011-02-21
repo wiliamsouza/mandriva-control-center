@@ -1,13 +1,11 @@
+import ConfigParser
 import gobject
 import dbus
 import dbus.service
 import dbus.mainloop.glib
-
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-
 from mcc2.parsers.sshd.SshdConfig import SshdConfig
 from mcc2.parsers.sshd.mcc2options import MccOption, MccMultiValueOption
-
 from mcc2.backends.policykit import check_authorization
 
 __all__ = ['Sshd']
@@ -27,6 +25,17 @@ class Sshd(dbus.service.Object):
 
         self.__loop = gobject.MainLoop()
         self.__sshd = SshdConfig('/tmp/augeas-sandbox', 0)
+        self.__action = 'org.mandrivalinux.mcc2.auth_admin_keep'
+
+        config = ConfigParser.ConfigParser()
+        config.read('/usr/share/mandriva/config/mcc2.cfg')
+        policy_level = config.get('policy', 'level')
+
+        if policy_level == 'application':
+            self.__action = 'org.mandrivalinux.mcc2.sshd.auth_admin_keep'
+
+        if policy_level == 'method':
+            self.__action = None
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Sshd",
@@ -52,8 +61,7 @@ class Sshd(dbus.service.Object):
                          sender_keyword='sender',
                          connection_keyword='connection')
     def DeleteOption(self, option, number, sender, connection):
-        check_authorization(sender, connection,
-            'org.mandrivalinux.mcc2.sshd.deleteoption')
+        check_authorization(sender, connection, self.__action)
 
         opt = self.__sshd.get_option(option, number)
         if not opt:
@@ -72,8 +80,7 @@ class Sshd(dbus.service.Object):
                          sender_keyword='sender',
                          connection_keyword='connection')
     def AddOption(self, option, value, number, sender, connection):
-        check_authorization(sender, connection,
-            'org.mandrivalinux.mcc2.sshd.addoption')
+        check_authorization(sender, connection, self.__action)
         opt = None
         if isinstance(value, dbus.Array):
             print 'Creating MccMultiValueOption'

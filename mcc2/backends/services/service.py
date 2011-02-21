@@ -1,10 +1,9 @@
+import ConfigParser
 import gobject
 import dbus
 import dbus.service
 import dbus.mainloop.glib
-
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-
 from mcc2.backends.policykit import check_authorization
 
 __all__ = ['Services']
@@ -43,10 +42,22 @@ class Services(dbus.service.Object):
             if error.get_dbus_name() == systemd_error:
                 pass
 
-        self._loop = gobject.MainLoop()
+        self.__loop = gobject.MainLoop()
         self.msg = {
             'not_running':'org.mandrivalinux.mcc2.Services.Error.SystemdNotRunning'
             }
+
+        self.__action = 'org.mandrivalinux.mcc2.auth_admin_keep'
+
+        config = ConfigParser.ConfigParser()
+        config.read('/usr/share/mandriva/config/mcc2.cfg')
+        policy_level = config.get('policy', 'level')
+
+        if policy_level == 'application':
+            self.__action = 'org.mandrivalinux.mcc2.services.auth_admin_keep'
+
+        if policy_level == 'method':
+            self.__action = None
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Services",
@@ -67,8 +78,7 @@ class Services(dbus.service.Object):
         if not self.is_systemd_running:
             raise dbus.DBusException, self.msg['not_running']
 
-        check_authorization(sender, connection,
-            'org.mandrivalinux.mcc2.services.start')
+        check_authorization(sender, connection, self.__action)
 
         return self.__systemd_interface.StartUnit(name, mode)
 
@@ -91,8 +101,7 @@ class Services(dbus.service.Object):
         if not self.is_systemd_running:
             raise dbus.DBusException, self.msg['not_running']
 
-        check_authorization(sender, connection,
-            'org.mandrivalinux.mcc2.services.stop')
+        check_authorization(sender, connection, self.__action)
 
         return self.__systemd_interface.StopUnit(name, mode)
 
@@ -115,8 +124,7 @@ class Services(dbus.service.Object):
         if not self.is_systemd_running:
             raise dbus.DBusException, self.msg['not_running']
 
-        check_authorization(sender, connection,
-            'org.mandrivalinux.mcc2.services.restart')
+        check_authorization(sender, connection, self.__action)
 
         return self.__systemd_interface.RestartUnit(name, mode)
 
@@ -163,7 +171,7 @@ class Services(dbus.service.Object):
 
 
     def run(self):
-        self._loop.run()
+        self.__loop.run()
 
 
     @classmethod

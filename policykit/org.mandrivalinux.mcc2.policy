@@ -6,9 +6,9 @@
   <vendor>Mandriva Linux</vendor>
   <vendor_url>http://www.mandriva.com</vendor_url>
 
-  <action id="org.mandrivalinux.mcc2.grub.auth_admin_keep">
-    <description>Set Grub Option</description>
-    <message>Authentication is required to set GRUB options</message>
+  <action id="org.mandrivalinux.mcc2.auth_admin_keep">
+    <description>Mandriva Control Center</description>
+    <message>Authentication is required</message>
     <defaults>
       <allow_any>no</allow_any>
       <allow_inactive>no</allow_inactive>

@@ -1,15 +1,12 @@
+import ConfigParser
 import gobject
-
 import dbus
 import dbus.service
 import dbus.mainloop.glib
-
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-
 import math
 import libuser
 from datetime import date, timedelta
-
 from mcc2.backends.policykit import check_authorization
 
 #TODO: make a method to this
@@ -31,6 +28,17 @@ class Users(dbus.service.Object):
 
         self._loop = gobject.MainLoop()
         self.__libuser = libuser.admin()
+        self.__action = 'org.mandrivalinux.mcc2.auth_admin_keep'
+
+        config = ConfigParser.ConfigParser()
+        config.read('/usr/share/mandriva/config/mcc2.cfg')
+        policy_level = config.get('policy', 'level')
+
+        if policy_level == 'application':
+            self.__action = 'org.mandrivalinux.mcc2.users.auth_admin_keep'
+
+        if policy_level == 'method':
+            self.__action = None
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
@@ -48,8 +56,9 @@ class Users(dbus.service.Object):
         
         @rtype dbus.Int64: The GID from recently created Group.
         """
-        check_authorization(sender, connection,
-            'org.mandrivalinux.mcc2.users.addgroup')
+        check_authorization(sender, connection, self.__action)
+        #check_authorization(sender, connection,
+        #    'org.mandrivalinux.mcc2.users.addgroup')
 
         init_group = self.__libuser.initGroup(groupname)
         init_group.set(libuser.GIDNUMBER, gid)
@@ -105,8 +114,9 @@ class Users(dbus.service.Object):
 
         @return dbus.Int64: The UID from recently created User.
         """
-        check_authorization(sender, connection,
-            'org.mandrivalinux.mcc2.users.adduser')
+        check_authorization(sender, connection, self.__action)
+        #check_authorization(sender, connection,
+        #    'org.mandrivalinux.mcc2.users.adduser')
 
         user_entity = self.__libuser.initUser(user_info['username'])
         user_entity.set(libuser.GECOS, [user_info['fullname']])
@@ -150,8 +160,9 @@ class Users(dbus.service.Object):
         
         @rtype: dbus.Dictionary: Recent removed group id and groupname.
         """
-        check_authorization(sender, connection,
-            'org.mandrivalinux.mcc2.users.deletegroup')
+        check_authorization(sender, connection, self.__action)
+        #check_authorization(sender, connection,
+        #    'org.mandrivalinux.mcc2.users.deletegroup')
 
         group_entity = self.__libuser.lookupGroupByName(groupname)
         gid = group_entity.get(libuser.GIDNUMBER)[0]
@@ -186,8 +197,9 @@ class Users(dbus.service.Object):
         
         @rtype: dbus.Dictionary: Recent removed user id and groupname.
         """
-        check_authorization(sender, connection,
-            'org.mandrivalinux.mcc2.users.deleteuser')
+        check_authorization(sender, connection, self.__action)
+        #check_authorization(sender, connection,
+        #    'org.mandrivalinux.mcc2.users.deleteuser')
 
         user_entity = self.__libuser.lookupUserByName(username)
         uid = user_entity.get(libuser.UIDNUMBER)[0]
@@ -342,8 +354,9 @@ class Users(dbus.service.Object):
         
         @rtype dbus.Int32: 1 ok or 0 fail.
         """
-        check_authorization(sender, connection,
-            'org.mandrivalinux.mcc2.users.lockgroup')
+        #
+        #check_authorization(sender, connection,
+        #    'org.mandrivalinux.mcc2.users.lockgroup')
 
         group_entity = self.__libuser.lookupGroupByName(groupname)
 
@@ -364,8 +377,9 @@ class Users(dbus.service.Object):
         
         @rtype dbus.Int32: 1 ok or 0 fail.
         """
-        check_authorization(sender, connection,
-            'org.mandrivalinux.mcc2.users.unlockgroup')
+        check_authorization(sender, connection, self.__action)
+        #check_authorization(sender, connection,
+        #    'org.mandrivalinux.mcc2.users.unlockgroup')
 
         group_entity = self.__libuser.lookupGroupByName(groupname)
 
@@ -403,8 +417,9 @@ class Users(dbus.service.Object):
         
         @rtype dbus.Int32: 1 ok or 0 fail.
         """
-        check_authorization(sender, connection,
-            'org.mandrivalinux.mcc2.users.lockuser')
+        check_authorization(sender, connection, self.__action)
+        #check_authorization(sender, connection,
+        #    'org.mandrivalinux.mcc2.users.lockuser')
 
         user_entity = self.__libuser.lookupUserByName(username)
 
@@ -425,8 +440,9 @@ class Users(dbus.service.Object):
         
         @rtype dbus.Int32: 1 ok or 0 fail.
         """
-        check_authorization(sender, connection,
-            'org.mandrivalinux.mcc2.users.unlockuser')
+        check_authorization(sender, connection, self.__action)
+        #check_authorization(sender, connection,
+        #    'org.mandrivalinux.mcc2.users.unlockuser')
 
         user_entity = self.__libuser.lookupUserByName(username)
 
@@ -459,8 +475,9 @@ class Users(dbus.service.Object):
         
         @rtype dbus.Int32: 1 ok or 0 fail.
         """
-        check_authorization(sender, connection,
-            'org.mandrivalinux.mcc2.users.modifygroup')
+        check_authorization(sender, connection, self.__action)
+        #check_authorization(sender, connection,
+        #    'org.mandrivalinux.mcc2.users.modifygroup')
 
         group_entity = self.__libuser.lookupGroupByName(group_info['groupname'])
         group_entity.set(libuser.MEMBERNAME, group_info['members'])
@@ -514,8 +531,9 @@ class Users(dbus.service.Object):
         
         @rtype dbus.Int32: 1 ok or 0 fail.
         """
-        check_authorization(sender, connection,
-            'org.mandrivalinux.mcc2.users.modifyuser')
+        check_authorization(sender, connection, self.__action)
+        #check_authorization(sender, connection,
+        #    'org.mandrivalinux.mcc2.users.modifyuser')
 
         user_entity = self.__libuser.lookupUserByName(user_info['username'])
         user_entity.set(libuser.GECOS, [user_info['fullname']])
