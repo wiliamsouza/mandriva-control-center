@@ -596,8 +596,34 @@ class Users(dbus.service.Object):
         #    user_entity.set(
         #        libuser.SHADOWLASTCHANGE,
         #        int(user_info['shadow_last_change']))
+        
+        self.__libuser.setpassUser(user_entity, user_info['password'], 0)
 
         return self.__libuser.modifyUser(user_entity)
+
+
+    @dbus.service.method("org.mandrivalinux.mcc2.Users",
+			 in_signature='s',
+                         out_signature='a{sv}')
+    def UserDetails(self, user):
+
+	user_entity = self.__libuser.lookupUserByName(user)
+        
+        return dbus.Dictionary(
+            {
+            'uid': user_entity.get(libuser.UIDNUMBER)[0],
+            'gid': user_entity.get(libuser.GIDNUMBER)[0],
+            'username': user_entity.get(libuser.USERNAME)[0],
+            'fullname': user_entity.get(libuser.GECOS)[0],
+            'home_directory': user_entity.get(libuser.HOMEDIRECTORY)[0],
+            'login_shell': user_entity.get(libuser.LOGINSHELL)[0],
+            'shadow_expire': user_entity.get(libuser.SHADOWEXPIRE)[0],
+            'shadow_min': user_entity.get(libuser.SHADOWMIN)[0],
+            'shadow_max': user_entity.get(libuser.SHADOWMAX)[0],
+            'shadow_warning': user_entity.get(libuser.SHADOWWARNING)[0],
+            'shadow_inactive': user_entity.get(libuser.SHADOWINACTIVE)[0],
+            'shadow_last_change': user_entity.get(libuser.SHADOWLASTCHANGE)[0],
+            }, signature=dbus.Signature('sv'))
 
 
     @dbus.service.method('org.mandrivalinux.mcc2.Users',
