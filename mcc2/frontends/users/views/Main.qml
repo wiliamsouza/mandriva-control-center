@@ -65,14 +65,20 @@ Item {
         }
     }
 
-    Item {
+    Rectangle {
         id: right
         x: left.width
         y: header.height
         width: window.width - left.width
         height: window.height - header.height
         clip: true
-        //color: "grey"
+        color: "lightblue"
+
+        Flickable {
+            id: rightFlick
+            anchors.fill: parent
+            contentWidth: right.width
+            contentHeight: userForm.height
 
         Grid {
             id: userForm
@@ -84,7 +90,19 @@ Item {
             anchors.top: parent.top
             anchors.topMargin: 12
 
-            // Line #1
+
+            // User data
+            Text {
+                text: "User data"
+                color: "red"
+                opacity: 0.6
+                font.bold: true
+                font.pixelSize: 20
+            }
+            Text {
+                text: " "
+            }
+
             Text {
                 text: "Full name:"
                 color: "black"
@@ -96,11 +114,9 @@ Item {
                 id: fullName
                 width: 215
                 text: "full name"
-                focus: true
                 selectByMouse: true
             }
 
-            // Line #2
             Text {
                 text: "Username:"
                 color: "black"
@@ -112,11 +128,9 @@ Item {
                 id: userName
                 width: 215
                 text: "username"
-                focus: true
                 selectByMouse: true
             }
 
-            // Line #3
             Text {
                 text: "Password:"
                 color: "black"
@@ -128,12 +142,10 @@ Item {
                 id: password
                 width: 215
                 text: "password"
-                focus: true
                 selectByMouse: true
                 echoMode: TextInput.Password
             }
 
-            // Line #4
             Text {
                 text: "Confirm password:"
                 color: "black"
@@ -145,12 +157,10 @@ Item {
                 id: confirmPassword
                 width: 215
                 text: "password"
-                focus: true
                 selectByMouse: true
                 echoMode: TextInput.Password
             }
 
-            // Line #5
             Text {
                 text: "Login shell:"
                 color: "black"
@@ -162,11 +172,9 @@ Item {
                 id: loginShell
                 width: 215
                 text: "login shell"
-                focus: true
                 selectByMouse: true
             }
 
-            // Line #6
             Text {
                 text: "Home Directory:"
                 color: "black"
@@ -178,11 +186,168 @@ Item {
                 id: homeDirectory
                 width: 215
                 text: "home"
-                focus: true
                 selectByMouse: true
             }
-        }
 
+
+            // Account info
+            Text {
+                text: "Account info"
+                color: "red"
+                opacity: 0.6
+                font.bold: true
+                font.pixelSize: 20
+            }
+            Text {
+                text: " "
+            }
+
+            Text {
+                text: "Account expires:"
+                color: "black"
+                opacity: 0.6
+                font.bold: true
+                font.pixelSize: 15
+            }
+            TextInput {
+                id: accountExpires
+                width: 215
+                //text: ""
+                selectByMouse: true
+                inputMask: "0000-00-00"
+            }
+
+            Text {
+                text: "Lock account:"
+                color: "black"
+                opacity: 0.6
+                font.bold: true
+                font.pixelSize: 15
+            }
+            TextInput {
+                id: lockAccount
+                width: 215
+                text: "no"
+                selectByMouse: true
+            }
+
+            Text {
+                text: "Icon:"
+                color: "black"
+                opacity: 0.6
+                font.bold: true
+                font.pixelSize: 15
+            }
+            Text {
+                text: " "
+            }
+
+
+            // Password info
+            Text {
+                text: "Password info"
+                color: "red"
+                opacity: 0.6
+                font.bold: true
+                font.pixelSize: 20
+            }
+            Text {
+                text: " "
+            }
+
+            Text {
+                text: "Password Expiration:"
+                color: "black"
+                opacity: 0.6
+                font.bold: true
+                font.pixelSize: 15
+            }
+            TextInput {
+                id: passwordExpiration
+                width: 215
+                text: "no"
+                selectByMouse: true
+            }
+
+            Text {
+                text: "Days before change allowed:"
+                color: "black"
+                opacity: 0.6
+                font.bold: true
+                font.pixelSize: 15
+            }
+            TextInput {
+                id: changedAllowed
+                width: 215
+                text: "changed allowed"
+                selectByMouse: true
+            }
+
+            Text {
+                text: "Days before change required:"
+                color: "black"
+                opacity: 0.6
+                font.bold: true
+                font.pixelSize: 15
+            }
+            TextInput {
+                id: changedRequired
+                width: 215
+                text: "changed required"
+                selectByMouse: true
+            }
+
+            Text {
+                text: "Days warning before change:"
+                color: "black"
+                opacity: 0.6
+                font.bold: true
+                font.pixelSize: 15
+            }
+            TextInput {
+                id: warningChange
+                width: 215
+                text: "warning change"
+                selectByMouse: true
+            }
+
+            Text {
+                text: "Days before account inactive:"
+                color: "black"
+                opacity: 0.6
+                font.bold: true
+                font.pixelSize: 15
+            }
+            TextInput {
+                id: accountInactive
+                width: 215
+                text: "account inactive"
+                selectByMouse: true
+            }
+
+            Text {
+                text: "User last changed password on:"
+                color: "black"
+                opacity: 0.6
+                font.bold: true
+                font.pixelSize: 15
+            }
+            Text {
+                text: "Sun Dec 26 2010"
+            }
+
+            // Groups
+            Text {
+                text: "Groups"
+                color: "red"
+                opacity: 0.6
+                font.bold: true
+                font.pixelSize: 20
+            }
+            Text {
+                text: " "
+            }
+        }
 
         Grid {
             id: groupForm
@@ -209,6 +374,7 @@ Item {
                 focus: true
                 selectByMouse: true
             }
+        }
         }
 
         // Not used variable scope problem
@@ -250,6 +416,7 @@ Item {
                             listView.model = userModel
                             listView.delegate = userDelegate
                             groupForm.visible = false
+                            rightFlick.contentHeight = userForm.height
                             userForm.visible = true
                             addButton.source = "images/list-add-user.png"
                             editButton.source ="images/user-properties.png"
@@ -263,6 +430,7 @@ Item {
                             listView.model = groupsModel
                             listView.delegate = groupDelegate
                             userForm.visible = false
+                            rightFlick.contentHeight = groupForm.height
                             groupForm.visible = true
                             addButton.source = "images/user-group-new.png"
                             editButton.source ="images/user-group-properties.png"
