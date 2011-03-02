@@ -14,7 +14,10 @@ class User(QtCore.QObject):
             'org.mandrivalinux.mcc2.Users')
         
         self.__userDetails = self.__interface.UserDetails(user)
-        
+
+    def _uid(self):
+        return str(self.__userDetails['uid'])
+
     def _username(self):
         return str(self.__userDetails['username'])
 
@@ -29,6 +32,7 @@ class User(QtCore.QObject):
 
     changed = QtCore.Signal()
 
+    uid = QtCore.Property(unicode, _uid, notify=changed)
     username = QtCore.Property(unicode, _username, notify=changed)
     fullname = QtCore.Property(unicode, _fullname, notify=changed)
     home_directory = QtCore.Property(unicode, _home_directory, notify=changed)
