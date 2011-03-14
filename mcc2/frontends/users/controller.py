@@ -1,53 +1,81 @@
-from PySide import QtGui, QtCore
+from PySide import QtCore
+from PySide import QtGui
 from PySide import QtDeclarative
 
 import dbus
-#import dbus.mainloop.glib
-#dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
-import sys
+class Controller(QtCore.QObject):
 
-from models import User, UserModel
-#from mcc2.frontend.users.models import User, UserModel
-#from mcc2.frontend.users.controller import
+    def __init__(self, parent):
+        QtCore.QObject.__init__(self)
+        self.parent = parent
 
+        self.__bus = dbus.SystemBus()
+        self.__proxy = self.__bus.get_object(
+            'org.mandrivalinux.mcc2.Users',
+            '/org/mandrivalinux/mcc2/Users')
+        self.__interface = dbus.Interface(
+            self.__proxy,
+            'org.mandrivalinux.mcc2.Users')
 
-#class ServiceController(QtCore.QObject):
-#
-#    @QtCore.Slot(QtCore.QObject)
-#    def service_selected(self, service):
-#        print 'User clicked on:', service._service['Id']
+    @QtCore.Slot(QtCore.QObject)
+    def addUser(self, grid):
+        user_info = {}
+        fullName = grid.findChild(QtDeclarative.QDeclarativeItem, 'addFullName').property('text')
+        user_info['fullname'] = fullName
+        userName = grid.findChild(QtDeclarative.QDeclarativeItem, 'addUserName').property('text')
+        user_info['username'] = userName
+        password = grid.findChild(QtDeclarative.QDeclarativeItem, 'addPassword').property('text')
+        confirmPassword = grid.findChild(QtDeclarative.QDeclarativeItem, 'addConfirmPassword').property('text')
 
+        #TODO Find a way to show a message to gui from here
+        if password == confirmPassword:
+            user_info['password'] = password
+        else:
+            pass
 
-def start():
-    app = QtGui.QApplication(sys.argv)
-    window = QtGui.QMainWindow()
-    view = QtDeclarative.QDeclarativeView()
-    widget = QtGui.QWidget()
-    view.setViewport(widget)
-    view.setResizeMode(QtDeclarative.QDeclarativeView.SizeRootObjectToView)
+        loginShell = grid.findChild(QtDeclarative.QDeclarativeItem, 'addLoginShell').property('text')
+        user_info['shell'] = loginShell
 
-    bus = dbus.SystemBus()
-    proxy = bus.get_object(
-        'org.mandrivalinux.mcc2.Users',
-        '/org/mandrivalinux/mcc2/Users')
-    interface = dbus.Interface(proxy, 'org.mandrivalinux.mcc2.Users')
-    
-    users = []
-    for user in interface.ListUsers():
-        users.append(User(user))
+        # TODO: Turn this in a checkbox component
+        createHomeDirectory = grid.findChild(QtDeclarative.QDeclarativeItem, 'addCreateHomeDirectory').property('checked')
+        print createHomeDirectory
+        #if createHomeDirectory is True:
+        #    user_info['create_home'] = True
+        #else:
+        #    user_info['create_home'] = False
 
-    #userController = UserController()
-    userModel = UserModel(users)
+        homeDirectory = grid.findChild(QtDeclarative.QDeclarativeItem, 'addHomeDirectory').property('text')
+        user_info['home_directory'] = homeDirectory
 
-    root_context = view.rootContext()
-    #root_context.setContextProperty('userController', userController)
-    root_context.setContextProperty('userModel', userModel)
+        # TODO: Turn this in a checkbox component
+        privateGroup = grid.findChild(QtDeclarative.QDeclarativeItem, 'addCreatePrivateGroup').property('checked')
+        print privateGroup
 
-    view.setSource('views/Main.qml')
-    window.setCentralWidget(view)
-    window.show()
-    app.exec_()
+        # TODO: Turn this in a checkbox component
+        specifyUserId = grid.findChild(QtDeclarative.QDeclarativeItem, 'addSpecifyUserId').property('checked')
+        print specifyUserId
 
-if __name__ == '__main__':
-    start()
+        userId = grid.findChild(QtDeclarative.QDeclarativeItem, 'addUserId')
+
+        # Get the FirstUnusedUid
+        uid = self.__interface.FirstUnusedUid()
+
+        # Create a group with the same name of the user automaticaly
+        #if privateGroup is True
+        #    gid = self.__interface.FirstUnusedGid()
+        """
+        user_info = {
+            'fullname': fullName.property('text'),
+            'username': userName.property('text'),
+            'shell': loginShell.property('text'),
+            'uid': uid,
+            'gid': gid,
+            'create_home': True,
+            'home_directory': '/home/john',
+            'password': 'secret'
+            }
+        """
+    @QtCore.Slot()
+    def quit(self):
+        self.parent.quit()

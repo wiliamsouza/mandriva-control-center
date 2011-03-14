@@ -26,7 +26,7 @@ class Users(dbus.service.Object):
             bus_name,
             "/org/mandrivalinux/mcc2/Users")
 
-        self._loop = gobject.MainLoop()
+        self.__loop = gobject.MainLoop()
         self.__libuser = libuser.admin()
         self.__action = 'org.mandrivalinux.mcc2.auth_admin_keep'
 
@@ -48,12 +48,12 @@ class Users(dbus.service.Object):
                          connection_keyword='connection')
     def AddGroup(self, groupname, gid, sender, connection):
         """Add Group.
-        
+
         @param groupname: Group name
         @param gid: Group ID
-        
+
         @raise dbus.DBusException:
-        
+
         @rtype dbus.Int64: The GID from recently created Group.
         """
         check_authorization(sender, connection, self.__action)
@@ -107,7 +107,8 @@ class Users(dbus.service.Object):
                 'uid': 666,
                 'gid': 666,
                 'home_directory': '/home/john',
-                'password': 'secret'
+                'password': 'secret',
+                'create_home': True
                 }
 
         @raise dbus.DBusException:
@@ -120,7 +121,10 @@ class Users(dbus.service.Object):
 
         user_entity = self.__libuser.initUser(user_info['username'])
         user_entity.set(libuser.GECOS, [user_info['fullname']])
-        user_entity.set(libuser.GIDNUMBER, [user_info['gid']])
+
+        if user_info.has_key('gid'):
+            user_entity.set(libuser.GIDNUMBER, [user_info['gid']])
+
         user_entity.set(libuser.UIDNUMBER, [user_info['uid']])
         user_entity.set(libuser.HOMEDIRECTORY, [user_info['home_directory']])
         user_entity.set(libuser.LOGINSHELL, [user_info['shell']])
@@ -153,11 +157,11 @@ class Users(dbus.service.Object):
                          connection_keyword='connection')
     def DeleteGroup(self, groupname, sender, connection):
         """Delete a Group.
-        
+
         @param groupname: Group name.
-        
+
         @raise dbus.DBusException:
-        
+
         @rtype: dbus.Dictionary: Recent removed group id and groupname.
         """
         check_authorization(sender, connection, self.__action)
@@ -190,11 +194,11 @@ class Users(dbus.service.Object):
                          connection_keyword='connection')
     def DeleteUser(self, username, sender, connection):
         """Delete an User.
-        
+
         @param username: User name.
-        
+
         @raise dbus.DBusException:
-        
+
         @rtype: dbus.Dictionary: Recent removed user id and groupname.
         """
         check_authorization(sender, connection, self.__action)
@@ -223,24 +227,25 @@ class Users(dbus.service.Object):
                          out_signature='as')
     def ListGroups(self):
         """List All Groups.
-        
+
         @raise dbus.DBusException:
-        
+
         @rtype: dbus.Array: All groups
         """
         return self.__libuser.enumerateGroups()
 
 
+    #TODO: Raise exception if user not existe by now it return an empty list
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
                          in_signature='s',
                          out_signature='as')
     def ListGroupsByUser(self, username):
         """List Group by User.
-        
+
         @param username: User name.
-        
+
         @raise dbus.DBusException:
-        
+
         @rtype: dbus.Array: Groups this user is in.
         """
         return self.__libuser.enumerateGroupsByUser(username)
@@ -257,9 +262,9 @@ class Users(dbus.service.Object):
                          out_signature='as')
     def ListUsers(self):
         """List All Users.
-        
+
         @raise dbus.DBusException:
-        
+
         @rtype: dbus.Array: All users
         """
         return self.__libuser.enumerateUsers()
@@ -270,11 +275,11 @@ class Users(dbus.service.Object):
                          out_signature='as')
     def ListUsersByGroup(self, groupname):
         """List Users by Group.
-        
+
         @param groupname: Group name.
-        
+
         @raise dbus.DBusException:
-        
+
         @rtype: dbus.Array: Users in this group.
         """
         return self.__libuser.enumerateUsersByGroup(groupname)
@@ -291,9 +296,9 @@ class Users(dbus.service.Object):
                          out_signature='t')
     def FirstUnusedGid(self):
         """First Unused Gid.
-        
+
         @raise dbus.DBusException:
-        
+
         @rtype: dbus.Int32: First unused gid.
         """
         return dbus.Int64(self.__libuser.getFirstUnusedGid())
@@ -303,9 +308,9 @@ class Users(dbus.service.Object):
                          out_signature='t')
     def FirstUnusedUid(self):
         """First Unused Uid.
-        
+
         @raise dbus.DBusException:
-        
+
         @rtype: dbus.Int32:
         """
         return dbus.Int64(self.__libuser.getFirstUnusedUid())
@@ -315,9 +320,9 @@ class Users(dbus.service.Object):
                          out_signature='as')
     def ListUserShells(self):
         """List Shell available.
-        
+
         @raise dbus.DBusException:
-        
+
         @rtype: dbus.Array: shell list.
         """
         return self.__libuser.getUserShells()
@@ -328,15 +333,15 @@ class Users(dbus.service.Object):
                          out_signature='i')
     def GroupIsLocked(self, group):
         """Check if Group is Locked.
-        
+
         @param group: A group name to check
-        
+
         @raise dbus.DBusException:
-        
+
         @rtype: dbus.Int32, 1 locked or 0 unlocked.
         """
         group_entity = self.__libuser.lookupGroupByName(group)
-        
+
         return dbus.Int32(self.__libuser.groupIsLocked(group_entity))
 
 
@@ -347,11 +352,11 @@ class Users(dbus.service.Object):
                          connection_keyword='connection')
     def LockGroup(self, groupname, sender, connection):
         """Lock Group.
-        
+
         @param username: A dbus.String with group name as it value.
 
         @raise dbus.DBusException:
-        
+
         @rtype dbus.Int32: 1 ok or 0 fail.
         """
         #
@@ -370,11 +375,11 @@ class Users(dbus.service.Object):
                          connection_keyword='connection')
     def UnlockGroup(self, groupname, sender, connection):
         """ Unlock group
-        
+
         @param groupname: A dbus.String with group name as it value.
 
         @raise dbus.DBusException:
-        
+
         @rtype dbus.Int32: 1 ok or 0 fail.
         """
         check_authorization(sender, connection, self.__action)
@@ -391,11 +396,11 @@ class Users(dbus.service.Object):
                          out_signature='i')
     def UserIsLocked(self, username):
         """Check is User Locked.
-        
+
         @param username: A dbus.String with user name as it value.
 
         @raise dbus.DBusException:
-        
+
         @rtype dbus.Int32: 1 ok or 0 fail.
         """
         user_entity = self.__libuser.lookupUserByName(username)
@@ -410,11 +415,11 @@ class Users(dbus.service.Object):
                          connection_keyword='connection')
     def LockUser(self, username, sender, connection):
         """Lock User.
-        
+
         @param username: A dbus.String with user name as it value.
 
         @raise dbus.DBusException:
-        
+
         @rtype dbus.Int32: 1 ok or 0 fail.
         """
         check_authorization(sender, connection, self.__action)
@@ -423,7 +428,7 @@ class Users(dbus.service.Object):
 
         user_entity = self.__libuser.lookupUserByName(username)
 
-        return dbus.Int32(self.__libuser.LockUser(user_entity))
+        return dbus.Int32(self.__libuser.lockUser(user_entity))
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
@@ -433,11 +438,11 @@ class Users(dbus.service.Object):
                          connection_keyword='connection')
     def UnlockUser(self, username, sender, connection):
         """ Unlock user
-        
+
         @param username: A dbus.String with user name as it value.
 
         @raise dbus.DBusException:
-        
+
         @rtype dbus.Int32: 1 ok or 0 fail.
         """
         check_authorization(sender, connection, self.__action)
@@ -456,23 +461,23 @@ class Users(dbus.service.Object):
                          connection_keyword='connection')
     def ModifyGroup(self, group_info, sender, connection):
         """Modify Group.
-        
+
         @param group_info:A dbus.Dictionary with user information with
         the following content:
 
             * groupname:
             * new_groupname: This is optional.
             * members:
-        
+
         Example:
         group_info = {
                 'groupname': 'john',
                 'new_groupname': 'johns'
                 'members': ['john', 'users', 'wheel']
                 }
-        
+
         @raise dbus.DBusException:
-        
+
         @rtype dbus.Int32: 1 ok or 0 fail.
         """
         check_authorization(sender, connection, self.__action)
@@ -495,18 +500,18 @@ class Users(dbus.service.Object):
                          connection_keyword='connection')
     def ModifyUser(self, user_info, sender, connection):
         """Modify User.
-        
+
         @param user_info: A dbus.Dictionary with user information with
         the following content:
-        
+
             * fullname: User full name
             * username: Yes, you guess!
             * shell: Shell to use, you can get a list of available
                     shells using ListUserShells.
-        
+
         All shadow_* dictionaty keys is optional and only be used
         if present.
-        
+
         Example:
         user_info = {
                 'username': 'john'
@@ -524,11 +529,11 @@ class Users(dbus.service.Object):
                 'shadow_inactive': -1,
                 'shadow_last_change': 'YYYY-MM-DD'
                 }
-        
+
         @raise dbus.DBusException:
             * org.mandrivalinux.mcc2.Users.Error.InvalidDate:
             * org.mandrivalinux.mcc2.Users.Error.YearIsTooBig:
-        
+
         @rtype dbus.Int32: 1 ok or 0 fail.
         """
         check_authorization(sender, connection, self.__action)
@@ -537,7 +542,7 @@ class Users(dbus.service.Object):
 
         user_entity = self.__libuser.lookupUserByName(user_info['username'])
         user_entity.set(libuser.GECOS, [user_info['fullname']])
-        
+
         #TODO: Check if uid and gid can be converted to int()
         # if not raise an error
         user_entity.set(libuser.GIDNUMBER, [user_info['gid']])
@@ -596,7 +601,7 @@ class Users(dbus.service.Object):
         #    user_entity.set(
         #        libuser.SHADOWLASTCHANGE,
         #        int(user_info['shadow_last_change']))
-        
+
         self.__libuser.setpassUser(user_entity, user_info['password'], 0)
 
         return self.__libuser.modifyUser(user_entity)
@@ -605,10 +610,12 @@ class Users(dbus.service.Object):
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
 			 in_signature='s',
                          out_signature='a{sv}')
-    def UserDetails(self, user):
+    def UserDetails(self, username):
+        """
+        shadow_expire: return -1 if expiration is disabled.
+        """
+    	user_entity = self.__libuser.lookupUserByName(username)
 
-	user_entity = self.__libuser.lookupUserByName(user)
-        
         return dbus.Dictionary(
             {
             'uid': user_entity.get(libuser.UIDNUMBER)[0],
@@ -626,6 +633,24 @@ class Users(dbus.service.Object):
             }, signature=dbus.Signature('sv'))
 
 
+    @dbus.service.method("org.mandrivalinux.mcc2.Users",
+                         in_signature='s',
+                         out_signature='a{sv}')
+    def GroupDetails(self, groupname):
+
+        group_entity = self.__libuser.lookupGroupByName(groupname)
+        members = group_entity.get(libuser.MEMBERNAME)
+        if not len(members):
+            members = dbus.Boolean(0)
+
+        return dbus.Dictionary(
+            {
+            'gid': group_entity.get(libuser.GIDNUMBER)[0],
+            'groupname': group_entity.get(libuser.GROUPNAME)[0],
+            'members': members
+            }, signature=dbus.Signature('sv'))
+
+
     @dbus.service.method('org.mandrivalinux.mcc2.Users',
                          sender_keyword='sender',
                          connection_keyword='connection')
@@ -634,7 +659,7 @@ class Users(dbus.service.Object):
 
 
     def run(self):
-        self._loop.run()
+        self.__loop.run()
 
 
     @classmethod

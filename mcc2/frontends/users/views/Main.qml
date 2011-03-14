@@ -1,4 +1,5 @@
-import QtQuick 1.0
+import Qt 4.7
+//import QtQuick 1.0
 //import Qt.labs.Mx 1.0
 import "mandriva"
 
@@ -38,6 +39,15 @@ Rectangle {
                 Image {
                     id: addUserButton
                     source: "images/list-add-user.png"
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            groupForm.visible = false
+                            contentFlick.contentHeight = addUserForm.height
+                            userForm.visible = false
+                            addUserForm.visible = true
+                        }
+                    }
                 },
                 Image {
                     id: addGroupButton
@@ -72,7 +82,7 @@ Rectangle {
             id: listView
             width: sidebar.width
             height: sidebar.height
-            model: usersModel
+            model: userModel
             delegate: userDelegate
             header: listViewHeader
             highlightFollowsCurrentItem: true
@@ -99,7 +109,7 @@ Rectangle {
                 id: userForm
                 visible: false
                 columns: 2
-                spacing: 12
+                spacing: 8
                 anchors.left: parent.left
                 anchors.leftMargin: 12
                 anchors.top: parent.top
@@ -128,8 +138,6 @@ Rectangle {
                 MdvTextInput {
                     id: fullName
                     width: 215
-                    //text: "full name"
-                    //selectByMouse: true
                 }
 
                 Text {
@@ -142,8 +150,6 @@ Rectangle {
                 MdvTextInput {
                     id: userName
                     width: 215
-                    //text: "username"
-                    //selectByMouse: true
                 }
 
                 Text {
@@ -157,7 +163,6 @@ Rectangle {
                     id: password
                     width: 215
                     text: "password"
-                    //selectByMouse: true
                     echoMode: TextInput.Password
                 }
 
@@ -172,7 +177,6 @@ Rectangle {
                     id: confirmPassword
                     width: 215
                     text: "password"
-                    //selectByMouse: true
                     echoMode: TextInput.Password
                 }
 
@@ -186,8 +190,6 @@ Rectangle {
                 MdvTextInput {
                     id: loginShell
                     width: 215
-                    //text: "login shell"
-                    //selectByMouse: true
                 }
 
                 Text {
@@ -200,8 +202,6 @@ Rectangle {
                 MdvTextInput {
                     id: homeDirectory
                     width: 215
-                    //text: "home"
-                    //selectByMouse: true
                 }
 
 
@@ -224,12 +224,22 @@ Rectangle {
                     font.pixelSize: 15
                     font.family: "Sans"
                 }
+                MdvCheckBox {
+                    objectName: 'shadowExpire'
+                    id: shadowExpire
+                }
+
+
+                Text {
+                    text: "Expiration Date:"
+                    color: "#e3dbdb"
+                    font.bold: true
+                    font.pixelSize: 15
+                    font.family: "Sans"
+                }
                 MdvTextInput {
-                    id: accountExpires
+                    id: expirationDate
                     width: 215
-                    //text: ""
-                    //selectByMouse: true
-                    //inputMask: "0000-00-00"
                 }
 
                 Text {
@@ -239,12 +249,11 @@ Rectangle {
                     font.pixelSize: 15
                     font.family: "Sans"
                 }
-                MdvTextInput {
+                MdvCheckBox {
+                    objectName: 'lockAccount'
                     id: lockAccount
-                    width: 215
-                    //text: "no"
-                    //selectByMouse: true
                 }
+
 
                 Text {
                     text: "Icon:"
@@ -271,20 +280,6 @@ Rectangle {
                 }
 
                 Text {
-                    text: "Expiration:" //"Password expiration:"
-                    color: "#e3dbdb"
-                    font.bold: true
-                    font.pixelSize: 15
-                    font.family: "Sans"
-                }
-                MdvTextInput {
-                    id: passwordExpiration
-                    width: 215
-                    //text: "no"
-                    //selectByMouse: true
-                }
-
-                Text {
                     text: "Change allowed:" //"Days before change allowed:"
                     color: "#e3dbdb"
                     font.bold: true
@@ -292,10 +287,8 @@ Rectangle {
                     font.family: "Sans"
                 }
                 MdvTextInput {
-                    id: changedAllowed
+                    id: shadowMin
                     width: 215
-                    //text: "changed allowed"
-                    //selectByMouse: true
                 }
 
                 Text {
@@ -306,10 +299,8 @@ Rectangle {
                     font.family: "Sans"
                 }
                 MdvTextInput {
-                    id: changedRequired
+                    id: shadowMax
                     width: 215
-                    //text: "changed required"
-                    //selectByMouse: true
                 }
 
                 Text {
@@ -320,10 +311,8 @@ Rectangle {
                     font.family: "Sans"
                 }
                 MdvTextInput {
-                    id: warningChange
+                    id: shadowWarning
                     width: 215
-                    //text: "warning change"
-                    //selectByMouse: true
                 }
 
                 Text {
@@ -334,20 +323,19 @@ Rectangle {
                     font.family: "Sans"
                 }
                 MdvTextInput {
-                    id: accountInactive
+                    id: shadowInactive
                     width: 215
-                    //text: "account inactive"
-                    //selectByMouse: true
                 }
 
                 Text {
-                    text: "Last changed:"//"User last changed password on:"
+                    text: "Last changed:" //"User last changed password on:"
                     color: "#e3dbdb"
                     font.bold: true
                     font.pixelSize: 15
                     font.family: "Sans"
                 }
                 Text {
+                    id: shadowLastChange
                     text: "Sun Dec 26 2010"
                 }
 
@@ -362,18 +350,6 @@ Rectangle {
                 Text {
                     text: " "
                 }
-                // listViewGroup
-                //ListView {
-                //   id: listViewGroup
-                //    width: content.width
-                //    height: content.height
-                //    model: groupsModel
-                //    delegate: groupDelegate
-                //    highlight: Rectangle { color: "steelblue" }
-                //    highlightFollowsCurrentItem: true
-                    //header: listViewHeader
-                    //focus: true
-               // }
             }
 
 
@@ -381,7 +357,7 @@ Rectangle {
                 id: groupForm
                 visible: false
                 columns: 2
-                spacing: 12
+                spacing: 8
                 anchors.left: parent.left
                 anchors.leftMargin: 12
                 anchors.top: parent.top
@@ -398,13 +374,341 @@ Rectangle {
                 MdvTextInput {
                     id: groupName
                     width: 215
-                    //text: "group name"
-                    //focus: true
-                    //selectByMouse: true
+                }
+            }
+
+
+            Grid {
+                id: addUserForm
+                visible: false
+                columns: 2
+                spacing: 8
+                anchors.left: parent.left
+                anchors.leftMargin: 12
+                anchors.top: parent.top
+                anchors.topMargin: 12
+
+
+                Text {
+                    text: "Add new user"
+                    color: "#241c1c"
+                    font.bold: true
+                    font.pixelSize: 20
+                    font.family: "Sans"
+                }
+                Text {
+                    text: " "
+                }
+
+                Text {
+                    text: "Full name:"
+                    color: "#e3dbdb"
+                    font.bold: true
+                    font.pixelSize: 15
+                    font.family: "Sans"
+                }
+                MdvTextInput {
+                    objectName: 'addFullName'
+                    //id: addFullName
+                    width: 215
+                }
+
+                Text {
+                    text: "Username:"
+                    color: "#e3dbdb"
+                    font.bold: true
+                    font.pixelSize: 15
+                    font.family: "Sans"
+                }
+                MdvTextInput {
+                    objectName: 'addUserName'
+                    width: 215
+                }
+
+                Text {
+                    text: "Password:"
+                    color: "#e3dbdb"
+                    font.bold: true
+                    font.pixelSize: 15
+                    font.family: "Sans"
+                }
+                MdvTextInput {
+                    objectName: 'addPassword'
+                    width: 215
+                    text: "password"
+                    echoMode: TextInput.Password
+                }
+
+                Text {
+                    text: "Confirm password:"
+                    color: "#e3dbdb"
+                    font.bold: true
+                    font.pixelSize: 15
+                    font.family: "Sans"
+                }
+                MdvTextInput {
+                    objectName: 'addConfirmPassword'
+                    width: 215
+                    text: "password"
+                    echoMode: TextInput.Password
+                }
+
+                Text {
+                    text: "Login shell:"
+                    color: "#e3dbdb"
+                    font.bold: true
+                    font.pixelSize: 15
+                    font.family: "Sans"
+                }
+                MdvTextInput {
+                    objectName: 'addLoginShell'
+                    width: 215
+                }
+
+                Text {
+                    text: "Create home:"
+                    color: "#e3dbdb"
+                    font.bold: true
+                    font.pixelSize: 15
+                    font.family: "Sans"
+                }
+                MdvCheckBox {
+                    objectName: 'addCreateHomeDirectory'
+                }
+
+                Text {
+                    text: "Home Directory:"
+                    color: "#e3dbdb"
+                    font.bold: true
+                    font.pixelSize: 15
+                    font.family: "Sans"
+                }
+                MdvTextInput {
+                    objectName: 'addHomeDirectory'
+                    width: 215
+                }
+
+                Text {
+                    text: "Private group:"
+                    color: "#e3dbdb"
+                    font.bold: true
+                    font.pixelSize: 15
+                    font.family: "Sans"
+                }
+                MdvCheckBox {
+                    objectName: 'addCreatePrivateGroup'
+                }
+
+                Text {
+                    text: "Specify user ID:"
+                    color: "#e3dbdb"
+                    font.bold: true
+                    font.pixelSize: 15
+                    font.family: "Sans"
+                }
+                MdvCheckBox {
+                    objectName: 'addSpecifyUserId'
+                }
+
+                Text {
+                    text: "User ID:"
+                    color: "#e3dbdb"
+                    font.bold: true
+                    font.pixelSize: 15
+                    font.family: "Sans"
+                }
+                MdvTextInput {
+                    objectName: 'addUserId'
+                    width: 215
+                }
+
+                Text {
+                    text: " "
+                }
+                MdvButton {
+                    width: 100
+                    text: "Save"
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            controller.addUser(addUserForm)
+                        }
+                    }
                 }
             }
         }
     }
+
+    Component {
+        id: listViewHeader
+        Column {
+            id: col
+            Row {
+                spacing: 10
+                anchors.horizontalCenter:  parent.horizontalCenter
+                MdvButton {
+                    width: (listView.width / 2) - 5
+                    text: "Users"
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            listView.model = userModel
+                            listView.delegate = userDelegate
+                            groupForm.visible = false
+                            contentFlick.contentHeight = userForm.height
+                            userForm.visible = true
+                            addUserForm.visible = false
+                            deleteButton.opacity = 0.2
+                        }
+                    }
+                }
+                MdvButton {
+                    text: "Groups"
+                    width: (listView.width / 2) - 5
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            listView.model = groupModel
+                            listView.delegate = groupDelegate
+                            userForm.visible = false
+                            contentFlick.contentHeight = groupForm.height
+                            groupForm.visible = true
+                            addUserForm.visible = false
+                            deleteButton.opacity = 0.2
+                        }
+                    }
+                }
+            }
+            MdvTextInput {
+                id: searchBox
+                width: listView.width
+                height: 22
+                hint: "Search"
+            }
+        }
+    }
+
+    Component {
+        id: userDelegate
+        Rectangle {
+            height: 60
+            width: listView.width
+            color: ((index % 2 == 0) ? "#c8b7b7" : "#ac9393")
+            Row {
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 12
+                anchors.left: parent.left
+                anchors.leftMargin: 10
+                children: [
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: model.user.uid
+                        color: "#d45500"
+                        font.bold: true
+                        font.pixelSize: 16
+                        font.family: "Sans"
+                    },
+                    Column {
+                        anchors.verticalCenter: parent.verticalCenter
+                        spacing: 3
+                        children: [
+                            Text {
+                                text: model.user.username
+                                color: "#483737"
+                                font.bold: true
+                                font.pixelSize: 16
+                                font.family: "Sans"
+                            },
+                            Text {
+                                text: model.user.fullname
+                                color: "#6c5353"
+                                font.pixelSize: 12
+                                font.family: "Sans"
+                            }
+                        ]
+                    }
+                ]
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    console.log("Clicked")
+                    listView.currentIndex = index
+                    fullName.text = model.user.fullname
+                    userName.text = model.user.username
+                    loginShell.text = model.user.login_shell
+                    homeDirectory.text = model.user.home_directory
+                    lockAccount.checked = model.user.islocked
+                    shadowExpire.checked = model.user.shadow_expire
+                    expirationDate.text = model.user.expiration_date
+                    shadowMin.text = model.user.shadow_min
+                    shadowMax.text = model.user.shadow_max
+                    shadowWarning.text = model.user.shadow_warning
+                    shadowInactive.text = model.user.shadow_inactive
+                    shadowLastChange.text = model.user.shadow_last_change
+                    deleteButton.opacity = 1
+                    // keep this two line at end
+                    groupForm.visible = false
+                    addUserForm.visible = false
+                    userForm.visible = true
+                    contentFlick.contentHeight = userForm.height
+                }
+            }
+        }
+    }
+
+    Component {
+        id: groupDelegate
+        Rectangle {
+            height: 60
+            width: listView.width
+            color: ((index % 2 == 0) ? "#c8b7b7" : "#ac9393")
+            Row {
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 12
+                anchors.left: parent.left
+                anchors.leftMargin: 10
+                children: [
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: model.group.gid
+                        color: "#d45500"
+                        font.bold: true
+                        font.pixelSize: 16
+                        font.family: "Sans"
+                    },
+                    Column {
+                        anchors.verticalCenter: parent.verticalCenter
+                        children: [
+                            Text {
+                                text: model.group.groupname
+                                color: "#483737"
+                                font.bold: true
+                                font.pixelSize: 16
+                                font.family: "Sans"
+                            }
+                        ]
+                    }
+                ]
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    console.log("Clicked")
+                    listView.currentIndex = index
+                    groupName.text = model.group.groupname
+                    deleteButton.opacity = 1
+
+                    // keep this two line at end
+                    userForm.visible = false
+                    addUserForm.visible = false
+                    groupForm.visible = true
+                    contentFlick.contentHeight = groupForm.height
+                }
+            }
+        }
+    }
+
 
     /**
     Component {
@@ -423,70 +727,7 @@ Rectangle {
     }
     **/
 
-    Component {
-        id: listViewHeader
-        //ButtonGroup {
-        //    width: col.width
-        //    height: col.height
-            Column {
-                id: col
-                Row {
-                    spacing: 10
-                    anchors.horizontalCenter:  parent.horizontalCenter
-                    MdvButton {
-                        width: (listView.width / 2) - 5 //Row spacing
-                        text: "Users"
-                        //checkable: true
-                        //checked: true
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: {
-                                listView.model = usersModel
-                                listView.delegate = userDelegate
-                                groupForm.visible = false
-                                contentFlick.contentHeight = userForm.height
-                                userForm.visible = true
-                                deleteButton.opacity = 0.2
-                                //addButton.source = "images/list-add-user.png"
-                                //editButton.source ="images/user-properties.png"
-                                //deleteButton.source = "images/list-remove-user.png"
-                            }
-                        }
-                    }
-                    MdvButton {
-                        text: "Groups"
-                        width: (listView.width / 2) - 5 //Row spacing
-                        //checkable: true
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: {
-                                listView.model = groupsModel
-                                listView.delegate = groupDelegate
-                                userForm.visible = false
-                                contentFlick.contentHeight = groupForm.height
-                                groupForm.visible = true
-                                deleteButton.opacity = 0.2
-                                //addButton.source = "images/user-group-new.png"
-                                //editButton.source ="images/user-group-properties.png"
-                                //deleteButton.source = "images/user-group-delete.png"
-                            }
-                        }
-                    }
-                }
-                MdvTextInput {
-                    id: searchBox
-                    width: listView.width
-                    height: 22
-                    hint: "Search"
-                    //leftIconSource: "images/system-search.png";
-                    //onLeftIconClicked: searchBox.hint = "Searching...";
-                    //rightIconSource: "images/edit-delete.png";
-                    //onRightIconClicked: searchBox.hint = "Search";
-                }
-            }
-        //}
-    }
-
+    /**
     ListModel {
         id: usersModel
         ListElement {
@@ -525,69 +766,9 @@ Rectangle {
             home_directory: "/home/foo"
         }
     }
+    **/
 
-    Component {
-        id: userDelegate
-        Rectangle {
-            height: 60
-            width: listView.width
-            color: ((index % 2 == 0) ? "#c8b7b7" : "#ac9393")
-            Row {
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 12
-                anchors.left: parent.left
-                anchors.leftMargin: 10
-                children: [
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: uid //model.user.uid
-                        color: "#d45500"
-                        font.bold: true
-                        font.pixelSize: 16
-                        font.family: "Sans"
-                    },
-                    Column {
-                        anchors.verticalCenter: parent.verticalCenter
-                        spacing: 3
-                        children: [
-                            Text {
-                                //id: userName
-                                text: username //model.user.username
-                                color: "#483737"
-                                font.bold: true
-                                font.pixelSize: 16
-                                font.family: "Sans"
-                            },
-                            Text {
-                                //id: fullName
-                                text: fullname //model.user.fullname
-                                color: "#6c5353"
-                                font.pixelSize: 12
-                                font.family: "Sans"
-                            }
-                        ]
-                    }
-                ]
-            }
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    console.log("Clicked")
-                    listView.currentIndex = index
-                    fullName.text = fullname //model.user.fullname
-                    userName.text = username //model.user.username
-                    loginShell.text = login_shell //model.user.login_shell
-                    homeDirectory.text = home_directory //model.user.home_directory
-                    deleteButton.opacity = 1
-
-                    // keep this two line at en
-                    groupForm.visible = false
-                    userForm.visible = true
-                }
-            }
-        }
-    }
-
+    /**
     ListModel {
         id: groupsModel
         ListElement {
@@ -614,55 +795,7 @@ Rectangle {
             gid: "502"
         }
     }
+    **/
 
-    Component {
-        id: groupDelegate
-        Rectangle {
-            height: 60
-            width: listView.width
-            color: ((index % 2 == 0) ? "#c8b7b7" : "#ac9393")
-            Row {
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 12
-                anchors.left: parent.left
-                anchors.leftMargin: 10
-                children: [
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: gid //model.user.uid
-                        color: "#d45500"
-                        font.bold: true
-                        font.pixelSize: 16
-                        font.family: "Sans"
-                    },
-                    Column { //
-                        anchors.verticalCenter: parent.verticalCenter
-                        children: [
-                            Text {
-                                //id: groupName
-                                text: groupname
-                                color: "#483737"
-                                font.bold: true
-                                font.pixelSize: 16
-                                font.family: "Sans"
-                            }
-                        ]
-                    } //
-                ]
-            }
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    console.log("Clicked")
-                    listView.currentIndex = index
-                    groupName.text = groupname
-                    deleteButton.opacity = 1
 
-                    // keep this two line at end
-                    userForm.visible = false
-                    groupForm.visible = true
-                }
-            }
-        }
-    }
 }

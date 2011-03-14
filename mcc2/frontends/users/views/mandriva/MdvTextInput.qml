@@ -38,7 +38,8 @@
 **
 ****************************************************************************/
 
-import QtQuick 1.0
+import Qt 4.7
+//import QtQuick 1.0
 
 FocusScope {
     id: focusScope
@@ -47,6 +48,7 @@ FocusScope {
     property alias text: textInput.text
     property alias echoMode: textInput.echoMode
     property alias hint: typeSomething.text
+    //property alias onTextChanged: textInput.onTextChanged
 
 
     BorderImage {
