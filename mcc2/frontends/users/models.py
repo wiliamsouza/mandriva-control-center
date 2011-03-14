@@ -24,6 +24,7 @@ class User(QtCore.QObject):
 	self.__expiration_date = ''
         self.__shadow_expire = False
         if self.__userDetails['shadow_expire'] > 0:
+            print 'expira ' + user
             self.__shadow_expire = True
             self.__expiration_date = self.__userDetails['shadow_expire']
 
@@ -43,7 +44,7 @@ class User(QtCore.QObject):
         return str(self.__userDetails['login_shell'])
 
     def _shadow_expire(self):
-        return self.__userDetails['shadow_expire']
+        return self.__shadow_expire
 
     def _expiration_date(self):
             return str(self.__expiration_date)
@@ -63,8 +64,8 @@ class User(QtCore.QObject):
     def _shadow_last_change(self):
         return str(self.__userDetails['shadow_last_change'])
 
-    #def _groups(self):
-    #    return self.__groups
+    def _groups(self):
+        return self.__groups
 
     def _islocked(self):
         return self.__islocked
@@ -76,14 +77,14 @@ class User(QtCore.QObject):
     fullname = QtCore.Property(unicode, _fullname, notify=changed)
     home_directory = QtCore.Property(unicode, _home_directory, notify=changed)
     login_shell = QtCore.Property(unicode, _login_shell, notify=changed)
-    shadow_expire = QtCore.Property(unicode, _shadow_expire, notify=changed)
+    shadow_expire = QtCore.Property(bool, _shadow_expire, notify=changed)
     expiration_date = QtCore.Property(unicode, _expiration_date, notify=changed)
     shadow_min = QtCore.Property(unicode, _shadow_min, notify=changed)
     shadow_max = QtCore.Property(unicode, _shadow_max, notify=changed)
     shadow_warning = QtCore.Property(unicode, _shadow_warning, notify=changed)
     shadow_inactive = QtCore.Property(unicode, _shadow_inactive, notify=changed)
     shadow_last_change = QtCore.Property(unicode, _shadow_last_change, notify=changed)
-    #groups = QtCore.Property(_groups, notify=changed)
+    groups = QtCore.Property(list, _groups, notify=changed)
     islocked = QtCore.Property(bool ,_islocked, notify=changed)
 
 
@@ -127,8 +128,8 @@ class Group(QtCore.QObject):
         return str(self.__groupDetails['groupname'])
 
     #TODO: How to use list with QtCore.Property
-    #def _members(self):
-    #    return str(self.__groupDetails['members'])
+    def _members(self):
+        return str(self.__groupDetails['members'])
 
     def _islocked(self):
         return str(self.__islocked)
@@ -137,7 +138,7 @@ class Group(QtCore.QObject):
 
     gid = QtCore.Property(unicode, _gid, notify=changed)
     groupname = QtCore.Property(unicode, _groupname, notify=changed)
-    #members = QtCore.Property(_members, notify=changed)
+    members = QtCore.Property(list, _members, notify=changed)
     islocked = QtCore.Property(unicode ,_islocked, notify=changed)
 
 

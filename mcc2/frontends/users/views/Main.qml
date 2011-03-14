@@ -85,8 +85,8 @@ Rectangle {
             model: userModel
             delegate: userDelegate
             header: listViewHeader
-            highlightFollowsCurrentItem: true
-            focus: true
+            //highlightFollowsCurrentItem: true
+            //focus: true
         }
     }
 
@@ -341,14 +341,29 @@ Rectangle {
 
                 // Groups *****************************************************
                 Text {
+                    text: " "
+                }
+                Text {
                     text: "Groups"
                     color: "#241c1c"
                     font.bold: true
                     font.pixelSize: 20
                     font.family: "Sans"
                 }
+
                 Text {
                     text: " "
+                }
+                ListView {
+                    id: groupSelectListView
+                    width: 215
+                    height: 300
+                    model: allGroupModel
+                    delegate: groupSelectDelegate
+                    clip: true
+                    //header: listViewHeader
+                    //highlightFollowsCurrentItem: true
+                    //focus: true
                 }
             }
 
@@ -375,8 +390,35 @@ Rectangle {
                     id: groupName
                     width: 215
                 }
-            }
 
+                // Groups *****************************************************
+                Text {
+                    text: " "
+                }
+                Text {
+                    text: "Group users"
+                    color: "#241c1c"
+                    font.bold: true
+                    font.pixelSize: 20
+                    font.family: "Sans"
+                }
+
+                Text {
+                    text: " "
+                }
+
+                ListView {
+                    id: userSelectListView
+                    width: 215
+                    height: 300
+                    model: allUserModel
+                    delegate: userSelectDelegate
+                    clip: true
+                    //header: listViewHeader
+                    //highlightFollowsCurrentItem: true
+                    //focus: true
+                }
+            }
 
             Grid {
                 id: addUserForm
@@ -638,9 +680,9 @@ Rectangle {
                     userName.text = model.user.username
                     loginShell.text = model.user.login_shell
                     homeDirectory.text = model.user.home_directory
-                    lockAccount.checked = model.user.islocked
                     shadowExpire.checked = model.user.shadow_expire
                     expirationDate.text = model.user.expiration_date
+                    lockAccount.checked = model.user.islocked
                     shadowMin.text = model.user.shadow_min
                     shadowMax.text = model.user.shadow_max
                     shadowWarning.text = model.user.shadow_warning
@@ -653,6 +695,33 @@ Rectangle {
                     userForm.visible = true
                     contentFlick.contentHeight = userForm.height
                 }
+            }
+        }
+    }
+
+    Component {
+        id: userSelectDelegate
+        Rectangle {
+            height: 30
+            width: userSelectListView.width
+            color: ((index % 2 == 0) ? "#c8b7b7" : "#ac9393")
+            Row {
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 12
+                anchors.left: parent.left
+                anchors.leftMargin: 10
+                children: [
+                    MdvCheckBox {
+                        objectName: model.user.username + 'Checkbox'
+                    },
+                    Text {
+                        text: model.user.username
+                        color: "#483737"
+                        font.bold: true
+                        font.pixelSize: 16
+                        font.family: "Sans"
+                    }
+                ]
             }
         }
     }
@@ -709,6 +778,32 @@ Rectangle {
         }
     }
 
+    Component {
+        id: groupSelectDelegate
+        Rectangle {
+            height: 30
+            width: groupSelectListView.width
+            color: ((index % 2 == 0) ? "#c8b7b7" : "#ac9393")
+            Row {
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 12
+                anchors.left: parent.left
+                anchors.leftMargin: 10
+                children: [
+                    MdvCheckBox {
+                        objectName: 'groupCheckbox'
+                    },
+                    Text {
+                        text: model.group.groupname
+                        color: "#483737"
+                        font.bold: true
+                        font.pixelSize: 16
+                        font.family: "Sans"
+                    }
+                ]
+            }
+        }
+    }
 
     /**
     Component {
@@ -729,7 +824,7 @@ Rectangle {
 
     /**
     ListModel {
-        id: usersModel
+        id: userSelectModel
         ListElement {
             username: "wiliam"
             fullname: "Wiliam Souza"
@@ -770,7 +865,7 @@ Rectangle {
 
     /**
     ListModel {
-        id: groupsModel
+        id: groupSelectModel
         ListElement {
             groupname: "wiliam"
             members: "wiliam"

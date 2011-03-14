@@ -226,6 +226,25 @@ class Users(dbus.service.Object):
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
                          out_signature='as')
     def ListGroups(self):
+        """List Groups.
+
+        @raise dbus.DBusException:
+
+        @rtype: dbus.Array: All groups
+        """
+        groups = []
+        for group in self.__libuser.enumerateGroups():
+            group_entity = self.__libuser.lookupGroupByName(group)
+            gid = group_entity.get(libuser.GIDNUMBER)[0]
+            #TODO: move this range to configration files
+            if gid >= 500 and gid <= 65530:
+                groups.append(group)
+        return groups
+
+
+    @dbus.service.method("org.mandrivalinux.mcc2.Users",
+                         out_signature='as')
+    def ListAllGroups(self):
         """List All Groups.
 
         @raise dbus.DBusException:
@@ -261,6 +280,25 @@ class Users(dbus.service.Object):
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
                          out_signature='as')
     def ListUsers(self):
+        """List Users.
+
+        @raise dbus.DBusException:
+
+        @rtype: dbus.Array: All users
+        """
+        users = []
+        for user in self.__libuser.enumerateUsers():
+            user_entity = self.__libuser.lookupUserByName(user)
+            uid = user_entity.get(libuser.UIDNUMBER)[0]
+            #TODO: move this range to configration files
+            if uid >= 500 and uid <= 65530:
+                users.append(user)
+        return users
+                
+	  
+    @dbus.service.method("org.mandrivalinux.mcc2.Users",
+                         out_signature='as')
+    def ListAllUsers(self):
         """List All Users.
 
         @raise dbus.DBusException:
@@ -268,7 +306,7 @@ class Users(dbus.service.Object):
         @rtype: dbus.Array: All users
         """
         return self.__libuser.enumerateUsers()
-
+        
 
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
                          in_signature='s',

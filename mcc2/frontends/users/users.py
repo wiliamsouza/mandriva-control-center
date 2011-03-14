@@ -34,18 +34,31 @@ class UsersGui(object):
         for user in self.interface.ListUsers():
             users.append(User(user))
 
+        allUsers = []
+        for user in self.interface.ListAllUsers():
+            allUsers.append(User(user))
+
         groups = []
         for group in self.interface.ListGroups():
             groups.append(Group(group))
 
+        allGroups = []
+        for group in self.interface.ListAllGroups():
+            allGroups.append(Group(group))
+
+
         _controller = Controller(self)
         userModel = UserModel(users)
+        allUserModel = UserModel(allUsers)
         groupModel = GroupModel(groups)
+        allGroupModel = GroupModel(allGroups)
 
         self.root_context = self.view.rootContext()
         self.root_context.setContextProperty('controller', _controller)
         self.root_context.setContextProperty('userModel', userModel)
+        self.root_context.setContextProperty('allUserModel', allUserModel)
         self.root_context.setContextProperty('groupModel', groupModel)
+        self.root_context.setContextProperty('allGroupModel', allGroupModel)
 
         self.view.setSource('views/Main.qml')
         self.view.setWindowTitle('Mandriva Control Center - Users and Groups')
