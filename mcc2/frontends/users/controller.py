@@ -21,61 +21,73 @@ class Controller(QtCore.QObject):
     @QtCore.Slot(QtCore.QObject)
     def addUser(self, grid):
         user_info = {}
+
         fullName = grid.findChild(QtDeclarative.QDeclarativeItem, 'addFullName').property('text')
         user_info['fullname'] = fullName
+        print fullName
+        
         userName = grid.findChild(QtDeclarative.QDeclarativeItem, 'addUserName').property('text')
         user_info['username'] = userName
+        print userName
+
         password = grid.findChild(QtDeclarative.QDeclarativeItem, 'addPassword').property('text')
         confirmPassword = grid.findChild(QtDeclarative.QDeclarativeItem, 'addConfirmPassword').property('text')
-
         #TODO Find a way to show a message to gui from here
         if password == confirmPassword:
             user_info['password'] = password
         else:
-            pass
+            print "Password mismatch!"
 
         loginShell = grid.findChild(QtDeclarative.QDeclarativeItem, 'addLoginShell').property('text')
         user_info['shell'] = loginShell
+        print loginShell
 
-        # TODO: Turn this in a checkbox component
         createHomeDirectory = grid.findChild(QtDeclarative.QDeclarativeItem, 'addCreateHomeDirectory').property('checked')
+        user_info['create_home'] = createHomeDirectory
         print createHomeDirectory
-        #if createHomeDirectory is True:
-        #    user_info['create_home'] = True
-        #else:
-        #    user_info['create_home'] = False
 
         homeDirectory = grid.findChild(QtDeclarative.QDeclarativeItem, 'addHomeDirectory').property('text')
         user_info['home_directory'] = homeDirectory
+        print homeDirectory
 
-        # TODO: Turn this in a checkbox component
         privateGroup = grid.findChild(QtDeclarative.QDeclarativeItem, 'addCreatePrivateGroup').property('checked')
         print privateGroup
-
-        # TODO: Turn this in a checkbox component
-        specifyUserId = grid.findChild(QtDeclarative.QDeclarativeItem, 'addSpecifyUserId').property('checked')
-        print specifyUserId
-
-        userId = grid.findChild(QtDeclarative.QDeclarativeItem, 'addUserId')
+        if privateGroup:
+            print 'Creating a new group'
+            gid = self.__interface.FirstUnusedGid()
+            #TODO: Add exception handler here
+            user_info['gid'] = int(self.__interface.AddGroup(user_info['username'], gid))
 
         # Get the FirstUnusedUid
-        uid = self.__interface.FirstUnusedUid()
+        user_info['uid'] = self.__interface.FirstUnusedUid()
 
-        # Create a group with the same name of the user automaticaly
-        #if privateGroup is True
-        #    gid = self.__interface.FirstUnusedGid()
-        """
-        user_info = {
-            'fullname': fullName.property('text'),
-            'username': userName.property('text'),
-            'shell': loginShell.property('text'),
-            'uid': uid,
-            'gid': gid,
-            'create_home': True,
-            'home_directory': '/home/john',
-            'password': 'secret'
-            }
-        """
+        specifyUserId = grid.findChild(QtDeclarative.QDeclarativeItem, 'addSpecifyUserId').property('checked')
+        print specifyUserId
+        if specifyUserId:
+            #TODO: Add exception handler here
+            user_info['uid'] = int(grid.findChild(QtDeclarative.QDeclarativeItem, 'addUserId').property('text'))
+
+        print user_info
+        print self.__interface.AddUser(user_info)
+
+    @QtCore.Slot(QtCore.QObject)
+    def addGroup(self, grid):
+
+        groupName = grid.findChild(QtDeclarative.QDeclarativeItem, 'addGroupName').property('text')
+        print groupName
+
+        # Get the FirstUnusedGid
+        gid = self.__interface.FirstUnusedGid()
+
+        specifyGroupId = grid.findChild(QtDeclarative.QDeclarativeItem, 'addSpecifyGroupId').property('checked')
+        print specifyGroupId
+        if specifyGroupId:
+            #TODO: Add exception handler here
+            gid = int(grid.findChild(QtDeclarative.QDeclarativeItem, 'addGroupId').property('text'))
+
+        print groupName, gid
+        print self.__interface.AddGroup(groupName, gid)
+
     @QtCore.Slot()
     def quit(self):
         self.parent.quit()

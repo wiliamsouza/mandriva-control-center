@@ -53,12 +53,17 @@ class UsersGui(object):
         groupModel = GroupModel(groups)
         allGroupModel = GroupModel(allGroups)
 
+        unusedUid = str(self.interface.FirstUnusedUid())
+        unusedGid = str(self.interface.FirstUnusedGid())
+
         self.root_context = self.view.rootContext()
         self.root_context.setContextProperty('controller', _controller)
         self.root_context.setContextProperty('userModel', userModel)
         self.root_context.setContextProperty('allUserModel', allUserModel)
         self.root_context.setContextProperty('groupModel', groupModel)
         self.root_context.setContextProperty('allGroupModel', allGroupModel)
+        self.root_context.setContextProperty('unusedUid', unusedUid)
+        self.root_context.setContextProperty('unusedGid', unusedGid)
 
         self.view.setSource('views/Main.qml')
         self.view.setWindowTitle('Mandriva Control Center - Users and Groups')

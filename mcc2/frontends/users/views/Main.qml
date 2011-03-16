@@ -36,6 +36,7 @@ Rectangle {
                     source: "images/document-save.png"
                     opacity: 0.2
                 },
+
                 Image {
                     id: addUserButton
                     source: "images/list-add-user.png"
@@ -45,14 +46,27 @@ Rectangle {
                             groupForm.visible = false
                             contentFlick.contentHeight = addUserForm.height
                             userForm.visible = false
+                            addGroupForm.visible = false
                             addUserForm.visible = true
                         }
                     }
                 },
+
                 Image {
                     id: addGroupButton
                     source: "images/user-group-new.png"
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            groupForm.visible = false
+                            contentFlick.contentHeight = addGroupForm.height
+                            userForm.visible = false
+                            addUserForm.visible = false
+                            addGroupForm.visible = true
+                        }
+                    }
                 },
+
                 Image {
                     id: deleteButton
                     source: "images/list-remove-user.png"
@@ -62,6 +76,7 @@ Rectangle {
                         //controller.Delete
                     }
                 },
+
                 Image {
                     id: refreshButton
                     source: "images/view-refresh.png"
@@ -465,6 +480,7 @@ Rectangle {
                 MdvTextInput {
                     objectName: 'addUserName'
                     width: 215
+                    onTextChanged: addHomeDirectory.text = "/home/" + text
                 }
 
                 Text {
@@ -477,7 +493,6 @@ Rectangle {
                 MdvTextInput {
                     objectName: 'addPassword'
                     width: 215
-                    text: "password"
                     echoMode: TextInput.Password
                 }
 
@@ -491,7 +506,6 @@ Rectangle {
                 MdvTextInput {
                     objectName: 'addConfirmPassword'
                     width: 215
-                    text: "password"
                     echoMode: TextInput.Password
                 }
 
@@ -505,6 +519,9 @@ Rectangle {
                 MdvTextInput {
                     objectName: 'addLoginShell'
                     width: 215
+                    text: "/bin/bash"
+                    //model: shellModel
+                    //currentIndex: 1
                 }
 
                 Text {
@@ -516,6 +533,7 @@ Rectangle {
                 }
                 MdvCheckBox {
                     objectName: 'addCreateHomeDirectory'
+                    checked: true
                 }
 
                 Text {
@@ -527,7 +545,9 @@ Rectangle {
                 }
                 MdvTextInput {
                     objectName: 'addHomeDirectory'
+                    id: addHomeDirectory
                     width: 215
+                    text: "/home/"
                 }
 
                 Text {
@@ -539,6 +559,7 @@ Rectangle {
                 }
                 MdvCheckBox {
                     objectName: 'addCreatePrivateGroup'
+                    checked: true
                 }
 
                 Text {
@@ -550,6 +571,7 @@ Rectangle {
                 }
                 MdvCheckBox {
                     objectName: 'addSpecifyUserId'
+                    onPressedChanged: !checked ? addUserId.opacity = 0.2: addUserId.opacity = 1
                 }
 
                 Text {
@@ -561,7 +583,10 @@ Rectangle {
                 }
                 MdvTextInput {
                     objectName: 'addUserId'
+                    id: addUserId
                     width: 215
+                    opacity: 0.2
+                    text: unusedUid
                 }
 
                 Text {
@@ -574,6 +599,82 @@ Rectangle {
                         anchors.fill: parent
                         onClicked: {
                             controller.addUser(addUserForm)
+                        }
+                    }
+                }
+            }
+
+            Grid {
+                id: addGroupForm
+                visible: false
+                columns: 2
+                spacing: 8
+                anchors.left: parent.left
+                anchors.leftMargin: 12
+                anchors.top: parent.top
+                anchors.topMargin: 12
+
+
+                Text {
+                    text: "Add new group"
+                    color: "#241c1c"
+                    font.bold: true
+                    font.pixelSize: 20
+                    font.family: "Sans"
+                }
+                Text {
+                    text: " "
+                }
+
+                Text {
+                    text: "Group name:"
+                    color: "#e3dbdb"
+                    font.bold: true
+                    font.pixelSize: 15
+                    font.family: "Sans"
+                }
+                MdvTextInput {
+                    objectName: 'addGroupName'
+                    width: 215
+                }
+
+                Text {
+                    text: "Specify group ID:"
+                    color: "#e3dbdb"
+                    font.bold: true
+                    font.pixelSize: 15
+                    font.family: "Sans"
+                }
+                MdvCheckBox {
+                    objectName: 'addSpecifyGroupId'
+                    onPressedChanged: !checked ? addGroupId.opacity = 0.2: addGroupId.opacity = 1
+                }
+
+                Text {
+                    text: "Group ID:"
+                    color: "#e3dbdb"
+                    font.bold: true
+                    font.pixelSize: 15
+                    font.family: "Sans"
+                }
+                MdvTextInput {
+                    objectName: 'addGroupId'
+                    id: addGroupId
+                    width: 215
+                    opacity: 0.2
+                    text: unusedGid
+                }
+
+                Text {
+                    text: " "
+                }
+                MdvButton {
+                    width: 100
+                    text: "Save"
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            controller.addGroup(addGroupForm)
                         }
                     }
                 }
@@ -892,5 +993,22 @@ Rectangle {
     }
     **/
 
+    ListModel {
+        id: shellModel
+        ListElement {
+            content: "/bin/bash"
+            icon: ""
+        }
+
+        ListElement {
+            content: "/bin/dash"
+            icon: ""
+        }
+
+        ListElement {
+            content: "/bin/sh"
+            icon: ""
+        }
+    }
 
 }
