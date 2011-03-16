@@ -80,6 +80,12 @@ Rectangle {
                 Image {
                     id: refreshButton
                     source: "images/view-refresh.png"
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            controller.reflesh(groupModel)
+                        }
+                    }
                 }
             ]
         }
@@ -586,7 +592,7 @@ Rectangle {
                     id: addUserId
                     width: 215
                     opacity: 0.2
-                    text: unusedUid
+                    //text: unusedUid
                 }
 
                 Text {
@@ -662,7 +668,7 @@ Rectangle {
                     id: addGroupId
                     width: 215
                     opacity: 0.2
-                    text: unusedGid
+                    //text: unusedGid
                 }
 
                 Text {
@@ -701,6 +707,7 @@ Rectangle {
                             contentFlick.contentHeight = userForm.height
                             userForm.visible = true
                             addUserForm.visible = false
+                            addGroupForm.visible = false
                             deleteButton.opacity = 0.2
                         }
                     }
@@ -717,6 +724,7 @@ Rectangle {
                             contentFlick.contentHeight = groupForm.height
                             groupForm.visible = true
                             addUserForm.visible = false
+                            addGroupForm.visible = false
                             deleteButton.opacity = 0.2
                         }
                     }

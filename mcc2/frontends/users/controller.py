@@ -22,71 +22,84 @@ class Controller(QtCore.QObject):
     def addUser(self, grid):
         user_info = {}
 
-        fullName = grid.findChild(QtDeclarative.QDeclarativeItem, 'addFullName').property('text')
-        user_info['fullname'] = fullName
-        print fullName
+        fullName = grid.findChild(QtDeclarative.QDeclarativeItem, 'addFullName')
+        user_info['fullname'] = fullName.property('text')
         
-        userName = grid.findChild(QtDeclarative.QDeclarativeItem, 'addUserName').property('text')
-        user_info['username'] = userName
-        print userName
+        userName = grid.findChild(QtDeclarative.QDeclarativeItem, 'addUserName')
+        user_info['username'] = userName.property('text')
 
-        password = grid.findChild(QtDeclarative.QDeclarativeItem, 'addPassword').property('text')
-        confirmPassword = grid.findChild(QtDeclarative.QDeclarativeItem, 'addConfirmPassword').property('text')
+        password = grid.findChild(QtDeclarative.QDeclarativeItem, 'addPassword')
+        confirmPassword = grid.findChild(QtDeclarative.QDeclarativeItem, 'addConfirmPassword')
         #TODO Find a way to show a message to gui from here
-        if password == confirmPassword:
-            user_info['password'] = password
+        if password.property('text') == confirmPassword.property('text'):
+            user_info['password'] = password.property('text')
         else:
             print "Password mismatch!"
 
-        loginShell = grid.findChild(QtDeclarative.QDeclarativeItem, 'addLoginShell').property('text')
-        user_info['shell'] = loginShell
-        print loginShell
+        loginShell = grid.findChild(QtDeclarative.QDeclarativeItem, 'addLoginShell')
+        user_info['shell'] = loginShell.property('text')
 
-        createHomeDirectory = grid.findChild(QtDeclarative.QDeclarativeItem, 'addCreateHomeDirectory').property('checked')
-        user_info['create_home'] = createHomeDirectory
-        print createHomeDirectory
+        createHomeDirectory = grid.findChild(QtDeclarative.QDeclarativeItem, 'addCreateHomeDirectory')
+        user_info['create_home'] = createHomeDirectory.property('checked')
 
-        homeDirectory = grid.findChild(QtDeclarative.QDeclarativeItem, 'addHomeDirectory').property('text')
-        user_info['home_directory'] = homeDirectory
-        print homeDirectory
+        homeDirectory = grid.findChild(QtDeclarative.QDeclarativeItem, 'addHomeDirectory')
+        user_info['home_directory'] = homeDirectory.property('text')
 
-        privateGroup = grid.findChild(QtDeclarative.QDeclarativeItem, 'addCreatePrivateGroup').property('checked')
-        print privateGroup
-        if privateGroup:
-            print 'Creating a new group'
+        privateGroup = grid.findChild(QtDeclarative.QDeclarativeItem, 'addCreatePrivateGroup')
+        if privateGroup.property('checked'):
             gid = self.__interface.FirstUnusedGid()
             #TODO: Add exception handler here
-            user_info['gid'] = int(self.__interface.AddGroup(user_info['username'], gid))
+            user_info['gid'] = self.__interface.AddGroup(user_info['username'], gid)
 
         # Get the FirstUnusedUid
         user_info['uid'] = self.__interface.FirstUnusedUid()
 
-        specifyUserId = grid.findChild(QtDeclarative.QDeclarativeItem, 'addSpecifyUserId').property('checked')
-        print specifyUserId
-        if specifyUserId:
+        specifyUserId = grid.findChild(QtDeclarative.QDeclarativeItem, 'addSpecifyUserId')
+        addUserId = grid.findChild(QtDeclarative.QDeclarativeItem, 'addUserId')
+        if specifyUserId.property('checked'):
             #TODO: Add exception handler here
-            user_info['uid'] = int(grid.findChild(QtDeclarative.QDeclarativeItem, 'addUserId').property('text'))
+            user_info['uid'] = int(addUserId.property('text'))
 
         print user_info
         print self.__interface.AddUser(user_info)
 
+        fullName.setProperty('text', '')
+        userName.setProperty('text', '')
+        password.setProperty('text', '')
+        confirmPassword.setProperty('text', '')
+        loginShell.setProperty('text', '/bin/bash')
+        createHomeDirectory.setProperty('checked', True)
+        homeDirectory.setProperty('text', '/home/')
+        privateGroup.setProperty('checked', True)
+        specifyUserId.setProperty('checked', False)
+        addUserId.setProperty('text', '')
+
     @QtCore.Slot(QtCore.QObject)
     def addGroup(self, grid):
 
-        groupName = grid.findChild(QtDeclarative.QDeclarativeItem, 'addGroupName').property('text')
-        print groupName
+        groupName = grid.findChild(QtDeclarative.QDeclarativeItem, 'addGroupName')
 
         # Get the FirstUnusedGid
         gid = self.__interface.FirstUnusedGid()
 
-        specifyGroupId = grid.findChild(QtDeclarative.QDeclarativeItem, 'addSpecifyGroupId').property('checked')
-        print specifyGroupId
-        if specifyGroupId:
+        specifyGroupId = grid.findChild(QtDeclarative.QDeclarativeItem, 'addSpecifyGroupId')
+        addGroupId = grid.findChild(QtDeclarative.QDeclarativeItem, 'addGroupId')
+        if specifyGroupId.property('checked'):
             #TODO: Add exception handler here
-            gid = int(grid.findChild(QtDeclarative.QDeclarativeItem, 'addGroupId').property('text'))
+            gid = int(addGroupId.property('text'))
 
-        print groupName, gid
-        print self.__interface.AddGroup(groupName, gid)
+        #print groupName, gid
+        self.__interface.AddGroup(groupName.property('text'), gid)
+
+        groupName.setProperty('text', '')
+        specifyGroupId.setProperty('checked', False)
+        addGroupId.setProperty('text', '')
+        self.parent.groupModel.refresh()
+
+    @QtCore.Slot(QtCore.QObject)
+    def reflesh(self, groupModel):
+        print 'refreshing'
+        groupModel.refresh()
 
     @QtCore.Slot()
     def quit(self):

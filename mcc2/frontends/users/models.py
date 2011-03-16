@@ -91,17 +91,17 @@ class User(QtCore.QObject):
 class UserModel(QtCore.QAbstractListModel):
     COLUMNS = ('user',)
 
-    def __init__(self, user):
+    def __init__(self, users):
         QtCore.QAbstractListModel.__init__(self)
-        self._user = user
+        self._users = users
         self.setRoleNames(dict(enumerate(UserModel.COLUMNS)))
 
     def rowCount(self, parent=QtCore.QModelIndex()):
-        return len(self._user)
+        return len(self._users)
 
     def data(self, index, role):
         if index.isValid() and role == UserModel.COLUMNS.index('user'):
-            return self._user[index.row()]
+            return self._users[index.row()]
         return None
 
 
@@ -145,15 +145,30 @@ class Group(QtCore.QObject):
 class GroupModel(QtCore.QAbstractListModel):
     COLUMNS = ('group',)
 
-    def __init__(self, group):
+    def __init__(self, groups):
         QtCore.QAbstractListModel.__init__(self)
-        self._group = group
+        self._groups = groups
         self.setRoleNames(dict(enumerate(GroupModel.COLUMNS)))
+        self.bus = dbus.SystemBus()
+        self.proxy = self.bus.get_object(
+            'org.mandrivalinux.mcc2.Users',
+            '/org/mandrivalinux/mcc2/Users')
+        self.interface = dbus.Interface(
+            self.proxy, 'org.mandrivalinux.mcc2.Users')
 
     def rowCount(self, parent=QtCore.QModelIndex()):
-        return len(self._group)
+        return len(self._groups)
 
     def data(self, index, role):
         if index.isValid() and role == GroupModel.COLUMNS.index('group'):
-            return self._group[index.row()]
+            return self._groups[index.row()]
         return None
+
+    def refresh(self, all_groups=False):
+        self._groups = []
+        if all_groups:
+            for group in self.interface.ListAllGroups():
+                self._groups.append(Group(group))
+        else:
+            for group in self.interface.ListGroups():
+                self._groups.append(Group(group))
