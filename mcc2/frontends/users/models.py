@@ -165,10 +165,14 @@ class GroupModel(QtCore.QAbstractListModel):
         return None
 
     def refresh(self, all_groups=False):
-        self._groups = []
+        del self._groups[:]
+        print self._groups
+        
         if all_groups:
             for group in self.interface.ListAllGroups():
                 self._groups.append(Group(group))
         else:
             for group in self.interface.ListGroups():
                 self._groups.append(Group(group))
+
+        print len(self._groups)

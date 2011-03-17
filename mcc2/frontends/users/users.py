@@ -19,8 +19,8 @@ class UsersGui(object):
         self.view = QtDeclarative.QDeclarativeView()
         #TODO: Make a check if OpenGL is supported
         #self.widget = QtOpenGL.QGLWidget()
-        self.widget = QtGui.QWidget()
-        self.view.setViewport(self.widget)
+        #self.widget = QtGui.QWidget()
+        #self.view.setViewport(self.widget)
         self.view.setResizeMode(
             QtDeclarative.QDeclarativeView.SizeRootObjectToView)
         self.bus = dbus.SystemBus()
