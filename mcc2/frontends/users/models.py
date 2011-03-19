@@ -2,6 +2,7 @@ from PySide import QtCore
 
 import dbus
 
+
 class User(QtCore.QObject):
     def __init__(self, user):
         QtCore.QObject.__init__(self)
@@ -93,6 +94,7 @@ class UserModel(QtCore.QAbstractListModel):
 
     def __init__(self, users):
         QtCore.QAbstractListModel.__init__(self)
+        self.setObjectName('user')
         self._users = users
         self.setRoleNames(dict(enumerate(UserModel.COLUMNS)))
 
@@ -147,6 +149,7 @@ class GroupModel(QtCore.QAbstractListModel):
 
     def __init__(self, groups):
         QtCore.QAbstractListModel.__init__(self)
+        self.setObjectName('group')
         self._groups = groups
         self.setRoleNames(dict(enumerate(GroupModel.COLUMNS)))
         self.bus = dbus.SystemBus()
@@ -159,20 +162,26 @@ class GroupModel(QtCore.QAbstractListModel):
     def rowCount(self, parent=QtCore.QModelIndex()):
         return len(self._groups)
 
+    def flags(self, index):
+        return QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled # | QtCore.Qt.ItemIsEditable
+
     def data(self, index, role):
         if index.isValid() and role == GroupModel.COLUMNS.index('group'):
             return self._groups[index.row()]
         return None
 
-    def refresh(self, all_groups=False):
-        del self._groups[:]
-        print self._groups
-        
-        if all_groups:
-            for group in self.interface.ListAllGroups():
-                self._groups.append(Group(group))
-        else:
-            for group in self.interface.ListGroups():
-                self._groups.append(Group(group))
+    def removeRows(self):
+        count = len(self._groups) -1
+        while count != -1:
+            print count
+            self.beginRemoveRows(QtCore.QModelIndex(), count, count)
+            del self._groups[count]
+            count -= 1
 
-        print len(self._groups)
+        self.endRemoveRows()
+
+    def addItem(self):
+        self.beginInsertRows(QtCore.QModelIndex(), len(self._groups), len(self._groups))
+        for group in self.interface.ListGroups():
+                self._groups.append(Group(group))
+        self.endInsertRows()

@@ -43,6 +43,8 @@ Rectangle {
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
+                            listView.model = userModel
+                            listView.delegate = userDelegate
                             groupForm.visible = false
                             contentFlick.contentHeight = addUserForm.height
                             userForm.visible = false
@@ -58,6 +60,8 @@ Rectangle {
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
+                            listView.model = groupModel
+                            listView.delegate = groupDelegate
                             groupForm.visible = false
                             contentFlick.contentHeight = addGroupForm.height
                             userForm.visible = false
@@ -73,7 +77,9 @@ Rectangle {
                     opacity: 0.2
                     MouseArea {
                         anchors.fill: parent
-                        //controller.Delete
+                         listView.model.objectName
+                        //controller.DeleteGroup()
+                        //controller.DeleteUser()
                     }
                 },
 
@@ -106,8 +112,10 @@ Rectangle {
             model: userModel
             delegate: userDelegate
             header: listViewHeader
-            //highlightFollowsCurrentItem: true
+            highlight: listViewHighlight
+            highlightFollowsCurrentItem: true
             //focus: true
+            onModelChanged:
         }
     }
 
@@ -453,7 +461,7 @@ Rectangle {
 
 
                 Text {
-                    text: "Add new user"
+                    text: "New user"
                     color: "#241c1c"
                     font.bold: true
                     font.pixelSize: 20
@@ -622,7 +630,7 @@ Rectangle {
 
 
                 Text {
-                    text: "Add new group"
+                    text: "New group"
                     color: "#241c1c"
                     font.bold: true
                     font.pixelSize: 20
@@ -744,6 +752,7 @@ Rectangle {
         Rectangle {
             height: 60
             width: listView.width
+
             color: ((index % 2 == 0) ? "#c8b7b7" : "#ac9393")
             Row {
                 anchors.verticalCenter: parent.verticalCenter
@@ -800,6 +809,7 @@ Rectangle {
                     deleteButton.opacity = 1
                     // keep this two line at end
                     groupForm.visible = false
+                    addGroupForm.visible = false
                     addUserForm.visible = false
                     userForm.visible = true
                     contentFlick.contentHeight = userForm.height
@@ -880,6 +890,7 @@ Rectangle {
                     // keep this two line at end
                     userForm.visible = false
                     addUserForm.visible = false
+                    addGroupForm.visible = false
                     groupForm.visible = true
                     contentFlick.contentHeight = groupForm.height
                 }
@@ -914,13 +925,14 @@ Rectangle {
         }
     }
 
-    /**
     Component {
         id: listViewHighlight
         Rectangle {
             color: "lightsteelblue"
             radius: 8
             y: listView.currentItem.y
+            z: 2
+            opacity: 0.4
             Behavior on y {
                 SpringAnimation {
                     spring: 3
@@ -929,7 +941,6 @@ Rectangle {
             }
         }
     }
-    **/
 
     /**
     ListModel {

@@ -76,7 +76,7 @@ class Controller(QtCore.QObject):
 
     @QtCore.Slot(QtCore.QObject)
     def addGroup(self, grid):
-
+        ##self.parent.groupModel.layoutAboutToBeChanged.emit()
         groupName = grid.findChild(QtDeclarative.QDeclarativeItem, 'addGroupName')
 
         # Get the FirstUnusedGid
@@ -94,12 +94,22 @@ class Controller(QtCore.QObject):
         groupName.setProperty('text', '')
         specifyGroupId.setProperty('checked', False)
         addGroupId.setProperty('text', '')
-        self.parent.groupModel.refresh()
+        ##self.parent.groupModel.refresh()
+        self.parent.groupModel.removeRows()
+        self.parent.groupModel.addItem()
+
+    @QtCore.Slot(QtCore.QObject)
+    def deleteUser(self, username):
+        print 'User deleted'
+
+    @QtCore.Slot(QtCore.QObject)
+    def deleteGroup(self, groupname):
+        print 'Group deleted'
 
     @QtCore.Slot(QtCore.QObject)
     def reflesh(self, groupModel):
-        print 'refreshing'
-        groupModel.refresh()
+        self.parent.groupModel.removeRows()
+        self.parent.groupModel.addItem()
 
     @QtCore.Slot()
     def quit(self):
