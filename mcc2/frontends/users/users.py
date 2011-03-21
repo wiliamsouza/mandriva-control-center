@@ -17,10 +17,6 @@ class UsersGui(object):
     def __init__(self, argv):
         self.app = QtGui.QApplication(argv)
         self.view = QtDeclarative.QDeclarativeView()
-        #TODO: Make a check if OpenGL is supported
-        #self.widget = QtOpenGL.QGLWidget()
-        #self.widget = QtGui.QWidget()
-        #self.view.setViewport(self.widget)
         self.view.setResizeMode(
             QtDeclarative.QDeclarativeView.SizeRootObjectToView)
         self.bus = dbus.SystemBus()
@@ -53,17 +49,12 @@ class UsersGui(object):
         self.groupModel = GroupModel(groups)
         self.allGroupModel = GroupModel(allGroups)
 
-        #self.unusedUid = str(self.interface.FirstUnusedUid())
-        #self.unusedGid = str(self.interface.FirstUnusedGid())
-
         self.root_context = self.view.rootContext()
         self.root_context.setContextProperty('controller', self.controller)
         self.root_context.setContextProperty('userModel', self.userModel)
         self.root_context.setContextProperty('allUserModel', self.allUserModel)
         self.root_context.setContextProperty('groupModel', self.groupModel)
         self.root_context.setContextProperty('allGroupModel', self.allGroupModel)
-        #self.root_context.setContextProperty('unusedUid', self.unusedUid)
-        #self.root_context.setContextProperty('unusedGid', self.unusedGid)
 
         self.view.setSource('views/Main.qml')
         self.view.setWindowTitle('Mandriva Control Center - Users and Groups')

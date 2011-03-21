@@ -19,7 +19,7 @@ class Controller(QtCore.QObject):
             'org.mandrivalinux.mcc2.Users')
 
     @QtCore.Slot(QtCore.QObject)
-    def addUser(self, grid):
+    def addUser(self, grid, model):
         user_info = {}
 
         fullName = grid.findChild(QtDeclarative.QDeclarativeItem, 'addFullName')
@@ -76,34 +76,28 @@ class Controller(QtCore.QObject):
 
     @QtCore.Slot(QtCore.QObject)
     def addGroup(self, grid):
-        ##self.parent.groupModel.layoutAboutToBeChanged.emit()
         groupName = grid.findChild(QtDeclarative.QDeclarativeItem, 'addGroupName')
-
-        # Get the FirstUnusedGid
-        gid = self.__interface.FirstUnusedGid()
-
         specifyGroupId = grid.findChild(QtDeclarative.QDeclarativeItem, 'addSpecifyGroupId')
         addGroupId = grid.findChild(QtDeclarative.QDeclarativeItem, 'addGroupId')
+        gid = self.__interface.FirstUnusedGid()
         if specifyGroupId.property('checked'):
             #TODO: Add exception handler here
             gid = int(addGroupId.property('text'))
 
-        #print groupName, gid
         self.__interface.AddGroup(groupName.property('text'), gid)
+        self.parent.groupModel.addGroup(groupName.property('text'))
 
         groupName.setProperty('text', '')
         specifyGroupId.setProperty('checked', False)
         addGroupId.setProperty('text', '')
-        ##self.parent.groupModel.refresh()
-        self.parent.groupModel.removeRows()
-        self.parent.groupModel.addItem()
 
     @QtCore.Slot(QtCore.QObject)
     def deleteUser(self, username):
         print 'User deleted'
 
-    @QtCore.Slot(QtCore.QObject)
-    def deleteGroup(self, groupname):
+    @QtCore.Slot(int)
+    def deleteGroup(self, row):
+        self.parent.groupModel.removeRows(row)
         print 'Group deleted'
 
     @QtCore.Slot(QtCore.QObject)

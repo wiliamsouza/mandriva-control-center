@@ -149,39 +149,26 @@ class GroupModel(QtCore.QAbstractListModel):
 
     def __init__(self, groups):
         QtCore.QAbstractListModel.__init__(self)
-        self.setObjectName('group')
         self._groups = groups
         self.setRoleNames(dict(enumerate(GroupModel.COLUMNS)))
-        self.bus = dbus.SystemBus()
-        self.proxy = self.bus.get_object(
-            'org.mandrivalinux.mcc2.Users',
-            '/org/mandrivalinux/mcc2/Users')
-        self.interface = dbus.Interface(
-            self.proxy, 'org.mandrivalinux.mcc2.Users')
 
     def rowCount(self, parent=QtCore.QModelIndex()):
         return len(self._groups)
 
-    def flags(self, index):
-        return QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled # | QtCore.Qt.ItemIsEditable
+    #def flags(self, index):
+    #    return QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled
 
     def data(self, index, role):
         if index.isValid() and role == GroupModel.COLUMNS.index('group'):
             return self._groups[index.row()]
         return None
 
-    def removeRows(self):
-        count = len(self._groups) -1
-        while count != -1:
-            print count
-            self.beginRemoveRows(QtCore.QModelIndex(), count, count)
-            del self._groups[count]
-            count -= 1
-
+    def removeRows(self, row, parent=QtCore.QModelIndex()):
+        self.beginRemoveRows(parent, row, row)
+        del self._groups[row]
         self.endRemoveRows()
 
-    def addItem(self):
+    def addGroup(self, groupname):
         self.beginInsertRows(QtCore.QModelIndex(), len(self._groups), len(self._groups))
-        for group in self.interface.ListGroups():
-                self._groups.append(Group(group))
+        self._groups.append(Group(groupname))
         self.endInsertRows()

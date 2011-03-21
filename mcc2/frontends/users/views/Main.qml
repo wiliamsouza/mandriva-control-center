@@ -1,5 +1,5 @@
-import Qt 4.7
-//import QtQuick 1.0
+//import Qt 4.7
+import QtQuick 1.0
 //import Qt.labs.Mx 1.0
 import "mandriva"
 
@@ -77,9 +77,9 @@ Rectangle {
                     opacity: 0.2
                     MouseArea {
                         anchors.fill: parent
-                         listView.model.objectName
-                        //controller.DeleteGroup()
-                        //controller.DeleteUser()
+                        onClicked: {
+                            controller.deleteGroup(listView.currentIndex)
+                        }
                     }
                 },
 
@@ -115,7 +115,7 @@ Rectangle {
             highlight: listViewHighlight
             highlightFollowsCurrentItem: true
             //focus: true
-            onModelChanged:
+            //onModelChanged:
         }
     }
 
