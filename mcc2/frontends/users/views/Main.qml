@@ -1,6 +1,4 @@
-//import Qt 4.7
 import QtQuick 1.0
-//import Qt.labs.Mx 1.0
 import "mandriva"
 
 
@@ -50,6 +48,9 @@ Rectangle {
                             userForm.visible = false
                             addGroupForm.visible = false
                             addUserForm.visible = true
+                            deleteGroup.visible = false
+                            deleteUser.visible = true
+                            deleteUser.opacity = 0.2
                         }
                     }
                 },
@@ -67,18 +68,43 @@ Rectangle {
                             userForm.visible = false
                             addUserForm.visible = false
                             addGroupForm.visible = true
+                            deleteUser.visible = false
+                            deleteGroup.visible = true
+                            deleteGroup.opacity = 0.2
                         }
                     }
                 },
 
                 Image {
-                    id: deleteButton
+                    id: deleteUser
                     source: "images/list-remove-user.png"
                     opacity: 0.2
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
-                            controller.deleteGroup(listView.currentIndex)
+                            if (deleteUser.opacity == 0.2)
+                                console.log("button disabled")
+                            else
+                                scrollFormUser.message = "Do you really want to delete the user?"
+                                scrollFormUser.state = "show"
+                                //listView.currentIndex = 0
+                        }
+                    }
+                },
+
+                Image {
+                    id: deleteGroup
+                    source: "images/list-remove-user.png"
+                    opacity: 0.2
+                    visible: false
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            if (deleteGroup.opacity == 0.2)
+                                console.log("button disabled")
+                            else
+                                scrollFormGroup.message = "Do you really want to delete the group?"
+                                scrollFormGroup.state = "show"
                         }
                     }
                 },
@@ -114,8 +140,6 @@ Rectangle {
             header: listViewHeader
             highlight: listViewHighlight
             highlightFollowsCurrentItem: true
-            //focus: true
-            //onModelChanged:
         }
     }
 
@@ -127,6 +151,140 @@ Rectangle {
         height: window.height - header.height
         clip: true
         color: "#6c5353"
+
+        Rectangle {
+            property alias message: messageGroup.text
+            property bool status: false
+
+            id: scrollFormGroup
+            y: -height
+            z: 10
+            width: content.width - 100
+            height: 80
+            color: "#e3dbdb"
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Text {
+                id: messageGroup
+                text: ""
+                color: "#241c1c"
+                font.bold: true
+                font.family: "Sans"
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                anchors.topMargin: 10
+            }
+
+
+            Row {
+                spacing: 10
+                anchors.horizontalCenter:  parent.horizontalCenter
+                anchors.bottom: parent.bottom
+
+                MdvButton {
+                    width: 40
+                    text: "Ok"
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            scrollFormGroup.status = true
+                            scrollFormGroup.state = ""
+                            console.log("deleting group")
+                            controller.deleteGroup(listView.currentIndex, listView.currentItem)
+                            listView.currentIndex = 0
+                        }
+                    }
+                }
+
+                MdvButton {
+                    text: "Cancel"
+                    width: 80
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            scrollFormGroup.status = false
+                            scrollFormGroup.state = ""
+                        }
+                    }
+                }
+            }
+
+            states : State {
+                name: "show"
+                PropertyChanges { target: scrollFormGroup; y: 0}
+            }
+
+            transitions: Transition {
+                NumberAnimation { properties: "y"; duration: 500 }
+            }
+        }
+
+        Rectangle {
+            property alias message: messageUser.text
+            property bool status: false
+
+            id: scrollFormUser
+            y: -height
+            z: 10
+            width: content.width - 100
+            height: 80
+            color: "#e3dbdb"
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Text {
+                id: messageUser
+                text: ""
+                color: "#241c1c"
+                font.bold: true
+                font.family: "Sans"
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                anchors.topMargin: 10
+            }
+
+
+            Row {
+                spacing: 10
+                anchors.horizontalCenter:  parent.horizontalCenter
+                anchors.bottom: parent.bottom
+
+                MdvButton {
+                    width: 40
+                    text: "Ok"
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            scrollFormUser.status = true
+                            scrollFormUser.state = ""
+                            console.log("deleting user")
+                            controller.deleteUser(listView.currentIndex, listView.currentItem)
+                            listView.currentIndex = 0
+                        }
+                    }
+                }
+
+                MdvButton {
+                    text: "Cancel"
+                    width: 80
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            scrollFormUser.status = false
+                            scrollFormUser.state = ""
+                        }
+                    }
+                }
+            }
+
+            states : State {
+                name: "show"
+                PropertyChanges { target: scrollFormUser; y: 0}
+            }
+
+            transitions: Transition {
+                NumberAnimation { properties: "y"; duration: 500 }
+            }
+        }
 
         Flickable {
             id: contentFlick
@@ -417,6 +575,8 @@ Rectangle {
                 }
                 MdvTextInput {
                     id: groupName
+                    property string oldGroupName: ""
+                    objectName: "groupName"
                     width: 215
                 }
 
@@ -443,9 +603,23 @@ Rectangle {
                     model: allUserModel
                     delegate: userSelectDelegate
                     clip: true
+                    visible: true
                     //header: listViewHeader
                     //highlightFollowsCurrentItem: true
                     //focus: true
+                }
+                Text {
+                    text: " "
+                }
+                MdvButton {
+                    width: 100
+                    text: "Save"
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            controller.ModifyGroup(groupForm)
+                        }
+                    }
                 }
             }
 
@@ -672,7 +846,7 @@ Rectangle {
                     font.family: "Sans"
                 }
                 MdvTextInput {
-                    objectName: 'addGroupId'
+                    objectName: "addGroupId"
                     id: addGroupId
                     width: 215
                     opacity: 0.2
@@ -713,10 +887,12 @@ Rectangle {
                             listView.delegate = userDelegate
                             groupForm.visible = false
                             contentFlick.contentHeight = userForm.height
-                            userForm.visible = true
+                            //userForm.visible = true
                             addUserForm.visible = false
                             addGroupForm.visible = false
-                            deleteButton.opacity = 0.2
+                            deleteUser.opacity = 0.2
+                            deleteGroup.visible = false
+                            deleteUser.visible = true
                         }
                     }
                 }
@@ -730,10 +906,12 @@ Rectangle {
                             listView.delegate = groupDelegate
                             userForm.visible = false
                             contentFlick.contentHeight = groupForm.height
-                            groupForm.visible = true
+                            //groupForm.visible = true
                             addUserForm.visible = false
                             addGroupForm.visible = false
-                            deleteButton.opacity = 0.2
+                            deleteGroup.opacity = 0.2
+                            deleteUser.visible = false
+                            deleteGroup.visible = true
                         }
                     }
                 }
@@ -773,6 +951,7 @@ Rectangle {
                         spacing: 3
                         children: [
                             Text {
+                                objectName: "delegateUserName"
                                 text: model.user.username
                                 color: "#483737"
                                 font.bold: true
@@ -792,7 +971,6 @@ Rectangle {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    console.log("Clicked")
                     listView.currentIndex = index
                     fullName.text = model.user.fullname
                     userName.text = model.user.username
@@ -806,8 +984,9 @@ Rectangle {
                     shadowWarning.text = model.user.shadow_warning
                     shadowInactive.text = model.user.shadow_inactive
                     shadowLastChange.text = model.user.shadow_last_change
-                    deleteButton.opacity = 1
-                    // keep this two line at end
+                    deleteUser.opacity = 1
+                    controller.selectGroupByUser(model.user.username)
+                    // keep this lines at end
                     groupForm.visible = false
                     addGroupForm.visible = false
                     addUserForm.visible = false
@@ -830,8 +1009,18 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.leftMargin: 10
                 children: [
-                    MdvCheckBox {
-                        objectName: model.user.username + 'Checkbox'
+                    Text {
+                        id: checkbox
+                        text: "✔"
+                        font.pixelSize: 18
+                        font.bold: true
+                        opacity: ((model.user.ischecked) ? 1.0 : 0.1)
+                        color: "white"
+                        //anchors {
+                        //    verticalCenter: parent.verticalCenter
+                        //    right: parent.right
+                        //    rightMargin: 5
+                       // }
                     },
                     Text {
                         text: model.user.username
@@ -839,6 +1028,12 @@ Rectangle {
                         font.bold: true
                         font.pixelSize: 16
                         font.family: "Sans"
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                controller.toggledUser(allUserModel, model.user)
+                            }
+                        }
                     }
                 ]
             }
@@ -869,6 +1064,7 @@ Rectangle {
                         anchors.verticalCenter: parent.verticalCenter
                         children: [
                             Text {
+                                objectName: "delegateGroupName"
                                 text: model.group.groupname
                                 color: "#483737"
                                 font.bold: true
@@ -882,17 +1078,17 @@ Rectangle {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    console.log("Clicked")
                     listView.currentIndex = index
                     groupName.text = model.group.groupname
-                    deleteButton.opacity = 1
-
-                    // keep this two line at end
+                    groupName.oldGroupName = model.group.groupname
+                    deleteGroup.opacity = 1
+                    controller.selectUserByGroup(model.group.groupname)
+                    // keep this lines at end
                     userForm.visible = false
                     addUserForm.visible = false
                     addGroupForm.visible = false
-                    groupForm.visible = true
                     contentFlick.contentHeight = groupForm.height
+                    groupForm.visible = true
                 }
             }
         }
@@ -910,8 +1106,18 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.leftMargin: 10
                 children: [
-                    MdvCheckBox {
-                        objectName: 'groupCheckbox'
+                    Text {
+                        id: checkbox
+                        text: "✔"
+                        font.pixelSize: 18
+                        font.bold: true
+                        opacity: ((model.group.ischecked) ? 1.0 : 0.1)
+                        color: "white"
+                        //anchors {
+                        //    verticalCenter: parent.verticalCenter
+                        //    right: parent.right
+                        //    rightMargin: 5
+                       // }
                     },
                     Text {
                         text: model.group.groupname
@@ -919,6 +1125,12 @@ Rectangle {
                         font.bold: true
                         font.pixelSize: 16
                         font.family: "Sans"
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                controller.toggledGroup(allGroupModel, model.group)
+                            }
+                        }
                     }
                 ]
             }
@@ -941,93 +1153,4 @@ Rectangle {
             }
         }
     }
-
-    /**
-    ListModel {
-        id: userSelectModel
-        ListElement {
-            username: "wiliam"
-            fullname: "Wiliam Souza"
-            uid: "500"
-            login_shell: "/bin/sh"
-            home_directory: "/home/foo"
-        }
-        ListElement {
-            username: "paula"
-            fullname: "Ana Paula"
-            uid: "501"
-            login_shell: "/bin/sh"
-            home_directory: "/home/foo"
-        }
-        ListElement {
-            username: "caio"
-            fullname: "Caio Eduardo"
-            uid: "502"
-            login_shell: "/bin/sh"
-            home_directory: "/home/foo"
-        }
-        ListElement {
-            username: "Julia"
-            fullname: "Ana Julia"
-            uid: "503"
-            login_shell: "/bin/sh"
-            home_directory: "/home/foo"
-        }
-        ListElement {
-            username: "john"
-            fullname: "John Doe"
-            uid: "666"
-            login_shell: "/bin/sh"
-            home_directory: "/home/foo"
-        }
-    }
-    **/
-
-    /**
-    ListModel {
-        id: groupSelectModel
-        ListElement {
-            groupname: "wiliam"
-            members: "wiliam"
-            gid: "1000"
-        }
-
-        ListElement {
-            groupname: "paula"
-            members: "paula"
-            gid: "503"
-        }
-
-        ListElement {
-            groupname: "caio"
-            members: "caio"
-            gid: "501"
-        }
-
-        ListElement {
-            groupname: "Julia"
-            members: "julia"
-            gid: "502"
-        }
-    }
-    **/
-
-    ListModel {
-        id: shellModel
-        ListElement {
-            content: "/bin/bash"
-            icon: ""
-        }
-
-        ListElement {
-            content: "/bin/dash"
-            icon: ""
-        }
-
-        ListElement {
-            content: "/bin/sh"
-            icon: ""
-        }
-    }
-
 }

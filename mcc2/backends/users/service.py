@@ -7,7 +7,7 @@ dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 import math
 import libuser
 from datetime import date, timedelta
-from mcc2.backends.policykit import check_authorization
+from mcc2.backends.policykit import checkAuthorization
 
 #TODO: make a method to this
 MAX_USERNAME_LENGTH = libuser.UT_NAMESIZE - 1
@@ -56,8 +56,8 @@ class Users(dbus.service.Object):
 
         @rtype dbus.Int64: The GID from recently created Group.
         """
-        check_authorization(sender, connection, self.__action)
-        #check_authorization(sender, connection,
+        checkAuthorization(sender, connection, self.__action)
+        #checkAuthorization(sender, connection,
         #    'org.mandrivalinux.mcc2.users.addgroup')
 
         init_group = self.__libuser.initGroup(groupname)
@@ -115,12 +115,17 @@ class Users(dbus.service.Object):
 
         @return dbus.Int64: The UID from recently created User.
         """
-        check_authorization(sender, connection, self.__action)
-        #check_authorization(sender, connection,
+        checkAuthorization(sender, connection, self.__action)
+        #checkAuthorization(sender, connection,
         #    'org.mandrivalinux.mcc2.users.adduser')
 
         user_entity = self.__libuser.initUser(user_info['username'])
-        user_entity.set(libuser.GECOS, [user_info['fullname']])
+        
+        # libuser won't respect that always the fullname will be set by username
+        # if a fullname was not set.
+        if user_info.has_key('fullname'):
+            print 'has key fullname'
+            user_entity.set(libuser.GECOS, [user_info['fullname']])
 
         if user_info.has_key('gid'):
             user_entity.set(libuser.GIDNUMBER, [user_info['gid']])
@@ -164,8 +169,8 @@ class Users(dbus.service.Object):
 
         @rtype: dbus.Dictionary: Recent removed group id and groupname.
         """
-        check_authorization(sender, connection, self.__action)
-        #check_authorization(sender, connection,
+        checkAuthorization(sender, connection, self.__action)
+        #checkAuthorization(sender, connection,
         #    'org.mandrivalinux.mcc2.users.deletegroup')
 
         group_entity = self.__libuser.lookupGroupByName(groupname)
@@ -201,8 +206,8 @@ class Users(dbus.service.Object):
 
         @rtype: dbus.Dictionary: Recent removed user id and groupname.
         """
-        check_authorization(sender, connection, self.__action)
-        #check_authorization(sender, connection,
+        checkAuthorization(sender, connection, self.__action)
+        #checkAuthorization(sender, connection,
         #    'org.mandrivalinux.mcc2.users.deleteuser')
 
         user_entity = self.__libuser.lookupUserByName(username)
@@ -398,7 +403,7 @@ class Users(dbus.service.Object):
         @rtype dbus.Int32: 1 ok or 0 fail.
         """
         #
-        #check_authorization(sender, connection,
+        #checkAuthorization(sender, connection,
         #    'org.mandrivalinux.mcc2.users.lockgroup')
 
         group_entity = self.__libuser.lookupGroupByName(groupname)
@@ -420,8 +425,8 @@ class Users(dbus.service.Object):
 
         @rtype dbus.Int32: 1 ok or 0 fail.
         """
-        check_authorization(sender, connection, self.__action)
-        #check_authorization(sender, connection,
+        checkAuthorization(sender, connection, self.__action)
+        #checkAuthorization(sender, connection,
         #    'org.mandrivalinux.mcc2.users.unlockgroup')
 
         group_entity = self.__libuser.lookupGroupByName(groupname)
@@ -433,13 +438,13 @@ class Users(dbus.service.Object):
                          in_signature='s',
                          out_signature='i')
     def UserIsLocked(self, username):
-        """Check is User Locked.
+        """Check if User Locked.
 
         @param username: A dbus.String with user name as it value.
 
         @raise dbus.DBusException:
 
-        @rtype dbus.Int32: 1 ok or 0 fail.
+        @rtype: dbus.Int32, 1 locked or 0 unlocked.
         """
         user_entity = self.__libuser.lookupUserByName(username)
 
@@ -460,8 +465,8 @@ class Users(dbus.service.Object):
 
         @rtype dbus.Int32: 1 ok or 0 fail.
         """
-        check_authorization(sender, connection, self.__action)
-        #check_authorization(sender, connection,
+        checkAuthorization(sender, connection, self.__action)
+        #checkAuthorization(sender, connection,
         #    'org.mandrivalinux.mcc2.users.lockuser')
 
         user_entity = self.__libuser.lookupUserByName(username)
@@ -483,8 +488,8 @@ class Users(dbus.service.Object):
 
         @rtype dbus.Int32: 1 ok or 0 fail.
         """
-        check_authorization(sender, connection, self.__action)
-        #check_authorization(sender, connection,
+        checkAuthorization(sender, connection, self.__action)
+        #checkAuthorization(sender, connection,
         #    'org.mandrivalinux.mcc2.users.unlockuser')
 
         user_entity = self.__libuser.lookupUserByName(username)
@@ -497,7 +502,7 @@ class Users(dbus.service.Object):
                          out_signature='i',
                          sender_keyword='sender',
                          connection_keyword='connection')
-    def ModifyGroup(self, group_info, sender, connection):
+    def ModifyGroup(self, groupInfo, sender, connection):
         """Modify Group.
 
         @param group_info:A dbus.Dictionary with user information with
@@ -508,9 +513,9 @@ class Users(dbus.service.Object):
             * members:
 
         Example:
-        group_info = {
-                'groupname': 'john',
-                'new_groupname': 'johns'
+        groupInfo = {
+                'oldGroupName': 'john',
+                'newGroupName': 'john'
                 'members': ['john', 'users', 'wheel']
                 }
 
@@ -518,17 +523,16 @@ class Users(dbus.service.Object):
 
         @rtype dbus.Int32: 1 ok or 0 fail.
         """
-        check_authorization(sender, connection, self.__action)
-        #check_authorization(sender, connection,
-        #    'org.mandrivalinux.mcc2.users.modifygroup')
+        checkAuthorization(sender, connection, self.__action)
 
-        group_entity = self.__libuser.lookupGroupByName(group_info['groupname'])
-        group_entity.set(libuser.MEMBERNAME, group_info['members'])
+        groupEntity = self.__libuser.lookupGroupByName(groupInfo['oldGroupName'])
 
-        if group_info.has_key('new_groupname'):
-            group_entity.set(libuser.GROUPNAME, group_info['new_groupname'])
+        if groupEntity.has_key('members'):
+            groupEntity.set(libuser.MEMBERNAME, groupInfo['members'])
 
-        return dbus.Int32(self.__libuser.modifyGroup(group_entity))
+        groupEntity.set(libuser.GROUPNAME, groupInfo['newGroupName'])
+
+        return dbus.Int32(self.__libuser.modifyGroup(groupEntity))
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
@@ -574,8 +578,8 @@ class Users(dbus.service.Object):
 
         @rtype dbus.Int32: 1 ok or 0 fail.
         """
-        check_authorization(sender, connection, self.__action)
-        #check_authorization(sender, connection,
+        checkAuthorization(sender, connection, self.__action)
+        #checkAuthorization(sender, connection,
         #    'org.mandrivalinux.mcc2.users.modifyuser')
 
         user_entity = self.__libuser.lookupUserByName(user_info['username'])
@@ -661,6 +665,7 @@ class Users(dbus.service.Object):
             'username': user_entity.get(libuser.USERNAME)[0],
             'fullname': user_entity.get(libuser.GECOS)[0],
             'home_directory': user_entity.get(libuser.HOMEDIRECTORY)[0],
+            #'groups': self.__libuser.enumerateGroupsByUser(username),
             'login_shell': user_entity.get(libuser.LOGINSHELL)[0],
             'shadow_expire': user_entity.get(libuser.SHADOWEXPIRE)[0],
             'shadow_min': user_entity.get(libuser.SHADOWMIN)[0],
@@ -674,18 +679,15 @@ class Users(dbus.service.Object):
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
                          in_signature='s',
                          out_signature='a{sv}')
-    def GroupDetails(self, groupname):
+    def GroupDetails(self, groupName):
 
-        group_entity = self.__libuser.lookupGroupByName(groupname)
-        members = group_entity.get(libuser.MEMBERNAME)
-        if not len(members):
-            members = dbus.Boolean(0)
+        groupEntity = self.__libuser.lookupGroupByName(groupName)
 
         return dbus.Dictionary(
             {
-            'gid': group_entity.get(libuser.GIDNUMBER)[0],
-            'groupname': group_entity.get(libuser.GROUPNAME)[0],
-            'members': members
+            'gid': groupEntity.get(libuser.GIDNUMBER)[0],
+            'groupName': groupEntity.get(libuser.GROUPNAME)[0],
+            'members': self.__libuser.enumerateUsersByGroup(groupName)
             }, signature=dbus.Signature('sv'))
 
 

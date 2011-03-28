@@ -4,7 +4,7 @@ import dbus.mainloop.glib
 
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
-def check_authorization(sender, connection, action):
+def checkAuthorization(sender, connection, action):
     """Check policykit authorization.
         
     @param sender:
