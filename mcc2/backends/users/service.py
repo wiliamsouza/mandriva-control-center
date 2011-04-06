@@ -4,9 +4,9 @@ import dbus
 import dbus.service
 import dbus.mainloop.glib
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-import math
+#import math
 import libuser
-from datetime import date, timedelta
+#from datetime import date, timedelta
 from mcc2.backends.policykit import checkAuthorization
 
 #TODO: make a method to this
@@ -101,14 +101,14 @@ class Users(dbus.service.Object):
 
         Example:
         user_info = {
-                'fullname': 'John Doe',
-                'username': 'john',
-                'shell': '/bin/bash',
+                'fullName': 'John Doe',
+                'userName': 'john',
+                'loginShell': '/bin/bash',
                 'uid': 666,
                 'gid': 666,
-                'home_directory': '/home/john',
+                'homeDirectory': '/home/john',
                 'password': 'secret',
-                'create_home': True
+                'createHome': True
                 }
 
         @raise dbus.DBusException:
@@ -119,25 +119,24 @@ class Users(dbus.service.Object):
         #checkAuthorization(sender, connection,
         #    'org.mandrivalinux.mcc2.users.adduser')
 
-        user_entity = self.__libuser.initUser(user_info['username'])
+        user_entity = self.__libuser.initUser(user_info['userName'])
         
         # libuser won't respect that always the fullname will be set by username
         # if a fullname was not set.
-        if user_info.has_key('fullname'):
-            print 'has key fullname'
-            user_entity.set(libuser.GECOS, [user_info['fullname']])
+        if user_info.has_key('fullName'):
+            user_entity.set(libuser.GECOS, [user_info['fullName']])
 
         if user_info.has_key('gid'):
             user_entity.set(libuser.GIDNUMBER, [user_info['gid']])
 
         user_entity.set(libuser.UIDNUMBER, [user_info['uid']])
-        user_entity.set(libuser.HOMEDIRECTORY, [user_info['home_directory']])
-        user_entity.set(libuser.LOGINSHELL, [user_info['shell']])
+        user_entity.set(libuser.HOMEDIRECTORY, [user_info['homeDirectory']])
+        user_entity.set(libuser.LOGINSHELL, [user_info['loginShell']])
 
         try:
             self.__libuser.addUser(
                 user_entity,
-                mkhomedir = user_info['create_home'])
+                mkhomedir = user_info['createHome'])
         except RuntimeError, error:
             msg = 'org.mandrivalinux.mcc2.Users.Error.AddUserFailed'
 
@@ -149,7 +148,7 @@ class Users(dbus.service.Object):
 
         self.__libuser.setpassUser(user_entity, user_info['password'], 0)
 
-        user_entity = self.__libuser.lookupUserByName(user_info['username'])
+        user_entity = self.__libuser.lookupUserByName(user_info['userName'])
         uid = user_entity.get(libuser.UIDNUMBER)[0]
 
         return dbus.Int64(uid)
@@ -416,7 +415,7 @@ class Users(dbus.service.Object):
                          out_signature='i',
                          sender_keyword='sender',
                          connection_keyword='connection')
-    def UnlockGroup(self, groupname, sender, connection):
+    def UnLockGroup(self, groupname, sender, connection):
         """ Unlock group
 
         @param groupname: A dbus.String with group name as it value.
@@ -479,7 +478,7 @@ class Users(dbus.service.Object):
                          out_signature='i',
                          sender_keyword='sender',
                          connection_keyword='connection')
-    def UnlockUser(self, username, sender, connection):
+    def UnLockUser(self, username, sender, connection):
         """ Unlock user
 
         @param username: A dbus.String with user name as it value.
@@ -515,7 +514,7 @@ class Users(dbus.service.Object):
         Example:
         groupInfo = {
                 'oldGroupName': 'john',
-                'newGroupName': 'john'
+                'newGroupName': 'johns'
                 'members': ['john', 'users', 'wheel']
                 }
 
@@ -527,10 +526,13 @@ class Users(dbus.service.Object):
 
         groupEntity = self.__libuser.lookupGroupByName(groupInfo['oldGroupName'])
 
-        if groupEntity.has_key('members'):
+        if groupInfo.has_key('members'):
+            if groupInfo['members'][0] == '':
+                groupInfo['members'] = []
             groupEntity.set(libuser.MEMBERNAME, groupInfo['members'])
 
-        groupEntity.set(libuser.GROUPNAME, groupInfo['newGroupName'])
+        if groupInfo.has_key('newGroupName'):
+            groupEntity.set(libuser.GROUPNAME, groupInfo['newGroupName'])
 
         return dbus.Int32(self.__libuser.modifyGroup(groupEntity))
 
@@ -556,20 +558,20 @@ class Users(dbus.service.Object):
 
         Example:
         user_info = {
-                'username': 'john'
-                'new_username': 'johns',
-                'fullname': 'Johns Does',
-                'shell': '/bin/bash',
+                'oldUserName': 'john'
+                'newUserName': 'johns',
+                'fullName': 'Johns Does',
+                'loginShell': '/bin/bash',
                 'uid': 666,
                 'gid': 666,
-                'home_directory': '/home/john',
+                'homeDirectory': '/home/john',
                 'password': 'secret2',
-                'shadow_expire': 'YYYY-MM-DD',
-                'shadow_min': 0,
-                'shadow_max', 99999,
-                'shadow_warning': 7,
-                'shadow_inactive': -1,
-                'shadow_last_change': 'YYYY-MM-DD'
+                'shadowExpire': '15071', # in days
+                'shadowMin': 0,
+                'shadowMax', 99999,
+                'shadowWarning': 7,
+                'shadowInactive': -1,
+                'shadowLastChange': '15071' # in days
                 }
 
         @raise dbus.DBusException:
@@ -582,97 +584,84 @@ class Users(dbus.service.Object):
         #checkAuthorization(sender, connection,
         #    'org.mandrivalinux.mcc2.users.modifyuser')
 
-        user_entity = self.__libuser.lookupUserByName(user_info['username'])
-        user_entity.set(libuser.GECOS, [user_info['fullname']])
+        user_entity = self.__libuser.lookupUserByName(user_info['oldUserName'])
 
-        #TODO: Check if uid and gid can be converted to int()
+        if user_info.has_key('fullName'):
+            user_entity.set(libuser.GECOS, [user_info['fullName']])
+
+        #TODO: Check if gid can be converted to int()
         # if not raise an error
-        user_entity.set(libuser.GIDNUMBER, [user_info['gid']])
-        user_entity.set(libuser.UIDNUMBER, [user_info['uid']])
-        user_entity.set(libuser.HOMEDIRECTORY, [user_info['home_directory']])
-        user_entity.set(libuser.LOGINSHELL, [user_info['shell']])
+        if user_info.has_key('gid'):
+            user_entity.set(libuser.GIDNUMBER, [user_info['gid']])
+        # Change UID is not permited
+        #user_entity.set(libuser.UIDNUMBER, [user_info['uid']])
+        if user_info.has_key('homeDirectory'):
+            user_entity.set(libuser.HOMEDIRECTORY, [user_info['homeDirectory']])
 
-        if user_info.has_key('new_username'):
-            user_entity.set(libuser.USERNAME, [user_info['new_username']])
+        if user_info.has_key('loginShell'):
+            user_entity.set(libuser.LOGINSHELL, [user_info['loginShell']])
 
-        if user_info.has_key('shadow_expire'):
-            year = None
-            month = None
-            day = None
+        if user_info.has_key('newUserName'):
+            user_entity.set(libuser.USERNAME, [user_info['newUserName']])
 
-            try:
-                (year, month, day) = user_info['shadow_expire'].split('-')
-            except ValueError:
-                msg = 'org.mandrivalinux.mcc2.Users.Error.InvalideDate'
-                raise dbus.DBusException, msg
+        if user_info.has_key('shadowExpire'):
+            user_entity.set(libuser.SHADOWEXPIRE, [user_info['shadowExpire']])
 
-            try:
-                tmp = time.mktime ([year, month, day, 0, 0, 0, 0, 0, -1])
-            except OverflowError:
-                msg = 'org.mandrivalinux.mcc2.Users.Error.YearIsTooBig'
-                raise dbus.DBusException, msg
+        if user_info.has_key('shadowMin'):
+            user_entity.set(libuser.SHADOWMIN, int(user_info['shadowMin']))
 
-            seconds = 24 * 60 * 60
-            days_expire = tmp / seconds
-            fraction, integer = math.modf(days_expire)
+        if user_info.has_key('shadowMax'):
+            user_entity.set(libuser.SHADOWMAX, int(user_info['shadowMax']))
 
-            if fraction == 0.0:
-                days_expire = integer
-            else:
-                days_expire = integer + 1
-
-            user_entity.set(libuser.SHADOWEXPIRE, days_expire)
-
-        if user_info.has_key('shadow_min'):
-            user_entity.set(libuser.SHADOWMIN, int(user_info['shadow_min']))
-
-        if user_info.has_key('shadow_max'):
-            user_entity.set(libuser.SHADOWMAX, int(user_info['shadow_max']))
-
-        if user_info.has_key('shadow_warning'):
+        if user_info.has_key('shadowWarning'):
             user_entity.set(
                 libuser.SHADOWWARNING,
-                int(user_info['shadow_warning']))
+                int(user_info['shadowWarning']))
 
-        if user_info.has_key('shadow_inactive'):
+        if user_info.has_key('shadowInactive'):
             user_entity.set(
                 libuser.SHADOWINACTIVE,
-                int(user_info['shadow_inactive']))
+                int(user_info['shadowInactive']))
 
         #if user_info.has_key('shadow_last_change'):
         #    user_entity.set(
         #        libuser.SHADOWLASTCHANGE,
         #        int(user_info['shadow_last_change']))
 
-        self.__libuser.setpassUser(user_entity, user_info['password'], 0)
+        if user_info.has_key('password'):
+            self.__libuser.setpassUser(user_entity, user_info['password'], 0)
 
         return self.__libuser.modifyUser(user_entity)
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
-			 in_signature='s',
+                         in_signature='s',
                          out_signature='a{sv}')
-    def UserDetails(self, username):
+    def UserDetails(self, userName):
         """
         shadow_expire: return -1 if expiration is disabled.
         """
-    	user_entity = self.__libuser.lookupUserByName(username)
+        userEntity = self.__libuser.lookupUserByName(userName)
+
+        groups = self.__libuser.enumerateGroupsByUser(userName)
+        if not groups:
+            groups = ['']
 
         return dbus.Dictionary(
             {
-            'uid': user_entity.get(libuser.UIDNUMBER)[0],
-            'gid': user_entity.get(libuser.GIDNUMBER)[0],
-            'username': user_entity.get(libuser.USERNAME)[0],
-            'fullname': user_entity.get(libuser.GECOS)[0],
-            'home_directory': user_entity.get(libuser.HOMEDIRECTORY)[0],
-            #'groups': self.__libuser.enumerateGroupsByUser(username),
-            'login_shell': user_entity.get(libuser.LOGINSHELL)[0],
-            'shadow_expire': user_entity.get(libuser.SHADOWEXPIRE)[0],
-            'shadow_min': user_entity.get(libuser.SHADOWMIN)[0],
-            'shadow_max': user_entity.get(libuser.SHADOWMAX)[0],
-            'shadow_warning': user_entity.get(libuser.SHADOWWARNING)[0],
-            'shadow_inactive': user_entity.get(libuser.SHADOWINACTIVE)[0],
-            'shadow_last_change': user_entity.get(libuser.SHADOWLASTCHANGE)[0],
+            'uid': userEntity.get(libuser.UIDNUMBER)[0],
+            'gid': userEntity.get(libuser.GIDNUMBER)[0],
+            'userName': userEntity.get(libuser.USERNAME)[0],
+            'fullName': userEntity.get(libuser.GECOS)[0],
+            'homeDirectory': userEntity.get(libuser.HOMEDIRECTORY)[0],
+            'groups': groups,
+            'loginShell': userEntity.get(libuser.LOGINSHELL)[0],
+            'shadowExpire': userEntity.get(libuser.SHADOWEXPIRE)[0],
+            'shadowMin': userEntity.get(libuser.SHADOWMIN)[0],
+            'shadowMax': userEntity.get(libuser.SHADOWMAX)[0],
+            'shadowWarning': userEntity.get(libuser.SHADOWWARNING)[0],
+            'shadowInactive': userEntity.get(libuser.SHADOWINACTIVE)[0],
+            'shadowLastChange': userEntity.get(libuser.SHADOWLASTCHANGE)[0],
             }, signature=dbus.Signature('sv'))
 
 
@@ -682,12 +671,15 @@ class Users(dbus.service.Object):
     def GroupDetails(self, groupName):
 
         groupEntity = self.__libuser.lookupGroupByName(groupName)
+        members = self.__libuser.enumerateUsersByGroup(groupName)
+        if not members:
+            members = ['']
 
         return dbus.Dictionary(
             {
             'gid': groupEntity.get(libuser.GIDNUMBER)[0],
             'groupName': groupEntity.get(libuser.GROUPNAME)[0],
-            'members': self.__libuser.enumerateUsersByGroup(groupName)
+            'members': members
             }, signature=dbus.Signature('sv'))
 
 

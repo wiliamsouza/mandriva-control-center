@@ -25,24 +25,24 @@ class User(QtCore.QObject):
 
 	self.__expiration_date = ''
         self.__shadow_expire = False
-        if self.__userDetails['shadow_expire'] > 0:
+        if self.__userDetails['shadowExpire'] > 0:
             self.__shadow_expire = True
-            self.__expiration_date = self.__userDetails['shadow_expire']
+            self.__expiration_date = self.__userDetails['shadowExpire']
 
     def _uid(self):
         return str(self.__userDetails['uid'])
 
     def _username(self):
-        return str(self.__userDetails['username'])
+        return str(self.__userDetails['userName'])
 
     def _fullname(self):
-        return str(self.__userDetails['fullname'])
+        return str(self.__userDetails['fullName'])
 
     def _home_directory(self):
-        return str(self.__userDetails['home_directory'])
+        return str(self.__userDetails['homeDirectory'])
 
     def _login_shell(self):
-        return str(self.__userDetails['login_shell'])
+        return str(self.__userDetails['loginShell'])
 
     def _shadow_expire(self):
         return self.__shadow_expire
@@ -51,19 +51,19 @@ class User(QtCore.QObject):
             return str(self.__expiration_date)
 
     def _shadow_min(self):
-        return str(self.__userDetails['shadow_min'])
+        return str(self.__userDetails['shadowMin'])
 
     def _shadow_max(self):
-        return str(self.__userDetails['shadow_max'])
+        return str(self.__userDetails['shadowMax'])
 
     def _shadow_warning(self):
-        return str(self.__userDetails['shadow_warning'])
+        return str(self.__userDetails['shadowWarning'])
 
     def _shadow_inactive(self):
-        return str(self.__userDetails['shadow_inactive'])
+        return str(self.__userDetails['shadowInactive'])
 
     def _shadow_last_change(self):
-        return str(self.__userDetails['shadow_last_change'])
+        return str(self.__userDetails['shadowLastChange'])
 
     def _groups(self):
         return self.__groups

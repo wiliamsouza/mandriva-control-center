@@ -4,7 +4,7 @@ import dbus
 import dbus.service
 import dbus.mainloop.glib
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-from mcc2.backends.policykit import check_authorization
+from mcc2.backends.policykit import checkAuthorization
 
 __all__ = ['Services']
 
@@ -78,7 +78,7 @@ class Services(dbus.service.Object):
         if not self.is_systemd_running:
             raise dbus.DBusException, self.msg['not_running']
 
-        check_authorization(sender, connection, self.__action)
+        checkAuthorization(sender, connection, self.__action)
 
         return self.__systemd_interface.StartUnit(name, mode)
 
@@ -101,7 +101,7 @@ class Services(dbus.service.Object):
         if not self.is_systemd_running:
             raise dbus.DBusException, self.msg['not_running']
 
-        check_authorization(sender, connection, self.__action)
+        checkAuthorization(sender, connection, self.__action)
 
         return self.__systemd_interface.StopUnit(name, mode)
 
@@ -124,7 +124,7 @@ class Services(dbus.service.Object):
         if not self.is_systemd_running:
             raise dbus.DBusException, self.msg['not_running']
 
-        check_authorization(sender, connection, self.__action)
+        checkAuthorization(sender, connection, self.__action)
 
         return self.__systemd_interface.RestartUnit(name, mode)
 

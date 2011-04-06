@@ -30,7 +30,8 @@ class Controller(QtCore.QObject):
             user_info['fullname'] = fullname
         
         userName = grid.findChild(QtDeclarative.QDeclarativeItem, 'addUserName')
-        user_info['username'] = userName.property('text')
+        user_info['userName'] = userName.property('text')
+
         password = grid.findChild(QtDeclarative.QDeclarativeItem, 'addPassword')
         confirmPassword = grid.findChild(QtDeclarative.QDeclarativeItem, 'addConfirmPassword')
         #TODO Find a way to show a message to gui from here
@@ -40,18 +41,18 @@ class Controller(QtCore.QObject):
             print "Password mismatch!"
 
         loginShell = grid.findChild(QtDeclarative.QDeclarativeItem, 'addLoginShell')
-        user_info['shell'] = loginShell.property('text')
+        user_info['loginShell'] = loginShell.property('text')
         createHomeDirectory = grid.findChild(QtDeclarative.QDeclarativeItem, 'addCreateHomeDirectory')
-        user_info['create_home'] = createHomeDirectory.property('checked')
+        user_info['createHome'] = createHomeDirectory.property('checked')
         homeDirectory = grid.findChild(QtDeclarative.QDeclarativeItem, 'addHomeDirectory')
-        user_info['home_directory'] = homeDirectory.property('text')
+        user_info['homeDirectory'] = homeDirectory.property('text')
 
         privateGroup = grid.findChild(QtDeclarative.QDeclarativeItem, 'addCreatePrivateGroup')
         if privateGroup.property('checked'):
             gid = self.__interface.FirstUnusedGid()
             #TODO: Add exception handler here
-            user_info['gid'] = self.__interface.AddGroup(user_info['username'], gid)
-            self.parent.groupModel.addGroup(user_info['username'])
+            user_info['gid'] = self.__interface.AddGroup(user_info['userName'], gid)
+            self.parent.groupModel.addGroup(user_info['userName'])
 
         user_info['uid'] = self.__interface.FirstUnusedUid()
         specifyUserId = grid.findChild(QtDeclarative.QDeclarativeItem, 'addSpecifyUserId')
