@@ -38,8 +38,8 @@
 **
 ****************************************************************************/
 
-import Qt 4.7
-//import QtQuick 1.0
+//import Qt 4.7
+import QtQuick 1.0
 
 Item {
     id: scrollBar

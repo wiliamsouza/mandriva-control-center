@@ -1,24 +1,69 @@
 from PySide import QtCore
 
-class ServiceWrapper(QtCore.QObject):
-    def __init__(self, service):
+import dbus
+import dbus.mainloop.glib
+dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+
+bus = dbus.SystemBus()
+proxy = bus.get_object('org.mandrivalinux.mcc2.Services',
+                       '/org/mandrivalinux/mcc2/Services')
+interface = dbus.Interface(proxy, 'org.mandrivalinux.mcc2.Services')
+
+class Service(QtCore.QObject):
+    def __init__(self, servicePath):
         QtCore.QObject.__init__(self)
-        self._service = service
+        self.__servicePath = servicePath
+        self.__serviceDetails = {}
+        self.update()
 
     def _name(self):
-        return self._service['Id']
+        return self.__serviceDetails['Id']
 
     def _description(self):
-        return self._service['Description']
+        return self.__serviceDetails['Description']
 
     def _load_state(self):
-        return self._service['LoadState']
+        return self.__serviceDetails['LoadState']
 
     def _active_state(self):
-        return self._service['ActiveState']
+        return self.__serviceDetails['ActiveState']
 
     def _sub_state(self):
-        return self._service['SubState']
+        return self.__serviceDetails['SubState']
+
+    def start(self):
+        try:
+            interface.Start(self.name, 'fail')
+        except dbus.exceptions.DBusException, error:
+            if error.get_dbus_name() == "org.freedesktop.DBus.Error.NoReply":
+                print "timed out"
+            if error.get_dbus_name() == "org.mandrivalinux.mcc2.Services.Error.NotAuthorized":
+                print 'Not Authorized'
+        self.update()
+
+    def stop(self):
+        try:
+            interface.Stop(self.name, 'fail')
+        except dbus.exceptions.DBusException, error:
+            if error.get_dbus_name() == "org.freedesktop.DBus.Error.NoReply":
+                print "Timed out"
+            if error.get_dbus_name() == "org.mandrivalinux.mcc2.Services.Error.NotAuthorized":
+                print 'Not Authorized'
+        self.update()
+
+    def restart(self):
+        try:
+            interface.Restart(self.name, 'fail')
+        except dbus.exceptions.DBusException, error:
+            if error.get_dbus_name() == "org.freedesktop.DBus.Error.NoReply":
+                print "timed out"
+            if error.get_dbus_name() == "org.mandrivalinux.mcc2.Services.Error.NotAuthorized":
+                print 'Not Authorized'
+        self.update()
+
+    def update(self):
+        self.__serviceDetails = interface.ServiceDetails(self.__servicePath)
+        self.changed.emit()
 
     changed = QtCore.Signal()
 
@@ -28,18 +73,35 @@ class ServiceWrapper(QtCore.QObject):
     active_state = QtCore.Property(unicode, _active_state, notify=changed)
     sub_state = QtCore.Property(unicode, _sub_state, notify=changed)
 
+
 class ServiceModel(QtCore.QAbstractListModel):
     COLUMNS = ('service',)
 
-    def __init__(self, service):
+    def __init__(self):
         QtCore.QAbstractListModel.__init__(self)
-        self._service = service
+        self.__services = []
         self.setRoleNames(dict(enumerate(ServiceModel.COLUMNS)))
 
     def rowCount(self, parent=QtCore.QModelIndex()):
-        return len(self._service)
+        return len(self.__services)
 
     def data(self, index, role):
         if index.isValid() and role == ServiceModel.COLUMNS.index('service'):
-            return self._service[index.row()]
+            return self.__services[index.row()]
         return None
+ 
+    def start(self, row):
+        service = self.__services[row]
+        service.start()
+    
+    def stop(self, row):
+        service = self.__services[row]
+        service.stop()
+
+    def restart(self, row):
+        service = self.__services[row]
+        service.restart()
+
+    def populate(self):
+        for servicePath in interface.List():
+            self.__services.append(Service(servicePath[6]))

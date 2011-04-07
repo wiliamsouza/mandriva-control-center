@@ -15,7 +15,6 @@ Rectangle {
         width: window.width
         height: 100
         color: "#333333"
-
         Image {
             id: mandrivaLogo
             source: "images/mandriva_logo.png"
@@ -23,6 +22,7 @@ Rectangle {
             anchors.leftMargin: 12
             anchors.verticalCenter: parent.verticalCenter
         }
+
     }
 
     VisualItemModel {
@@ -326,7 +326,7 @@ Rectangle {
                             Rectangle {
                                 width: 108
                                 height: 25
-                                color: ((index % 2 == 0) ? "#333333" : "#808080")
+                                color: ((index % 2 == 0) ? "#808080": "#999999")
 
                                 Row {
                                     spacing: 4
@@ -346,6 +346,7 @@ Rectangle {
                                     Text {
                                         text: model.group.groupName
                                         anchors.verticalCenter: parent.verticalCenter
+                                        opacity: 0.7
                                     }
                                 }
 
@@ -387,7 +388,6 @@ Rectangle {
 
                             Button {
                                 text:"Delete"
-                                focus:true
                                 width:60
                                 height: 30
                                 onClicked: {
@@ -398,7 +398,6 @@ Rectangle {
 
                             Button {
                                 text:"Save"
-                                focus:true
                                 width:60
                                 height: 30
                                 onClicked: {
@@ -409,7 +408,6 @@ Rectangle {
 
                             Button {
                                 text:"Close"
-                                focus:true
                                 width:60
                                 height: 30
                                 onClicked: scrollFormUser.state = ""
@@ -575,7 +573,6 @@ Rectangle {
 
                             Button {
                                 text:"Save"
-                                focus:true
                                 width:60
                                 height: 30
                                 onClicked: {
@@ -587,7 +584,6 @@ Rectangle {
 
                             Button {
                                 text:"Close"
-                                focus:true
                                 width:60
                                 height: 30
                                 onClicked: scrollFormUser.state = ""
@@ -620,7 +616,7 @@ Rectangle {
                 Rectangle {
                     height: 40
                     width: groupTab.width
-                    color: ((index % 2 == 0) ? "#b3b3b3" : "#808080")
+                    color: ((index % 2 == 0) ? "#808080": "#999999")
 
                     Row {
                         spacing: 10
@@ -731,7 +727,7 @@ Rectangle {
                             Rectangle {
                                 width: 108
                                 height: 25
-                                color: ((index % 2 == 0) ? "#333333" : "#808080")
+                                color: ((index % 2 == 0) ? "#808080": "#999999")
 
                                 Row {
                                     spacing: 4
@@ -751,6 +747,7 @@ Rectangle {
                                     Text {
                                         text: model.user.userName
                                         anchors.verticalCenter: parent.verticalCenter
+                                        opacity: 0.7
                                     }
                                 }
 
@@ -790,7 +787,6 @@ Rectangle {
 
                             Button {
                                 text:"Delete"
-                                focus:true
                                 width:60
                                 height: 30
                                 onClicked: {
@@ -801,7 +797,6 @@ Rectangle {
 
                             Button {
                                 text:"Save"
-                                focus:true
                                 width:60
                                 height: 30
                                 onClicked: {
@@ -812,7 +807,6 @@ Rectangle {
 
                             Button {
                                 text:"Close"
-                                focus:true
                                 width:60
                                 height: 30
                                 onClicked: scrollFormGroup.state = ""
@@ -891,7 +885,6 @@ Rectangle {
 
                             Button {
                                 text:"Save"
-                                focus:true
                                 width:60
                                 height: 30
                                 onClicked: {
@@ -902,7 +895,6 @@ Rectangle {
 
                             Button {
                                 text:"Close"
-                                focus:true
                                 width:60
                                 height: 30
                                 onClicked: scrollFormGroup.state = ""
@@ -922,7 +914,6 @@ Rectangle {
             }
         }
     }
-
 
     ListView {
         id: tab
@@ -1008,7 +999,6 @@ Rectangle {
 
             Button {
                 text:"Add user"
-                focus: true
                 width: 70
                 height: 30
                 onClicked: {
@@ -1023,7 +1013,6 @@ Rectangle {
 
             Button {
                 text:"Add group"
-                focus: true
                 width: 80
                 height: 30
                 onClicked: {

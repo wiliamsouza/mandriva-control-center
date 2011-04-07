@@ -1,18 +1,18 @@
-import Qt 4.7
-//import QtQuick 1.0
+//import Qt 4.7
+import QtQuick 1.0
 import "colibri"
 
 Rectangle {
     id: main
     width: 640
     height: 480
+    color: "#4d4d4d"
 
     Rectangle {
         id: header
         width: main.width
         height: 100
-        clip: true
-        color: "gray"
+        color: "red"
     }
 
     Rectangle {
@@ -34,7 +34,7 @@ Rectangle {
         width: main.width - leftServices.width
         height: main.height - header.height
         clip: true
-        color: "darkgray"
+        color: "black"
         Grid {
             id: details_grid
             columns: 2
