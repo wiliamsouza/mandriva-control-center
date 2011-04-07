@@ -10,11 +10,10 @@ proxy = bus.get_object('org.mandrivalinux.mcc2.Services',
 interface = dbus.Interface(proxy, 'org.mandrivalinux.mcc2.Services')
 
 class Service(QtCore.QObject):
-    def __init__(self, servicePath):
+    def __init__(self, servicePath, serviceDetails):
         QtCore.QObject.__init__(self)
         self.__servicePath = servicePath
-        self.__serviceDetails = {}
-        self.update()
+        self.__serviceDetails = serviceDetails
 
     def _name(self):
         return self.__serviceDetails['Id']
@@ -103,5 +102,13 @@ class ServiceModel(QtCore.QAbstractListModel):
         service.restart()
 
     def populate(self):
+        count = 0
         for servicePath in interface.List():
-            self.__services.append(Service(servicePath[6]))
+            serviceDetails = interface.ServiceDetails(servicePath[6])
+            # This filtering is done to avoid show up more than one .device unit
+            # under different names
+            if serviceDetails['Following'] == "":
+                self.__services.append(Service(servicePath[6], serviceDetails))
+            else:
+                count = count + 1
+        print '%d .device unit removed by duplicity' % count
