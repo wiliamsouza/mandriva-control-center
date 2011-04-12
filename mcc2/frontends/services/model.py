@@ -9,25 +9,37 @@ proxy = bus.get_object('org.mandrivalinux.mcc2.Services',
                        '/org/mandrivalinux/mcc2/Services')
 interface = dbus.Interface(proxy, 'org.mandrivalinux.mcc2.Services')
 
+bus2 = dbus.SystemBus()
+proxy2 = bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
+interface2 = dbus.Interface(proxy2, 'org.freedesktop.systemd1.Manager')
+interface2.Subscribe()
+
 class Service(QtCore.QObject):
-    def __init__(self, servicePath, serviceDetails):
-        QtCore.QObject.__init__(self)
+
+    def __init__(self, servicePath, serviceDetails, parent):
+        QtCore.QObject.__init__(self, parent)
         self.__servicePath = servicePath
         self.__serviceDetails = serviceDetails
 
-    def _name(self):
+        unit_proxy = bus.get_object('org.freedesktop.systemd1', self.__servicePath)
+        properties_interface = dbus.Interface(unit_proxy, 'org.freedesktop.DBus.Properties')
+        properties_proxy = bus.get_object('org.freedesktop.systemd1', self.__servicePath)
+        properties_interface = dbus.Interface(properties_proxy, 'org.freedesktop.DBus.Properties')
+        properties_interface.connect_to_signal('PropertiesChanged', self.on_properties_changed)
+
+    def __getName(self):
         return self.__serviceDetails['Id']
 
-    def _description(self):
+    def __getDescription(self):
         return self.__serviceDetails['Description']
 
-    def _load_state(self):
+    def __getLoadState(self):
         return self.__serviceDetails['LoadState']
 
-    def _active_state(self):
+    def __getActiveState(self):
         return self.__serviceDetails['ActiveState']
 
-    def _sub_state(self):
+    def __getSubState(self):
         return self.__serviceDetails['SubState']
 
     def start(self):
@@ -60,24 +72,28 @@ class Service(QtCore.QObject):
                 print 'Not Authorized'
         self.update()
 
+    def on_properties_changed(self, *args, **kargs):
+        self.update()
+
     def update(self):
         self.__serviceDetails = interface.ServiceDetails(self.__servicePath)
         self.changed.emit()
 
     changed = QtCore.Signal()
 
-    name = QtCore.Property(unicode, _name, notify=changed)
-    description = QtCore.Property(unicode, _description, notify=changed)
-    load_state = QtCore.Property(unicode, _load_state, notify=changed)
-    active_state = QtCore.Property(unicode, _active_state, notify=changed)
-    sub_state = QtCore.Property(unicode, _sub_state, notify=changed)
+    name = QtCore.Property(unicode, __getName, notify=changed)
+    description = QtCore.Property(unicode, __getDescription, notify=changed)
+    loadState = QtCore.Property(unicode, __getLoadState, notify=changed)
+    activeState = QtCore.Property(unicode, __getActiveState, notify=changed)
+    subState = QtCore.Property(unicode, __getSubState, notify=changed)
 
 
 class ServiceModel(QtCore.QAbstractListModel):
     COLUMNS = ('service',)
 
-    def __init__(self):
-        QtCore.QAbstractListModel.__init__(self)
+    def __init__(self, parent=None):
+        QtCore.QAbstractListModel.__init__(self, parent)
+        self.parent = parent
         self.__services = []
         self.setRoleNames(dict(enumerate(ServiceModel.COLUMNS)))
 
@@ -108,7 +124,7 @@ class ServiceModel(QtCore.QAbstractListModel):
             # This filtering is done to avoid show up more than one .device unit
             # under different names
             if serviceDetails['Following'] == "":
-                self.__services.append(Service(servicePath[6], serviceDetails))
+                self.__services.append(Service(servicePath[6], serviceDetails, parent=self.parent))
             else:
                 count = count + 1
-        print '%d .device unit removed by duplicity' % count
+        #print '%d .device unit removed by duplicity' % count

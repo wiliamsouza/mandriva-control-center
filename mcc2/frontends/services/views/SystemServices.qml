@@ -22,6 +22,13 @@ Rectangle {
             anchors.leftMargin: 12
             anchors.verticalCenter: parent.verticalCenter
         }
+
+        TextField {
+            anchors.right: parent.right
+            anchors.rightMargin: 12
+            anchors.verticalCenter: parent.verticalCenter
+            onTextChanged: controller.search(serviceModel, text)
+        }
     }
 
     Rectangle {
@@ -51,6 +58,7 @@ Rectangle {
                     anchors.rightMargin: 12
                     anchors.top: parent.top
                     anchors.topMargin: 12
+                    smooth: true
 
                     MouseArea {
                         anchors.fill: parent
@@ -88,7 +96,7 @@ Rectangle {
                                 id: icon
                                 width: 16
                                 height: 16
-                                source: "images/green.png"
+                                source: "images/" + model.service.activeState + ".png"
                                 anchors.verticalCenter: parent.verticalCenter
                                 anchors.leftMargin: 4
                             },
@@ -133,21 +141,21 @@ Rectangle {
                         Text {
                            // width: content.width
                             //elide: Text.ElideRight
-                            text: model.service.load_state
+                            text: model.service.loadState
                             opacity: 0.7
                         }
 
                         Text {
                             //width: content.width
                             //elide: Text.ElideRight
-                            text: model.service.active_state
+                            text: model.service.activeState
                             opacity: 0.7
                         }
 
                         Text {
                             //width: content.width
                             //elide: Text.ElideRight
-                            text: model.service.sub_state
+                            text: model.service.subState
                             opacity: 0.7
                         }
                     }

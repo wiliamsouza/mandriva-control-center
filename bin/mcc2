@@ -3,6 +3,7 @@
 import sys
 sys.path.append('/usr/share/mandriva/')
 
-from mcc2.frontends.services import view
+from mcc2.frontends.services import services
+
 if __name__ == '__main__':
-    view.start()
+    services.start()

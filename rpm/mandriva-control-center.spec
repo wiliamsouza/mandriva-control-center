@@ -7,7 +7,7 @@ License:        Apache License
 URL:            http://www.mandriva.com
 Source0:        %{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-BuildArch:	noarch
+#BuildArch:	noarch
 Requires:	systemd
 Requires:	libuser
 Requires:	libuser-python

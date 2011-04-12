@@ -3,11 +3,12 @@ from PySide import QtCore, QtGui, QtDeclarative
 from models import UserModel, SystemUserModel, GroupModel, SystemGroupModel
 from controllers import Controller
 
-if __name__ == '__main__':
+
+def start():
     import sys
     app = QtGui.QApplication(sys.argv)
     view = QtDeclarative.QDeclarativeView()
-    #view.setWindowFlags(QtCore.Qt.WindowFlags() | QtCore.Qt.FramelessWindowHint)
+
     userModel = UserModel()
     userModel.populate()
     systemUserModel = SystemUserModel()
@@ -16,6 +17,7 @@ if __name__ == '__main__':
     groupModel.populate()
     systemGroupModel = SystemGroupModel()
     systemGroupModel.populate()
+
     controller = Controller()
 
     context = view.rootContext()
@@ -25,7 +27,7 @@ if __name__ == '__main__':
     context.setContextProperty('systemUserModel', systemUserModel)
     context.setContextProperty('controller', controller)
 
-    view.setSource('views/UsersAndGroups.qml')
+    view.setSource('/usr/share/mandriva/mcc2/frontends/users/views/UsersAndGroups.qml')
     view.setResizeMode(QtDeclarative.QDeclarativeView.SizeRootObjectToView)
     view.setWindowTitle('Mandriva Control Center - Users and Groups')
     view.connect(view.engine(), QtCore.SIGNAL('quit()'), app, QtCore.SLOT('quit()'));
@@ -33,7 +35,8 @@ if __name__ == '__main__':
     app.exec_()
 
 
-
+if __name__ == '__main__':
+    start()
 
 
 
