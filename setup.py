@@ -27,7 +27,7 @@ for dirpath, dirnames, filenames in os.walk('mcc2/'):
             data_dirpath.append(os.path.split(full)[0])
             data_fullpath.append(full)
     other_files.extend(zip(data_dirpath, [data_fullpath]))
-            
+
 data_files = [
     ('/usr/bin/', glob.glob('bin/mcc2*')),
     ('/usr/share/mandriva/bin/', glob.glob('bin/*-mechanism.py')),

@@ -10,14 +10,14 @@ CODE
 Backend
 -------
  
- * Add a common policykit authentication for privileged method execution
+ * [DONE] Add a common policykit authentication for privileged method execution
    then user can't enter the root passwors for each privileged task for
    a sort period of time. By now the user may enter the root password for
    stop, restar and start services we should change that.
 
- * Add an exception handler to dbus connection in all classes.
+ * [DONE] Add an exception handler to dbus connection in all classes.
  
- * Add backends dbus interface method stop.
+ * [DONE] Add backends dbus interface method stop.
  
  * Add support to rpm stop dbus interfaces when updating or removing packages.
 
@@ -27,10 +27,10 @@ Backend
  * Rename sshd HostKey protocol version 2 to HostKeyRSA and HostKeyDSA to avoid
    confusion.
 
- * Check if d-bus interface is running before start to avoid have to instance
+ * Check if d-bus interface is running before start to avoid have two instance
    running.
 
- * Make policykit authorization type be configurable for all methods that use it.
+ * [DONE] Make policykit authorization type be configurable for all methods that use it.
 
 Frontend
 --------
