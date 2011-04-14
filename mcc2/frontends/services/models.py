@@ -10,8 +10,7 @@ proxy = bus.get_object('org.mandrivalinux.mcc2.Services',
                        '/org/mandrivalinux/mcc2/Services')
 interface = dbus.Interface(proxy, 'org.mandrivalinux.mcc2.Services')
 
-bus2 = dbus.SystemBus()
-proxy2 = bus2.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
+proxy2 = bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
 interface2 = dbus.Interface(proxy2, 'org.freedesktop.systemd1.Manager')
 interface2.Subscribe()
 
@@ -22,10 +21,7 @@ class Service(QtCore.QObject):
         self.__servicePath = servicePath
         self.__serviceDetails = serviceDetails
 
-        #unit_proxy = bus2.get_object('org.freedesktop.systemd1', self.__servicePath)
-        #properties_interface = dbus.Interface(unit_proxy, 'org.freedesktop.DBus.Properties')
-
-        properties_proxy = bus2.get_object('org.freedesktop.systemd1', self.__servicePath)
+        properties_proxy = bus.get_object('org.freedesktop.systemd1', self.__servicePath)
         properties_interface = dbus.Interface(properties_proxy, 'org.freedesktop.DBus.Properties')
         properties_interface.connect_to_signal('PropertiesChanged', self.on_properties_changed)
 
