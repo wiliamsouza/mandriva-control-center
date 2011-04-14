@@ -1,7 +1,8 @@
-from PySide import QtCore, QtGui, QtDeclarative
+#from PySide import QtCore, QtGui, QtDeclarative
+from PyQt4 import QtCore, QtGui, QtDeclarative
 
-from models import UserModel, SystemUserModel, GroupModel, SystemGroupModel
-from controllers import Controller
+from mcc2.frontends.users.models import UserModel, SystemUserModel, GroupModel, SystemGroupModel
+from mcc2.frontends.users.controllers import Controller
 
 
 def start():
@@ -27,7 +28,7 @@ def start():
     context.setContextProperty('systemUserModel', systemUserModel)
     context.setContextProperty('controller', controller)
 
-    view.setSource('/usr/share/mandriva/mcc2/frontends/users/views/UsersAndGroups.qml')
+    view.setSource(QtCore.QUrl('/usr/share/mandriva/mcc2/frontends/users/views/UsersAndGroups.qml'))
     view.setResizeMode(QtDeclarative.QDeclarativeView.SizeRootObjectToView)
     view.setWindowTitle('Mandriva Control Center - Users and Groups')
     view.connect(view.engine(), QtCore.SIGNAL('quit()'), app, QtCore.SLOT('quit()'));

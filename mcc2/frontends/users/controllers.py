@@ -1,8 +1,9 @@
 import dbus
 
-from PySide import QtCore
-from PySide.QtDeclarative import QDeclarativeItem
-
+#from PySide import QtCore
+#from PySide.QtDeclarative import QDeclarativeItem
+from PyQt4 import QtCore
+from PyQt4.QtDeclarative import QDeclarativeItem
 
 bus = dbus.SystemBus(private=True)
 proxy = bus.get_object('org.mandrivalinux.mcc2.Users',
@@ -15,7 +16,8 @@ class Controller(QtCore.QObject):
     def __init__(self):
         QtCore.QObject.__init__(self)
 
-    @QtCore.Slot(QtCore.QObject, QtCore.QObject)
+    #@QtCore.Slot(QtCore.QObject, QtCore.QObject)
+    @QtCore.pyqtSlot(QtCore.QObject, QtCore.QObject)
     def addGroup(self, groupModel, groupForm):
         groupName = groupForm.findChild(QDeclarativeItem, 'groupNameAddForm')
         specifyGid = groupForm.findChild(QDeclarativeItem, 'specifyGidAddForm')
@@ -32,7 +34,8 @@ class Controller(QtCore.QObject):
         specifyGid.setProperty('checked', False)
         groupId.setProperty('text', '')
  
-    @QtCore.Slot(QtCore.QObject, QtCore.QObject, QtCore.QObject, int)
+    #@QtCore.Slot(QtCore.QObject, QtCore.QObject, QtCore.QObject, int)
+    @QtCore.pyqtSlot(QtCore.QObject, QtCore.QObject, QtCore.QObject, int)
     def modifyGroup(self, groupModel, systemUserModel, editGroupForm, currentIndex):
         groupName = editGroupForm.findChild(QDeclarativeItem, 'groupName')
         members = []
@@ -40,16 +43,19 @@ class Controller(QtCore.QObject):
             members.append(user.userName)
         groupModel.modify(groupName.property('text'), members, currentIndex)
  
-    @QtCore.Slot(QtCore.QObject, QtCore.QObject, int)
+    #@QtCore.Slot(QtCore.QObject, QtCore.QObject, int)
+    @QtCore.pyqtSlot(QtCore.QObject, QtCore.QObject, int)
     def deleteGroup(self, groupModel, currentItem, currentIndex):
         groupName = currentItem.findChild(QDeclarativeItem, 'delegateGroupName')
         groupModel.delete(groupName.property('text'), currentIndex)
 
-    @QtCore.Slot(QtCore.QObject, QtCore.QObject)
+    #@QtCore.Slot(QtCore.QObject, QtCore.QObject)
+    @QtCore.pyqtSlot(QtCore.QObject, QtCore.QObject)
     def toggledUser(self, systemUserModel, user):
         user.toggleChecked()
 
-    @QtCore.Slot(QtCore.QObject, QtCore.QObject, QtCore.QObject)
+    #@QtCore.Slot(QtCore.QObject, QtCore.QObject, QtCore.QObject)
+    @QtCore.pyqtSlot(QtCore.QObject, QtCore.QObject, QtCore.QObject)
     def addUser(self, userModel, userForm, groupModel):
         userDetails = {}
 
@@ -118,7 +124,8 @@ class Controller(QtCore.QObject):
         specifyUserId.setProperty('checked', False)
         userId.setProperty('text', '')
 
-    @QtCore.Slot(QtCore.QObject, QtCore.QObject, int)
+    #@QtCore.Slot(QtCore.QObject, QtCore.QObject, int)
+    @QtCore.pyqtSlot(QtCore.QObject, QtCore.QObject, int)
     def modifyUser(self, userModel, editUserForm, currentIndex):
         modifyUserDetails = {}
         fullName = editUserForm.findChild(QDeclarativeItem, 'fullName')
@@ -184,11 +191,13 @@ class Controller(QtCore.QObject):
 
         userModel.modify(modifyUserDetails, currentIndex)
 
-    @QtCore.Slot(QtCore.QObject, QtCore.QObject, int)
+    #@QtCore.Slot(QtCore.QObject, QtCore.QObject, int)
+    @QtCore.pyqtSlot(QtCore.QObject, QtCore.QObject, int)
     def deleteUser(self, userModel, currentItem, currentIndex):
         userName = currentItem.findChild(QDeclarativeItem, 'delegateUserName')
         userModel.delete(userName.property('text'), currentIndex)
         
-    @QtCore.Slot(QtCore.QObject, QtCore.QObject)
+    #@QtCore.Slot(QtCore.QObject, QtCore.QObject)
+    @QtCore.pyqtSlot(QtCore.QObject, QtCore.QObject)
     def toggledGroup(self, systemGroupModel, group):
         group.toggleChecked()

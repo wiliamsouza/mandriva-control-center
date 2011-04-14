@@ -1,4 +1,5 @@
-from PySide import QtCore
+#from PySide import QtCore
+from PyQt4 import QtCore
 
 import dbus
 import dbus.mainloop.glib
@@ -10,7 +11,7 @@ proxy = bus.get_object('org.mandrivalinux.mcc2.Services',
 interface = dbus.Interface(proxy, 'org.mandrivalinux.mcc2.Services')
 
 bus2 = dbus.SystemBus()
-proxy2 = bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
+proxy2 = bus2.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
 interface2 = dbus.Interface(proxy2, 'org.freedesktop.systemd1.Manager')
 interface2.Subscribe()
 
@@ -21,9 +22,10 @@ class Service(QtCore.QObject):
         self.__servicePath = servicePath
         self.__serviceDetails = serviceDetails
 
-        unit_proxy = bus.get_object('org.freedesktop.systemd1', self.__servicePath)
-        properties_interface = dbus.Interface(unit_proxy, 'org.freedesktop.DBus.Properties')
-        properties_proxy = bus.get_object('org.freedesktop.systemd1', self.__servicePath)
+        #unit_proxy = bus2.get_object('org.freedesktop.systemd1', self.__servicePath)
+        #properties_interface = dbus.Interface(unit_proxy, 'org.freedesktop.DBus.Properties')
+
+        properties_proxy = bus2.get_object('org.freedesktop.systemd1', self.__servicePath)
         properties_interface = dbus.Interface(properties_proxy, 'org.freedesktop.DBus.Properties')
         properties_interface.connect_to_signal('PropertiesChanged', self.on_properties_changed)
 
@@ -79,14 +81,22 @@ class Service(QtCore.QObject):
         self.__serviceDetails = interface.ServiceDetails(self.__servicePath)
         self.changed.emit()
 
-    changed = QtCore.Signal()
+    #changed = QtCore.Signal()
+    changed = QtCore.pyqtSignal()
 
+    """
     name = QtCore.Property(unicode, __getName, notify=changed)
     description = QtCore.Property(unicode, __getDescription, notify=changed)
     loadState = QtCore.Property(unicode, __getLoadState, notify=changed)
     activeState = QtCore.Property(unicode, __getActiveState, notify=changed)
     subState = QtCore.Property(unicode, __getSubState, notify=changed)
+    """
 
+    name = QtCore.pyqtProperty(unicode, __getName, notify=changed)
+    description = QtCore.pyqtProperty(unicode, __getDescription, notify=changed)
+    loadState = QtCore.pyqtProperty(unicode, __getLoadState, notify=changed)
+    activeState = QtCore.pyqtProperty(unicode, __getActiveState, notify=changed)
+    subState = QtCore.pyqtProperty(unicode, __getSubState, notify=changed)
 
 class ServiceModel(QtCore.QAbstractListModel):
     COLUMNS = ('service',)

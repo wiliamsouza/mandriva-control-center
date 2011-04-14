@@ -34,7 +34,10 @@ data_files = [
     ('/usr/share/dbus-1/system-services/', glob.glob('dbus/*.service')),
     ('/etc/dbus-1/system.d/', glob.glob('dbus/*.conf')),
     ('/usr/share/polkit-1/actions/', glob.glob('policykit/*.policy')),
-    ('/usr/share/mandriva/config', glob.glob('config/*.cfg'))]
+    ('/usr/share/mandriva/config', glob.glob('config/*.cfg')),
+    ('/usr/share/applications/kde4/', glob.glob('kcm/mcc2-*.desktop')),
+    ('/usr/share/kde4/services/', glob.glob('kcm/settings-*.desktop')),
+    ('/usr/share/apps/mandriva-control-center/', glob.glob('kcm/*.py')),]
 
 data_files.extend(other_files)
 

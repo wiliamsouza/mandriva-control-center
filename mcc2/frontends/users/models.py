@@ -7,7 +7,8 @@ dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 #import dbus.mainloop.qt
 #dbus.mainloop.qt.DBusQtMainLoop(set_as_default=True)
 
-from PySide import QtCore
+#from PySide import QtCore
+from PyQt4 import QtCore
 
 bus = dbus.SystemBus()
 proxy = bus.get_object('org.mandrivalinux.mcc2.Users',
@@ -219,8 +220,10 @@ class User(QtCore.QObject):
             self.__expirationDate = time.strftime('%Y-%m-%d', age)
         self.changed.emit()
 
-    changed = QtCore.Signal()
-
+    #changed = QtCore.Signal()
+    changed = QtCore.pyqtSignal()
+    
+    """
     uid = QtCore.Property(unicode, __uid, notify=changed)
     gid = QtCore.Property(unicode, __gid, notify=changed)
     userName = QtCore.Property(unicode, __getUserName, __setUserName, notify=changed)
@@ -236,7 +239,23 @@ class User(QtCore.QObject):
     shadowLastChange = QtCore.Property(unicode, __getShadowLastChange, notify=changed)
     groups = QtCore.Property(list, __getGroups, notify=changed)
     isLocked = QtCore.Property(bool, __isLocked, notify=changed)
+    """
 
+    uid = QtCore.pyqtProperty(unicode, __uid, notify=changed)
+    gid = QtCore.pyqtProperty(unicode, __gid, notify=changed)
+    userName = QtCore.pyqtProperty(unicode, __getUserName, __setUserName, notify=changed)
+    fullName = QtCore.pyqtProperty(unicode, __getFullName, __setFullName, notify=changed)
+    homeDirectory = QtCore.pyqtProperty(unicode, __getHomeDirectory, __setHomeDirectory, notify=changed)
+    loginShell = QtCore.pyqtProperty(unicode, __getLoginShell, __setLoginShell, notify=changed)
+    shadowExpire = QtCore.pyqtProperty(bool, __getShadowExpire, __setShadowExpire, notify=changed)
+    expirationDate = QtCore.pyqtProperty(unicode, __getExpirationDate, __setExpirationDate, notify=changed)
+    shadowMin = QtCore.pyqtProperty(unicode, __getShadowMin, __setShadowMin, notify=changed)
+    shadowMax = QtCore.pyqtProperty(unicode, __getShadowMax, __setShadowMax, notify=changed)
+    shadowWarning = QtCore.pyqtProperty(unicode, __getShadowWarning, __setShadowWarning, notify=changed)
+    shadowInactive = QtCore.pyqtProperty(unicode, __getShadowInactive, __setShadowInactive, notify=changed)
+    shadowLastChange = QtCore.pyqtProperty(unicode, __getShadowLastChange, notify=changed)
+    groups = QtCore.pyqtProperty(list, __getGroups, notify=changed)
+    isLocked = QtCore.pyqtProperty(bool, __isLocked, notify=changed)
 
 class SystemUserModel(QtCore.QAbstractListModel):
 
@@ -258,7 +277,8 @@ class SystemUserModel(QtCore.QAbstractListModel):
     def checked(self):
         return [user for user in self.__users if user.isChecked]
 
-    @QtCore.Slot(list)
+    #@QtCore.Slot(list)
+    @QtCore.pyqtSlot(list)
     def selectUsers(self, members):
         for user in self.__users:
             user.unCheck()
@@ -292,11 +312,16 @@ class SystemUser(QtCore.QObject):
         self.__checked = not self.__checked
         self.changed.emit()
 
-    changed = QtCore.Signal()
+    #changed = QtCore.Signal()
+    changed = QtCore.pyqtSignal()
 
+    """
     userName = QtCore.Property(unicode, __getUserName, notify=changed)
     isChecked = QtCore.Property(bool, __isChecked, notify=changed)
+    """
 
+    userName = QtCore.pyqtProperty(unicode, __getUserName, notify=changed)
+    isChecked = QtCore.pyqtProperty(bool, __isChecked, notify=changed)
 
 class GroupModel(QtCore.QAbstractListModel):
 
@@ -403,14 +428,22 @@ class Group(QtCore.QObject):
         self.__groupDetails = interface.GroupDetails(self.__group)
         self.changed.emit()
 
-    changed = QtCore.Signal()
+    #changed = QtCore.Signal()
+    changed = QtCore.pyqtSignal()
 
+    """
     groupName = QtCore.Property(unicode, __getGroupName, __setGroupName,
                                 notify=changed)
     gid = QtCore.Property(unicode, __gid, notify=changed)
     members = QtCore.Property(list, __getMembers, __setMembers, notify=changed)
     strMembers = QtCore.Property(unicode, __getStrMembers, notify=changed)
+    """
 
+    groupName = QtCore.pyqtProperty(unicode, __getGroupName, __setGroupName,
+                                notify=changed)
+    gid = QtCore.pyqtProperty(unicode, __gid, notify=changed)
+    members = QtCore.pyqtProperty(list, __getMembers, __setMembers, notify=changed)
+    strMembers = QtCore.pyqtProperty(unicode, __getStrMembers, notify=changed)
 
 class SystemGroupModel(QtCore.QAbstractListModel):
 
@@ -432,7 +465,8 @@ class SystemGroupModel(QtCore.QAbstractListModel):
     def checked(self):
         return [group for group in self.__groups if group.isChecked]
 
-    @QtCore.Slot(list)
+    #@QtCore.Slot(list)
+    @QtCore.pyqtSlot(list)
     def selectGroups(self, groups):
         for group in self.__groups:
             group.unCheck()
@@ -465,7 +499,13 @@ class SystemGroup(QtCore.QObject):
         self.__checked = not self.__checked
         self.changed.emit()
 
-    changed = QtCore.Signal()
+    #changed = QtCore.Signal()
+    changed = QtCore.pyqtSignal()
 
+    """
     groupName = QtCore.Property(unicode, __getGroupName, notify=changed)
     isChecked = QtCore.Property(bool, __isChecked, notify=changed)
+    """
+
+    groupName = QtCore.pyqtProperty(unicode, __getGroupName, notify=changed)
+    isChecked = QtCore.pyqtProperty(bool, __isChecked, notify=changed)

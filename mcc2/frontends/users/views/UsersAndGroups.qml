@@ -774,7 +774,7 @@ Rectangle {
 
                     Rectangle {
                         height: 42
-                        width: addUserForm.width
+                        width: editGroupForm.width
                         anchors.bottom: parent.bottom
                         anchors.right: parent.right
                         color: "#333333"
@@ -851,7 +851,7 @@ Rectangle {
                             objectName: "specifyGidAddForm"
                             text: "Specify group ID manually"
                             checked: false
-                            width: 150
+                            width: 300
                             onCheckedChanged: !checked ? groupIdAddForm.opacity = 0.6: groupIdAddForm.opacity = 1
                         }
 

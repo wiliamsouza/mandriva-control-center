@@ -1,4 +1,5 @@
-from PySide import QtGui
+#from PySide import QtGui
+from PyQt4 import QtGui
 
 
 class ProxyServiceModel(QtGui.QSortFilterProxyModel):

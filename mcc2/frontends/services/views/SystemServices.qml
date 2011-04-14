@@ -108,7 +108,7 @@ Rectangle {
 
                                     Text {
                                         id: title
-                                        width: content.width
+                                        width: content.width - 80
                                         elide: Text.ElideRight
                                         text: model.service.name
                                         opacity: 0.7
