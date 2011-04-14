@@ -1,0 +1,16 @@
+[Desktop Entry]
+Encoding=UTF-8
+Exec=kcmshell4 mcc2-users
+Icon=preferences-desktop-user
+Type=Service
+
+X-KDE-ServiceTypes=KCModule
+X-KDE-Library=kpythonpluginfactory
+X-KDE-ParentApp=kcontrol
+X-KDE-PluginKeyword=mandriva-control-center/mcc2-users.py
+X-KDE-System-Settings-Parent-Category=mandriva-control-center
+X-KDE-Weight=70
+
+Name=Mandriva Users And Groups
+Comment=Mandriva Users And Groups
+X-KDE-Keywords=Mandriva Control Center Users And Group Mcc2

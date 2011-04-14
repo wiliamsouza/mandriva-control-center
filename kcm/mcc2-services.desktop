@@ -1,0 +1,16 @@
+[Desktop Entry]
+Encoding=UTF-8
+Exec=kcmshell4 mcc2-services
+Icon=applications-system
+Type=Service
+
+X-KDE-ServiceTypes=KCModule
+X-KDE-Library=kpythonpluginfactory
+X-KDE-ParentApp=kcontrol
+X-KDE-PluginKeyword=mandriva-control-center/mcc2-services.py
+X-KDE-System-Settings-Parent-Category=mandriva-control-center
+X-KDE-Weight=70
+
+Name=Mandriva System Services
+Comment=Mandriva System Services
+X-KDE-Keywords=Mandriva Control Center System Services Mcc2

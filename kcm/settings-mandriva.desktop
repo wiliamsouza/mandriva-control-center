@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+X-KDE-ServiceTypes=SystemSettingsCategory
+X-KDE-System-Settings-Category=mandriva-control-center
+Icon=preferences-desktop-user
+
+Name=Mandriva Control Center
