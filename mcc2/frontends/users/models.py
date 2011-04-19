@@ -20,8 +20,8 @@ class UserModel(QtCore.QAbstractListModel):
 
     COLUMNS = ('user',)
 
-    def __init__(self):
-        QtCore.QAbstractListModel.__init__(self)
+    def __init__(self, parent):
+        QtCore.QAbstractListModel.__init__(self, parent=parent)
         self.__users = []
         self.setRoleNames(dict(enumerate(UserModel.COLUMNS)))
 
@@ -37,7 +37,7 @@ class UserModel(QtCore.QAbstractListModel):
         self.beginInsertRows(QtCore.QModelIndex(), len(self.__users), len(self.__users))
         #TODO: Add dbus exception handler here
         interface.AddUser(userDetails)
-        user = User(userDetails['userName'])
+        user = User(userDetails['userName'], self)
         self.__users.append(user)
         self.endInsertRows()
 
@@ -72,13 +72,13 @@ class UserModel(QtCore.QAbstractListModel):
 
     def populate(self):
         for user in interface.ListUsers():
-            self.__users.append(User(user))
+            self.__users.append(User(user, self))
 
 
 class User(QtCore.QObject):
 
-    def __init__(self, user):
-        QtCore.QObject.__init__(self)
+    def __init__(self, user, parent):
+        QtCore.QObject.__init__(self, parent=parent)
         self.__user = user
         self.__modifyUserDetails = {}
         self.__userDetails = {}
@@ -261,8 +261,8 @@ class SystemUserModel(QtCore.QAbstractListModel):
 
     COLUMNS = ('user',)
 
-    def __init__(self):
-        QtCore.QAbstractListModel.__init__(self)
+    def __init__(self, parent):
+        QtCore.QAbstractListModel.__init__(self, parent=parent)
         self.__users = []
         self.setRoleNames(dict(enumerate(SystemUserModel.COLUMNS)))
 
@@ -287,13 +287,13 @@ class SystemUserModel(QtCore.QAbstractListModel):
 
     def populate(self):
         for user in interface.ListAllUsers():
-            self.__users.append(SystemUser(user))
+            self.__users.append(SystemUser(user, self))
 
 
 class SystemUser(QtCore.QObject):
 
-    def __init__(self, user):
-        QtCore.QObject.__init__(self)
+    def __init__(self, user, parent):
+        QtCore.QObject.__init__(self, parent=parent)
 
         self.__user = user
         self.__checked = False
@@ -327,8 +327,8 @@ class GroupModel(QtCore.QAbstractListModel):
 
     COLUMNS = ('group',)
 
-    def __init__(self):
-        QtCore.QAbstractListModel.__init__(self)
+    def __init__(self, parent):
+        QtCore.QAbstractListModel.__init__(self, parent=parent)
         self.__groups = []
         self.setRoleNames(dict(enumerate(GroupModel.COLUMNS)))
 
@@ -345,7 +345,7 @@ class GroupModel(QtCore.QAbstractListModel):
         #TODO: Add dbus exception handler here
         # dbus.exceptions.DBusException: org.mandrivalinux.mcc2.Users.Error.GroupAlreadyExist
         groupId = interface.AddGroup(groupName, gid)
-        group = Group(groupName)
+        group = Group(groupName, self)
         self.__groups.append(group)
         self.endInsertRows()
         return groupId
@@ -368,14 +368,14 @@ class GroupModel(QtCore.QAbstractListModel):
 
     def populate(self, system=False):
         for group in interface.ListGroups():
-            self.__groups.append(Group(group))
+            self.__groups.append(Group(group, self))
 
 
 class Group(QtCore.QObject):
     """ QObject wrapper to dbus/libuser group representation """
 
-    def __init__(self, group):
-        QtCore.QObject.__init__(self)
+    def __init__(self, group, parent):
+        QtCore.QObject.__init__(self, parent=parent)
 
         self.__group = group
         self.__modifyGroupDetails = {}
@@ -449,8 +449,8 @@ class SystemGroupModel(QtCore.QAbstractListModel):
 
     COLUMNS = ('group',)
 
-    def __init__(self):
-        QtCore.QAbstractListModel.__init__(self)
+    def __init__(self, parent=None):
+        QtCore.QAbstractListModel.__init__(self, parent=parent)
         self.__groups = []
         self.setRoleNames(dict(enumerate(SystemGroupModel.COLUMNS)))
 
@@ -475,12 +475,12 @@ class SystemGroupModel(QtCore.QAbstractListModel):
 
     def populate(self, system=False):
         for group in interface.ListAllGroups():
-            self.__groups.append(SystemGroup(group))
+            self.__groups.append(SystemGroup(group, self))
 
 class SystemGroup(QtCore.QObject):
 
-    def __init__(self, group):
-        QtCore.QObject.__init__(self)
+    def __init__(self, group, parent):
+        QtCore.QObject.__init__(self, parent=parent)
 
         self.__group = group
         self.__checked = False
