@@ -15,29 +15,29 @@ class ServicesModule(KCModule):
     def __init__(self, component_data, parent):
         KCModule.__init__(self, component_data, parent)
 
-        view = QtDeclarative.QDeclarativeView(self)
+        self.view = QtDeclarative.QDeclarativeView(self)
 
-        userModel = UserModel()
-        userModel.populate()
-        systemUserModel = SystemUserModel()
-        systemUserModel.populate()
-        groupModel = GroupModel()
-        groupModel.populate()
-        systemGroupModel = SystemGroupModel()
-        systemGroupModel.populate()
+        self.userModel = UserModel(self.view)
+        self.userModel.populate()
+        self.systemUserModel = SystemUserModel(self.view)
+        self.systemUserModel.populate()
+        self.groupModel = GroupModel(self.view)
+        self.groupModel.populate()
+        self.systemGroupModel = SystemGroupModel(self.view)
+        self.systemGroupModel.populate()
 
-        controller = Controller()
+        self.controller = Controller(self.view)
 
-        context = view.rootContext()
-        context.setContextProperty('groupModel', groupModel)
-        context.setContextProperty('systemGroupModel', systemGroupModel)
-        context.setContextProperty('userModel', userModel)
-        context.setContextProperty('systemUserModel', systemUserModel)
-        context.setContextProperty('controller', controller)
+        self.context = self.view.rootContext()
+        self.context.setContextProperty('groupModel', self.groupModel)
+        self.context.setContextProperty('systemGroupModel', self.systemGroupModel)
+        self.context.setContextProperty('userModel', self.userModel)
+        self.context.setContextProperty('systemUserModel', self.systemUserModel)
+        self.context.setContextProperty('controller', self.controller)
 
-        view.setSource(QtCore.QUrl('/usr/share/mandriva/mcc2/frontends/users/views/UsersAndGroups.qml'))
+        self.view.setSource(QtCore.QUrl('/usr/share/mandriva/mcc2/frontends/users/views/UsersAndGroups.qml'))
         #view.setResizeMode(QtDeclarative.QDeclarativeView.SizeRootObjectToView)
-        view.setWindowTitle('Mandriva Control Center - Users and Groups')
+        self.view.setWindowTitle('Mandriva Control Center - Users and Groups')
 
 
 def CreatePlugin(widget_parent, parent, component_data):
