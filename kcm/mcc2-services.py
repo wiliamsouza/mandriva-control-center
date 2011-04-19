@@ -16,22 +16,38 @@ class ServicesModule(KCModule):
     def __init__(self, component_data, parent):
         KCModule.__init__(self, component_data, parent)
 
-        view = QtDeclarative.QDeclarativeView(self)
+        self.view = QtDeclarative.QDeclarativeView(self)
 
-        serviceModel = ServiceModel(view)
-        serviceModel.populate()
-        proxyServiceModel = ProxyServiceModel(serviceModel, parent=view)
+        self.proxyServiceModel = ProxyServiceModel(parent=self)
+        self.serviceModel = ServiceModel(self.proxyServiceModel)
+        self.serviceModel.populate()
+        self.proxyServiceModel.setSourceModel(self.serviceModel)
 
-        controller = Controller(view)
+        self.controller = Controller(self)
 
-        context = view.rootContext()
-        context.setContextProperty('controller', controller)
-        context.setContextProperty('serviceModel', proxyServiceModel)
+        self.context = self.view.rootContext()
+        self.context.setContextProperty('controller', self.controller)
+        self.context.setContextProperty('serviceModel', self.proxyServiceModel)
 
-        view.setSource(QtCore.QUrl('/usr/share/mandriva/mcc2/frontends/services/views/SystemServices.qml'))
-        #view.setResizeMode(QtDeclarative.QDeclarativeView.SizeRootObjectToView)
-        view.setWindowTitle('Mandriva Control Center - System Services')
+        self.view.setSource(QtCore.QUrl('/usr/share/mandriva/mcc2/frontends/services/views/SystemServices.qml'))
+        self.view.setResizeMode(QtDeclarative.QDeclarativeView.SizeRootObjectToView)
+        self.view.setWindowTitle('Mandriva Control Center - System Services')
 
+        #self.connect(self.view, QtCore.SIGNAL("clientClosed()"), self.onClose)
+        #self.connect(self.view, QtCore.SIGNAL("clientIsEmbedded()"), self.isLoaded)
+
+    """
+    def onClose(self):
+        print "*"*80
+        print "onClose"
+        self.view.destroy()
+
+    def isLoaded(self):
+        print "*"*80
+        print "isLoaded"
+        self.view.setFocus()
+        self.view.adjustSize()
+    """
 
 def CreatePlugin(widget_parent, parent, component_data):
     return ServicesModule(component_data, parent)
