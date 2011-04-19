@@ -6,11 +6,6 @@ class Controller(QtCore.QObject):
     def __init__(self, parent=None):
         QtCore.QObject.__init__(self, parent)
 
-    #@QtCore.Slot(QtCore.QObject)
-    @QtCore.pyqtSlot(QtCore.QObject)
-    def service_selected(self, service):
-        print 'User clicked on:', service.name
-
     #@QtCore.Slot(QtCore.QObject, int)
     @QtCore.pyqtSlot(QtCore.QObject, int)
     def start_service(self, serviceModel, currentIndex):
