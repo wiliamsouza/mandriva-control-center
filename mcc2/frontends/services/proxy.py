@@ -4,15 +4,14 @@ from PyQt4 import QtGui
 
 class ProxyServiceModel(QtGui.QSortFilterProxyModel):
     
-    def __init__(self, serviceModel, parent=None):
+    def __init__(self, parent=None):
         QtGui.QSortFilterProxyModel.__init__(self, parent)
-        self.serviceModel = serviceModel
-        self.setSourceModel(serviceModel)
         self.setDynamicSortFilter(True)
 
     def filterAcceptsRow(self, sourceRow, sourceParent):
-        index = self.serviceModel.index(sourceRow, 0)
-        service = self.serviceModel.data(index, 0)
+        self.serviceModel = self.sourceModel()
+        index = self.serviceModel.index(sourceRow, self.serviceModel.COLUMNS.index('service'))
+        service = self.serviceModel.data(index, self.serviceModel.COLUMNS.index('service'))
         regex = self.filterRegExp()
         if regex.indexIn(service.name) != -1:
             return True
