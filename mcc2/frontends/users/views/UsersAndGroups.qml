@@ -87,7 +87,7 @@ Rectangle {
                             // Pass group members to systemUserModel internaly
                             systemGroupGridView.model.selectGroups(model.user.groups)
 
-                            addUserForm.visible = false
+                            addFormUser.visible = false
                             editFormUser.visible = true
                         }
                     }
@@ -111,7 +111,7 @@ Rectangle {
                 height: userTab.height //- 25
                 color: "#b3b3b3"
                 //opacity: 0.6
-                //clip: true
+                clip: true
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 /** Edit form user ********************************************/
@@ -120,262 +120,274 @@ Rectangle {
                     width: scrollFormUser.width
                     height: scrollFormUser.height
                     visible: false
-                    clip: true
+                    //clip: true
 
                     Flickable {
                         anchors.fill: parent
                         contentWidth: editFormUser.width
                         contentHeight: myCol.height + 150
 
-                    Column {
-                        id: myCol
-                        anchors.top: parent.top
-                        anchors.topMargin: 6
-                        anchors.left: parent.left
-                        anchors.leftMargin: 6
-                        spacing: 6
-
-                        Grid {
-                            columns: 2
+                        Column {
+                            id: myCol
+                            anchors.top: parent.top
+                            anchors.topMargin: 6
+                            anchors.left: parent.left
+                            anchors.leftMargin: 6
                             spacing: 6
 
-                            Text {
-                                text: "User last changed password on"
-                                font.bold: true
-                                opacity: 0.7
-                            }
+                            Grid {
+                                columns: 2
+                                spacing: 6
 
-                            Text {
-                                id: shadowLastChange
-                                text: ""
-                                font.bold: true
-                                opacity: 0.7
-                            }
-
-                            Text {
-                                text: "Full name"
-                                font.bold: true
-                                opacity: 0.7
-                            }
-
-                            TextField {
-                                id: fullName
-                                objectName: "fullName"
-                                text: ""
-                            }
-
-                            Text {
-                                text: "User name"
-                                font.bold: true
-                                opacity: 0.7
-                            }
-
-                            TextField {
-                                id: userName
-                                objectName: "userName"
-                                text: ""
-                            }
-
-                            Text {
-                                text: "Password"
-                                font.bold: true
-                                opacity: 0.7
-                            }
-
-                            TextField {
-                                id: password
-                                objectName: "password"
-                                text: ""
-                                echoMode: TextInput.Password
-                            }
-
-                            Text {
-                                text: "Confirm password"
-                                font.bold: true
-                                opacity: 0.7
-                            }
-
-                            TextField {
-                                id: confirmPassword
-                                objectName: "confirmPassword"
-                                text: ""
-                                echoMode: TextInput.Password
-                            }
-
-                            Text {
-                                text: "Login shell"
-                                font.bold: true
-                                opacity: 0.7
-                            }
-
-                            TextField {
-                                id: loginShell
-                                objectName: "loginShell"
-                                text: ""
-                            }
-
-                            Text {
-                                text: "Home directory"
-                                font.bold: true
-                                opacity: 0.7
-                            }
-
-                            TextField {
-                                id: homeDirectory
-                                objectName: "homeDirectory"
-                                text: ""
-                            }
-
-                            Text {
-                                text: " "
-                            }
-
-                            CheckBox {
-                                id: shadowExpire
-                                objectName: "shadowExpire"
-                                text: "Enable account expiration"
-                                checked: false
-                                width: 200
-                                onCheckedChanged: !checked ? expirationDate.opacity = 0.6: expirationDate.opacity = 1
-                            }
-
-                            Text {
-                                text: "Account expires"
-                                font.bold: true
-                                opacity: 0.7
-                            }
-
-                            TextField {
-                                id: expirationDate
-                                objectName: "expirationDate"
-                                text: ""
-                                opacity: 0.6
-                                enabled: shadowExpire.checked
-                            }
-
-                            Text {
-                                text: " "
-                            }
-
-                            CheckBox {
-                                id: blockAccount
-                                objectName: "blockAccount"
-                                text: "Lock user account"
-                                checked: false
-                                width: 150
-                            }
-
-                            Text {
-                                text: "Days before change allowed"
-                                font.bold: true
-                                opacity: 0.7
-                            }
-
-                            TextField {
-                                id: shadowMin
-                                objectName: "shadowMin"
-                                text: ""
-                            }
-
-                            Text {
-                                text: "Days before change required"
-                                font.bold: true
-                                opacity: 0.7
-                            }
-
-                            TextField {
-                                id: shadowMax
-                                objectName: "shadowMax"
-                                text: ""
-                            }
-
-                            Text {
-                                text: "Days warning before change"
-                                font.bold: true
-                                opacity: 0.7
-                            }
-
-                            TextField {
-                                id: shadowWarning
-                                objectName: "shadowWarning"
-                                text: ""
-                            }
-
-                            Text {
-                                text: "Days before account inactive"
-                                font.bold: true
-                                opacity: 0.7
-                            }
-
-                            TextField {
-                                id: shadowInactive
-                                objectName: "shadowInactive"
-                                text: ""
-                            }
-                        }
-
-                        Text {
-                            text: "Select the groups that the user will be a member of"
-                            font.bold: true
-                            opacity: 0.7
-                        }
-
-                        Component {
-                            id: systemGroupDelegate
-
-                            Rectangle {
-                                width: 108
-                                height: 25
-                                color: ((index % 2 == 0) ? "#808080": "#999999")
-
-                                Row {
-                                    spacing: 4
-                                    anchors.left: parent.left
-                                    anchors.leftMargin: 4
-
-                                    Text {
-                                        //id: checkbox
-                                        text: "✔"
-                                        font.pixelSize: 18
-                                        font.bold: true
-                                        opacity: ((model.group.isChecked) ? 1.0 : 0.1)
-                                        color: "white"
-                                        //anchors.verticalCenter: parent.verticalCenter
-                                    }
-
-                                    Text {
-                                        text: model.group.groupName
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        opacity: 0.7
-                                    }
+                                Text {
+                                    text: "User last changed password on"
+                                    font.bold: true
+                                    opacity: 0.7
                                 }
 
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: {
+                                Text {
+                                    id: shadowLastChange
+                                    text: ""
+                                    font.bold: true
+                                    opacity: 0.7
+                                }
+
+                                Text {
+                                    text: "Full name"
+                                    font.bold: true
+                                    opacity: 0.7
+                                }
+
+                                TextField {
+                                    id: fullName
+                                    objectName: "fullName"
+                                    text: ""
+                                    KeyNavigation.tab: userName
+                                }
+
+                                Text {
+                                    text: "User name"
+                                    font.bold: true
+                                    opacity: 0.7
+                                }
+
+                                TextField {
+                                    id: userName
+                                    objectName: "userName"
+                                    text: ""
+                                    KeyNavigation.tab: password
+                                }
+
+                                Text {
+                                    text: "Password"
+                                    font.bold: true
+                                    opacity: 0.7
+                                }
+
+                                TextField {
+                                    id: password
+                                    objectName: "password"
+                                    text: ""
+                                    echoMode: TextInput.Password
+                                    KeyNavigation.tab: confirmPassword
+                                }
+
+                                Text {
+                                    text: "Confirm password"
+                                    font.bold: true
+                                    opacity: 0.7
+                                }
+
+                                TextField {
+                                    id: confirmPassword
+                                    objectName: "confirmPassword"
+                                    text: ""
+                                    echoMode: TextInput.Password
+                                    KeyNavigation.tab: loginShell
+                                }
+
+                                Text {
+                                    text: "Login shell"
+                                    font.bold: true
+                                    opacity: 0.7
+                                }
+
+                                TextField {
+                                    id: loginShell
+                                    objectName: "loginShell"
+                                    text: ""
+                                    KeyNavigation.tab: homeDirectory
+                                }
+
+                                Text {
+                                    text: "Home directory"
+                                    font.bold: true
+                                    opacity: 0.7
+                                }
+
+                                TextField {
+                                    id: homeDirectory
+                                    objectName: "homeDirectory"
+                                    text: ""
+                                    KeyNavigation.tab: shadowExpire
+                                }
+
+                                Text {
+                                    text: " "
+                                }
+
+                                CheckBox {
+                                    id: shadowExpire
+                                    objectName: "shadowExpire"
+                                    text: "Enable account expiration"
+                                    checked: false
+                                    width: 200
+                                    onCheckedChanged: !checked ? expirationDate.opacity = 0.6: expirationDate.opacity = 1
+                                    KeyNavigation.tab: expirationDate
+                                }
+
+                                Text {
+                                    text: "Account expires"
+                                    font.bold: true
+                                    opacity: 0.7
+                                }
+
+                                TextField {
+                                    id: expirationDate
+                                    objectName: "expirationDate"
+                                    text: ""
+                                    opacity: 0.6
+                                    enabled: shadowExpire.checked
+                                    KeyNavigation.tab: blockAccount
+                                }
+
+                                Text {
+                                    text: " "
+                                }
+
+                                CheckBox {
+                                    id: blockAccount
+                                    objectName: "blockAccount"
+                                    text: "Lock user account"
+                                    checked: false
+                                    width: 150
+                                    KeyNavigation.tab: shadowMin
+                                }
+
+                                Text {
+                                    text: "Days before change allowed"
+                                    font.bold: true
+                                    opacity: 0.7
+                                }
+
+                                TextField {
+                                    id: shadowMin
+                                    objectName: "shadowMin"
+                                    text: ""
+                                    KeyNavigation.tab: shadowMax
+                                }
+
+                                Text {
+                                    text: "Days before change required"
+                                    font.bold: true
+                                    opacity: 0.7
+                                }
+
+                                TextField {
+                                    id: shadowMax
+                                    objectName: "shadowMax"
+                                    text: ""
+                                    KeyNavigation.tab: shadowWarning
+                                }
+
+                                Text {
+                                    text: "Days warning before change"
+                                    font.bold: true
+                                    opacity: 0.7
+                                }
+
+                                TextField {
+                                    id: shadowWarning
+                                    objectName: "shadowWarning"
+                                    text: ""
+                                    KeyNavigation.tab: shadowInactive
+                                }
+
+                                Text {
+                                    text: "Days before account inactive"
+                                    font.bold: true
+                                    opacity: 0.7
+                                }
+
+                                TextField {
+                                    id: shadowInactive
+                                    objectName: "shadowInactive"
+                                    text: ""
+                                }
+                            }
+
+
+                            Text {
+                                text: "Select the groups that the user will be a member of"
+                                font.bold: true
+                                opacity: 0.7
+                            }
+
+                            Component {
+                                id: systemGroupDelegate
+
+                                Rectangle {
+                                    width: 108
+                                    height: 25
+                                    color: ((index % 2 == 0) ? "#808080": "#999999")
+
+                                    Row {
+                                        spacing: 4
+                                        anchors.left: parent.left
+                                        anchors.leftMargin: 4
+
+                                        Text {
+                                            //id: checkbox
+                                            text: "✔"
+                                            font.pixelSize: 18
+                                            font.bold: true
+                                            opacity: ((model.group.isChecked) ? 1.0 : 0.1)
+                                            color: "white"
+                                            //anchors.verticalCenter: parent.verticalCenter
+                                        }
+
+                                        Text {
+                                            text: model.group.groupName
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            opacity: 0.7
+                                        }
+                                    }
+
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: {
                                         controller.toggledGroup(systemGroupModel, model.group)
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                        GridView {
-                           id: systemGroupGridView
-                           clip: true
-                           height: 210 + 90
-                           width: scrollFormUser.width
-                           cellWidth: 108
-                           cellHeight: 25
-                           model: systemGroupModel
-                           delegate: systemGroupDelegate
+                            GridView {
+                               id: systemGroupGridView
+                               clip: true
+                               height: 210 + 90
+                               width: scrollFormUser.width
+                               cellWidth: 108
+                               cellHeight: 25
+                               model: systemGroupModel
+                               delegate: systemGroupDelegate
+                            }
                         }
                     }
 
-                } //Flick
-
                     Rectangle {
                         height: 42
-                        width: addUserForm.width
+                        width: addFormUser.width
                         anchors.bottom: parent.bottom
                         anchors.right: parent.right
                         color: "#333333"
@@ -418,149 +430,166 @@ Rectangle {
 
                 /** User add form ********************************************/
                 Item {
-                    id: addUserForm
+                    id: addFormUser
                     width: scrollFormUser.width
                     height: scrollFormUser.height
                     visible: false
+                    //clip: true
 
-                    Grid {
-                        anchors.top: parent.top
-                        anchors.topMargin: 6
-                        anchors.left: parent.left
-                        anchors.leftMargin: 6
-                        columns: 2
-                        spacing: 8
+                    Flickable {
+                        anchors.fill: parent
+                        contentWidth: addFormUser.width
+                        contentHeight: myGrid.height + 150
 
-                        Text {
-                            text: "Full name"
-                            font.bold: true
-                            opacity: 0.7
-                        }
+                        Grid {
+                            id: myGrid
+                            anchors.top: parent.top
+                            anchors.topMargin: 6
+                            anchors.left: parent.left
+                            anchors.leftMargin: 6
+                            columns: 2
+                            spacing: 8
 
-                        TextField {
-                            id: fullNameAddForm
-                            objectName: "fullNameAddForm"
-                            text: ""
-                        }
+                            Text {
+                                text: "Full name"
+                                font.bold: true
+                                opacity: 0.7
+                            }
 
-                        Text {
-                            text: "User name"
-                            font.bold: true
-                            opacity: 0.7
-                        }
+                            TextField {
+                                id: fullNameAddForm
+                                objectName: "fullNameAddForm"
+                                text: ""
+                                KeyNavigation.tab: userNameAddForm
+                            }
 
-                        TextField {
-                            id: userNameAddForm
-                            objectName: "userNameAddForm"
-                            text: ""
-                            onTextChanged: homeDirectoryAddForm.text = "/home/" + text
-                        }
+                            Text {
+                                text: "User name"
+                                font.bold: true
+                                opacity: 0.7
+                            }
 
-                        Text {
-                            text: "Password"
-                            font.bold: true
-                            opacity: 0.7
-                        }
+                            TextField {
+                                id: userNameAddForm
+                                objectName: "userNameAddForm"
+                                text: ""
+                                onTextChanged: homeDirectoryAddForm.text = "/home/" + text
+                                KeyNavigation.tab: passwordAddForm
+                            }
 
-                        TextField {
-                            id: passwordAddForm
-                            objectName: "passwordAddForm"
-                            text: ""
-                            echoMode: TextInput.Password
-                        }
+                            Text {
+                                text: "Password"
+                                font.bold: true
+                                opacity: 0.7
+                            }
 
-                        Text {
-                            text: "Confirm password"
-                            font.bold: true
-                            opacity: 0.7
-                        }
+                            TextField {
+                                id: passwordAddForm
+                                objectName: "passwordAddForm"
+                                text: ""
+                                echoMode: TextInput.Password
+                                KeyNavigation.tab: confirmPasswordAddForm
+                            }
 
-                        TextField {
-                            id: confirmPasswordAddForm
-                            objectName: "confirmPasswordAddForm"
-                            text: ""
-                            echoMode: TextInput.Password
-                        }
+                            Text {
+                                text: "Confirm password"
+                                font.bold: true
+                                opacity: 0.7
+                            }
 
-                        Text {
-                            text: "Login shell"
-                            font.bold: true
-                            opacity: 0.7
-                        }
+                            TextField {
+                                id: confirmPasswordAddForm
+                                objectName: "confirmPasswordAddForm"
+                                text: ""
+                                echoMode: TextInput.Password
+                                KeyNavigation.tab: loginShellAddForm
+                            }
 
-                        TextField {
-                            id: loginShellAddForm
-                            objectName: "loginShellAddForm"
-                            text: "/bin/bash"
-                        }
+                            Text {
+                                text: "Login shell"
+                                font.bold: true
+                                opacity: 0.7
+                            }
 
-                        Text {
-                            text: " "
-                        }
+                            TextField {
+                                id: loginShellAddForm
+                                objectName: "loginShellAddForm"
+                                text: "/bin/bash"
+                                KeyNavigation.tab: createHomeDirectoryAddForm
+                            }
 
-                        CheckBox {
-                            id: createHomeDirectoryAddForm
-                            objectName: "createHomeDirectoryAddForm"
-                            text: "Create home directory"
-                            checked: true
-                            width: 200
-                        }
+                            Text {
+                                text: " "
+                            }
 
-                        Text {
-                            text: "Home directory"
-                            font.bold: true
-                            opacity: 0.7
-                        }
+                            CheckBox {
+                                id: createHomeDirectoryAddForm
+                                objectName: "createHomeDirectoryAddForm"
+                                text: "Create home directory"
+                                checked: true
+                                width: 200
+                                KeyNavigation.tab: homeDirectoryAddForm
+                            }
 
-                        TextField {
-                            id: homeDirectoryAddForm
-                            objectName: "homeDirectoryAddForm"
-                            text: "/home/"
-                        }
+                            Text {
+                                text: "Home directory"
+                                font.bold: true
+                                opacity: 0.7
+                            }
 
-                        Text {
-                            text: " "
-                        }
+                            TextField {
+                                id: homeDirectoryAddForm
+                                objectName: "homeDirectoryAddForm"
+                                text: "/home/"
+                                KeyNavigation.tab: createPrivateGroupAddForm
+                            }
 
-                        CheckBox {
-                            id: createPrivateGroupAddForm
-                            objectName: "createPrivateGroupAddForm"
-                            text: "Create a private group for the user"
-                            checked: true
-                            width: 250
-                        }
+                            Text {
+                                text: " "
+                            }
 
-                        Text {
-                            text: " "
-                        }
+                            CheckBox {
+                                id: createPrivateGroupAddForm
+                                objectName: "createPrivateGroupAddForm"
+                                text: "Create a private group for the user"
+                                checked: true
+                                width: 250
+                                KeyNavigation.tab: specifyUserIdAddForm
+                            }
 
-                        CheckBox {
-                            id: specifyUserIdAddForm
-                            objectName: "specifyUserIdAddForm"
-                            text: "Specify user ID manually"
-                            checked: false
-                            width: 250
-                            onCheckedChanged: !checked ? userIdAddForm.opacity = 0.6: userIdAddForm.opacity = 1
-                        }
+                            Text {
+                                text: " "
+                            }
 
-                        Text {
-                            text: "User ID"
-                            font.bold: true
-                            opacity: 0.7
-                        }
+                            CheckBox {
+                                id: specifyUserIdAddForm
+                                objectName: "specifyUserIdAddForm"
+                                text: "Specify user ID manually"
+                                checked: false
+                                width: 250
+                                onCheckedChanged: !checked ? userIdAddForm.opacity = 0.6: userIdAddForm.opacity = 1
+                                KeyNavigation.tab: userIdAddForm
+                            }
 
-                        TextField {
-                            id: userIdAddForm
-                            objectName: "userIdAddForm"
-                            text: ""
-                            opacity: 0.6
-                            enabled: specifyUserIdAddForm.checked
+                            Text {
+                                text: "User ID"
+                                font.bold: true
+                                opacity: 0.7
+                            }
+
+                            TextField {
+                                id: userIdAddForm
+                                objectName: "userIdAddForm"
+                                text: ""
+                                opacity: 0.6
+                                enabled: specifyUserIdAddForm.checked
+                            }
                         }
                     }
 
                     Rectangle {
                         height: 42
-                        width: addUserForm.width
+                        width: addFormUser.width
                         anchors.bottom: parent.bottom
                         anchors.right: parent.right
                         color: "#333333"
@@ -578,7 +607,7 @@ Rectangle {
                                 onClicked: {
                                     scrollFormUser.state = ""
                                     // We pass groupModel here to be used to add a private group
-                                    controller.addUser(userModel, addUserForm, groupModel)
+                                    controller.addUser(userModel, addFormUser, groupModel)
                                 }
                             }
 
@@ -680,7 +709,7 @@ Rectangle {
                 //opacity: 0.6
                 width: groupTab.width - 100
                 height: groupTab.height// - 25
-                //clip: true
+                clip: true
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 /** Group edit form *******************************************/
@@ -690,85 +719,91 @@ Rectangle {
                     height: scrollFormGroup.height
                     visible: false
 
-                    Column {
-                        anchors.top: parent.top
-                        anchors.topMargin: 6
-                        anchors.left: parent.left
-                        anchors.leftMargin: 6
-                        spacing: 6
+                    Flickable {
+                        anchors.fill: parent
+                        contentWidth: editGroupForm.width
+                        contentHeight: groupColumn.height + 50
 
-
-                        Grid {
-                            columns: 2
+                        Column {
+                            id: groupColumn
+                            anchors.top: parent.top
+                            anchors.topMargin: 6
+                            anchors.left: parent.left
+                            anchors.leftMargin: 6
                             spacing: 6
 
+                            Grid {
+                                columns: 2
+                                spacing: 6
+
+                                Text {
+                                    text: "Group name"
+                                    font.bold: true
+                                    opacity: 0.7
+                                }
+
+                                TextField {
+                                    id: groupName
+                                    objectName: "groupName"
+                                    text: ""
+                                }
+                            }
+
                             Text {
-                                text: "Group name"
+                                text: "Select the user to join this group"
                                 font.bold: true
                                 opacity: 0.7
                             }
 
-                            TextField {
-                                id: groupName
-                                objectName: "groupName"
-                                text: ""
-                            }
-                        }
+                            Component {
+                                id: systemUserDelegate
 
-                        Text {
-                            text: "Select the user to join this group"
-                            font.bold: true
-                            opacity: 0.7
-                        }
+                                Rectangle {
+                                    width: 108
+                                    height: 25
+                                    color: ((index % 2 == 0) ? "#808080": "#999999")
 
-                        Component {
-                            id: systemUserDelegate
+                                    Row {
+                                        spacing: 4
+                                        anchors.left: parent.left
+                                        anchors.leftMargin: 4
 
-                            Rectangle {
-                                width: 108
-                                height: 25
-                                color: ((index % 2 == 0) ? "#808080": "#999999")
+                                        Text {
+                                            //id: checkbox
+                                            text: "✔"
+                                            font.pixelSize: 18
+                                            font.bold: true
+                                            opacity: ((model.user.isChecked) ? 1.0 : 0.1)
+                                            color: "white"
+                                            //anchors.verticalCenter: parent.verticalCenter
+                                        }
 
-                                Row {
-                                    spacing: 4
-                                    anchors.left: parent.left
-                                    anchors.leftMargin: 4
-
-                                    Text {
-                                        //id: checkbox
-                                        text: "✔"
-                                        font.pixelSize: 18
-                                        font.bold: true
-                                        opacity: ((model.user.isChecked) ? 1.0 : 0.1)
-                                        color: "white"
-                                        //anchors.verticalCenter: parent.verticalCenter
+                                        Text {
+                                            text: model.user.userName
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            opacity: 0.7
+                                        }
                                     }
 
-                                    Text {
-                                        text: model.user.userName
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        opacity: 0.7
-                                    }
-                                }
-
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: {
-                                        controller.toggledUser(systemUserModel, model.user)
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: {
+                                            controller.toggledUser(systemUserModel, model.user)
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                        GridView {
-                           id: systemUserGridView
-                           clip: true
-                           height: 210
-                           width: scrollFormGroup.width
-                           cellWidth: 108
-                           cellHeight: 25
-                           model: systemUserModel
-                           delegate: systemUserDelegate
+                            GridView {
+                               id: systemUserGridView
+                               clip: true
+                               height: 210
+                               width: scrollFormGroup.width
+                               cellWidth: 108
+                               cellHeight: 25
+                               model: systemUserModel
+                               delegate: systemUserDelegate
+                            }
                         }
                     }
 
@@ -822,57 +857,66 @@ Rectangle {
                     height: scrollFormGroup.height
                     visible: false
 
-                    Grid {
-                        anchors.top: parent.top
-                        anchors.topMargin: 6
-                        anchors.left: parent.left
-                        anchors.leftMargin: 6
-                        columns: 2
-                        spacing: 6
+                    Flickable {
+                        anchors.fill: parent
+                        contentWidth: addGroupForm.width
+                        contentHeight: groupGrid.height + 50
 
-                        Text {
-                            text: "Group name"
-                            font.bold: true
-                            opacity: 0.7
-                        }
+                        Grid {
+                            id: groupGrid
+                            anchors.top: parent.top
+                            anchors.topMargin: 6
+                            anchors.left: parent.left
+                            anchors.leftMargin: 6
+                            columns: 2
+                            spacing: 6
 
-                        TextField {
-                            id: groupNameAddForm
-                            objectName: "groupNameAddForm"
-                            text: ""
-                        }
+                            Text {
+                                text: "Group name"
+                                font.bold: true
+                                opacity: 0.7
+                            }
 
-                        Text {
-                            text: " "
-                        }
+                            TextField {
+                                id: groupNameAddForm
+                                objectName: "groupNameAddForm"
+                                text: ""
+                                KeyNavigation.tab: specifyGidAddForm
+                            }
 
-                        CheckBox {
-                            id: specifyGidAddForm
-                            objectName: "specifyGidAddForm"
-                            text: "Specify group ID manually"
-                            checked: false
-                            width: 300
-                            onCheckedChanged: !checked ? groupIdAddForm.opacity = 0.6: groupIdAddForm.opacity = 1
-                        }
+                            Text {
+                                text: " "
+                            }
 
-                        Text {
-                            text: "Group Id"
-                            font.bold: true
-                            opacity: 0.7
-                        }
+                            CheckBox {
+                                id: specifyGidAddForm
+                                objectName: "specifyGidAddForm"
+                                text: "Specify group ID manually"
+                                checked: false
+                                width: 300
+                                onCheckedChanged: !checked ? groupIdAddForm.opacity = 0.6: groupIdAddForm.opacity = 1
+                                KeyNavigation.tab: groupIdAddForm
+                            }
 
-                        TextField {
-                            id: groupIdAddForm
-                            objectName: "groupIdAddForm"
-                            text: ""
-                            opacity: 0.6
-                            enabled: specifyGidAddForm.checked
+                            Text {
+                                text: "Group Id"
+                                font.bold: true
+                                opacity: 0.7
+                            }
+
+                            TextField {
+                                id: groupIdAddForm
+                                objectName: "groupIdAddForm"
+                                text: ""
+                                opacity: 0.6
+                                enabled: specifyGidAddForm.checked
+                            }
                         }
                     }
 
                     Rectangle {
                         height: 42
-                        width: addUserForm.width
+                        width: addFormUser.width
                         anchors.bottom: parent.bottom
                         anchors.right: parent.right
                         color: "#333333"
@@ -1005,9 +1049,8 @@ Rectangle {
                     tab.currentIndex = 0
                     scrollFormUser.state = "show"
                     editFormUser.visible = false
-                    addUserForm.visible = true
+                    addFormUser.visible = true
                     scrollFormGroup.state = ""
-
                 }
             }
 
