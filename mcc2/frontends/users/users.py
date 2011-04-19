@@ -10,16 +10,16 @@ def start():
     app = QtGui.QApplication(sys.argv)
     view = QtDeclarative.QDeclarativeView()
 
-    userModel = UserModel()
+    userModel = UserModel(view)
     userModel.populate()
-    systemUserModel = SystemUserModel()
+    systemUserModel = SystemUserModel(view)
     systemUserModel.populate()
-    groupModel = GroupModel()
+    groupModel = GroupModel(view)
     groupModel.populate()
-    systemGroupModel = SystemGroupModel()
+    systemGroupModel = SystemGroupModel(view)
     systemGroupModel.populate()
 
-    controller = Controller()
+    controller = Controller(view)
 
     context = view.rootContext()
     context.setContextProperty('groupModel', groupModel)
