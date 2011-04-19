@@ -11,9 +11,10 @@ def start():
     app = QtGui.QApplication(sys.argv)
     view = QtDeclarative.QDeclarativeView()
 
-    serviceModel = ServiceModel(view)
+    proxyServiceModel = ProxyServiceModel(parent=view)
+    serviceModel = ServiceModel(proxyServiceModel)
     serviceModel.populate()
-    proxyServiceModel = ProxyServiceModel(serviceModel, parent=view)
+    proxyServiceModel.setSourceModel(serviceModel)
 
     controller = Controller(view)
 
