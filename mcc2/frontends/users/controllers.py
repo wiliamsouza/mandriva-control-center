@@ -13,8 +13,8 @@ interface = dbus.Interface(proxy, 'org.mandrivalinux.mcc2.Users')
 
 class Controller(QtCore.QObject):
 
-    def __init__(self):
-        QtCore.QObject.__init__(self)
+    def __init__(self, parent=None):
+        QtCore.QObject.__init__(self, parent=parent)
 
     #@QtCore.Slot(QtCore.QObject, QtCore.QObject)
     @QtCore.pyqtSlot(QtCore.QObject, QtCore.QObject)
@@ -24,16 +24,16 @@ class Controller(QtCore.QObject):
         groupId = groupForm.findChild(QDeclarativeItem, 'groupIdAddForm')
 
         gid = interface.FirstUnusedGid()
-        if specifyGid.property('checked'):
+        if specifyGid.property('checked').toBool():
             #TODO: Add exception handler here
-            gid = int(groupId.property('text'))
+            gid = groupId.property('text').toInt()[0]
 
-        groupModel.add(groupName.property('text'), gid)
+        groupModel.add(str(groupName.property('text').toString()), gid)
 
         groupName.setProperty('text', '')
         specifyGid.setProperty('checked', False)
         groupId.setProperty('text', '')
- 
+
     #@QtCore.Slot(QtCore.QObject, QtCore.QObject, QtCore.QObject, int)
     @QtCore.pyqtSlot(QtCore.QObject, QtCore.QObject, QtCore.QObject, int)
     def modifyGroup(self, groupModel, systemUserModel, editGroupForm, currentIndex):
@@ -41,13 +41,13 @@ class Controller(QtCore.QObject):
         members = []
         for user in systemUserModel.checked():
             members.append(user.userName)
-        groupModel.modify(groupName.property('text'), members, currentIndex)
+        groupModel.modify(str(groupName.property('text').toString()), members, currentIndex)
  
     #@QtCore.Slot(QtCore.QObject, QtCore.QObject, int)
     @QtCore.pyqtSlot(QtCore.QObject, QtCore.QObject, int)
     def deleteGroup(self, groupModel, currentItem, currentIndex):
         groupName = currentItem.findChild(QDeclarativeItem, 'delegateGroupName')
-        groupModel.delete(groupName.property('text'), currentIndex)
+        groupModel.delete(str(groupName.property('text').toString()), currentIndex)
 
     #@QtCore.Slot(QtCore.QObject, QtCore.QObject)
     @QtCore.pyqtSlot(QtCore.QObject, QtCore.QObject)
@@ -70,19 +70,19 @@ class Controller(QtCore.QObject):
         specifyUserId = userForm.findChild(QDeclarativeItem, 'specifyUserIdAddForm')
         userId = userForm.findChild(QDeclarativeItem, 'userIdAddForm')
 
-        if fullName.property('text') != '':
-            userDetails['fullName'] = fullName.property('text')
+        if str(fullName.property('text').toString()) != '':
+            userDetails['fullName'] = str(fullName.property('text').toString())
 
-        if userName.property('text') != '':
-            userDetails['userName'] = userName.property('text')
+        if str(userName.property('text').toString()) != '':
+            userDetails['userName'] = str(userName.property('text').toString())
         else:
             #TODO Show up an error message to warn the user
             # test if minimum user name length was entered
             pass
 
-        if password.property('text') == confirmPassword.property('text'):
-            if password.property('text') != '':
-                userDetails['password'] = password.property('text')
+        if str(password.property('text').toString()) == str(confirmPassword.property('text').toString()):
+            if str(password.property('text').toString()) != '':
+                userDetails['password'] = str(password.property('text').toString())
             else:
                 #TODO Show up an error message to warn the user
                 # test if minimum user name length was entered
@@ -92,26 +92,26 @@ class Controller(QtCore.QObject):
             # test if minimum user name length was entered
             pass
 
-        if loginShell.property('text') != '':
-            userDetails['loginShell'] = loginShell.property('text')
+        if str(loginShell.property('text').toString()) != '':
+            userDetails['loginShell'] = str(loginShell.property('text').toString())
         else:
             #TODO Show up an error message to warn the user
             pass
 
-        if createHomeDirectory.property('checked'):
+        if createHomeDirectory.property('checked').toBool():
             userDetails['createHome'] = True
-            userDetails['homeDirectory'] = homeDirectory.property('text')
+            userDetails['homeDirectory'] = str(homeDirectory.property('text').toString())
 
         gid = interface.FirstUnusedGid()
-        if createPrivateGroup.property('checked'):
+        if createPrivateGroup.property('checked').toBool():
             userDetails['gid'] = gid
 
         userDetails['uid'] = interface.FirstUnusedUid()
-        if specifyUserId.property('checked'):
-            userDetails['uid'] = userId.property('text')
+        if specifyUserId.property('checked').toBool():
+            userDetails['uid'] = str(userId.property('text').toString())
 
         userModel.add(userDetails)
-        groupModel.add(userName.property('text'), gid)
+        groupModel.add(str(userName.property('text').toString()), gid)
 
         fullName.setProperty('text', '')
         userName.setProperty('text', '')
@@ -195,7 +195,7 @@ class Controller(QtCore.QObject):
     @QtCore.pyqtSlot(QtCore.QObject, QtCore.QObject, int)
     def deleteUser(self, userModel, currentItem, currentIndex):
         userName = currentItem.findChild(QDeclarativeItem, 'delegateUserName')
-        userModel.delete(userName.property('text'), currentIndex)
+        userModel.delete(str(userName.property('text').toString()), currentIndex)
         
     #@QtCore.Slot(QtCore.QObject, QtCore.QObject)
     @QtCore.pyqtSlot(QtCore.QObject, QtCore.QObject)
