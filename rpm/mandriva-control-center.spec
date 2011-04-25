@@ -11,7 +11,8 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires:	systemd
 Requires:	libuser
 Requires:	libuser-python
-Requires:	pyside
+Requires:	python-qt4
+Requires:	python-dbus
 %py_requires -d
 
 %description
