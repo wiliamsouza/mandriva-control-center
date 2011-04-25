@@ -8,6 +8,7 @@ from mcc2.frontends.services.controllers import Controller
 
 def start():
     import sys
+    print sys.argv
     app = QtGui.QApplication(sys.argv)
     view = QtDeclarative.QDeclarativeView()
 
