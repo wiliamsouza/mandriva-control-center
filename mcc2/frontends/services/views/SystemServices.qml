@@ -133,7 +133,7 @@ Rectangle {
                         anchors.leftMargin: 28
 
                         Text {
-                            text: "Status:"
+                            text: qsTr("Status:")
                             font.bold: true
                             opacity: 0.7
                         }
@@ -166,7 +166,7 @@ Rectangle {
                         anchors.rightMargin: 50
 
                         Button {
-                            text:"Start"
+                            text: qsTr("Start")
                             width: 70
                             height: 30
                             onClicked: {
@@ -175,7 +175,7 @@ Rectangle {
                         }
 
                         Button {
-                            text:"Stop"
+                            text: qsTr("Stop")
                             width: 70
                             height: 30
                             onClicked: {
@@ -184,7 +184,7 @@ Rectangle {
                         }
 
                         Button {
-                            text:"Restart"
+                            text: qsTr("Restart")
                             width: 70
                             height: 30
                             onClicked: controller.restart_service(serviceModel, index)
