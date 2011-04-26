@@ -8,9 +8,17 @@ from mcc2.frontends.services.controllers import Controller
 
 def start():
     import sys
-    print sys.argv
     app = QtGui.QApplication(sys.argv)
     view = QtDeclarative.QDeclarativeView()
+    
+    locale = QtCore.QLocale.system()
+    translator = QtCore.QTranslator()
+
+    i18n_file = 'SystemServices_' + locale.name() + '.qm'
+    i18n_path = '/usr/share/mandriva/mcc2/frontends/services/views/i18n/'
+    
+    if (translator.load(i18n_file, i18n_path)):
+        app.installTranslator(translator)
 
     proxyServiceModel = ProxyServiceModel(parent=view)
     serviceModel = ServiceModel(proxyServiceModel)
