@@ -140,7 +140,7 @@ Rectangle {
                                 spacing: 6
 
                                 Text {
-                                    text: "User last changed password on"
+                                    text: qsTr("User last changed password on")
                                     font.bold: true
                                     opacity: 0.7
                                 }
@@ -153,7 +153,7 @@ Rectangle {
                                 }
 
                                 Text {
-                                    text: "Full name"
+                                    text: qsTr("Full name")
                                     font.bold: true
                                     opacity: 0.7
                                 }
@@ -166,7 +166,7 @@ Rectangle {
                                 }
 
                                 Text {
-                                    text: "User name"
+                                    text: qsTr("User name")
                                     font.bold: true
                                     opacity: 0.7
                                 }
@@ -179,7 +179,7 @@ Rectangle {
                                 }
 
                                 Text {
-                                    text: "Password"
+                                    text: qsTr("Password")
                                     font.bold: true
                                     opacity: 0.7
                                 }
@@ -193,7 +193,7 @@ Rectangle {
                                 }
 
                                 Text {
-                                    text: "Confirm password"
+                                    text: qsTr("Confirm password")
                                     font.bold: true
                                     opacity: 0.7
                                 }
@@ -207,7 +207,7 @@ Rectangle {
                                 }
 
                                 Text {
-                                    text: "Login shell"
+                                    text: qsTr("Login shell")
                                     font.bold: true
                                     opacity: 0.7
                                 }
@@ -220,7 +220,7 @@ Rectangle {
                                 }
 
                                 Text {
-                                    text: "Home directory"
+                                    text: qsTr("Home directory")
                                     font.bold: true
                                     opacity: 0.7
                                 }
@@ -239,7 +239,7 @@ Rectangle {
                                 CheckBox {
                                     id: shadowExpire
                                     objectName: "shadowExpire"
-                                    text: "Enable account expiration"
+                                    text: qsTr("Enable account expiration")
                                     checked: false
                                     width: 200
                                     onCheckedChanged: !checked ? expirationDate.opacity = 0.6: expirationDate.opacity = 1
@@ -247,14 +247,14 @@ Rectangle {
                                 }
 
                                 Text {
-                                    text: "Account expires"
+                                    text: qsTr("Account expires")
                                     font.bold: true
                                     opacity: 0.7
                                 }
 
                                 TextField {
                                     id: expirationDate
-                                    objectName: "expirationDate"
+                                    objectName: qsTr("expirationDate")
                                     text: ""
                                     opacity: 0.6
                                     enabled: shadowExpire.checked
@@ -268,14 +268,14 @@ Rectangle {
                                 CheckBox {
                                     id: blockAccount
                                     objectName: "blockAccount"
-                                    text: "Lock user account"
+                                    text: qsTr("Lock user account")
                                     checked: false
                                     width: 150
                                     KeyNavigation.tab: shadowMin
                                 }
 
                                 Text {
-                                    text: "Days before change allowed"
+                                    text: qsTr("Days before change allowed")
                                     font.bold: true
                                     opacity: 0.7
                                 }
@@ -288,7 +288,7 @@ Rectangle {
                                 }
 
                                 Text {
-                                    text: "Days before change required"
+                                    text: qsTr("Days before change required")
                                     font.bold: true
                                     opacity: 0.7
                                 }
@@ -301,7 +301,7 @@ Rectangle {
                                 }
 
                                 Text {
-                                    text: "Days warning before change"
+                                    text: qsTr("Days warning before change")
                                     font.bold: true
                                     opacity: 0.7
                                 }
@@ -314,7 +314,7 @@ Rectangle {
                                 }
 
                                 Text {
-                                    text: "Days before account inactive"
+                                    text: qsTr("Days before account inactive")
                                     font.bold: true
                                     opacity: 0.7
                                 }
@@ -328,7 +328,7 @@ Rectangle {
 
 
                             Text {
-                                text: "Select the groups that the user will be a member of"
+                                text: qsTr("Select the groups that the user will be a member of")
                                 font.bold: true
                                 opacity: 0.7
                             }
@@ -399,8 +399,8 @@ Rectangle {
                             anchors.rightMargin: 6
 
                             Button {
-                                text:"Delete"
-                                width:60
+                                text: qsTr("Delete")
+                                width: 60
                                 height: 30
                                 onClicked: {
                                     scrollFormUser.state = ""
@@ -409,8 +409,8 @@ Rectangle {
                             }
 
                             Button {
-                                text:"Save"
-                                width:60
+                                text: qsTr("Save")
+                                width: 60
                                 height: 30
                                 onClicked: {
                                     scrollFormUser.state = ""
@@ -419,8 +419,8 @@ Rectangle {
                             }
 
                             Button {
-                                text:"Close"
-                                width:60
+                                text: qsTr("Close")
+                                width: 60
                                 height: 30
                                 onClicked: scrollFormUser.state = ""
                             }
@@ -451,7 +451,7 @@ Rectangle {
                             spacing: 8
 
                             Text {
-                                text: "Full name"
+                                text: qsTr("Full name")
                                 font.bold: true
                                 opacity: 0.7
                             }
@@ -464,7 +464,7 @@ Rectangle {
                             }
 
                             Text {
-                                text: "User name"
+                                text: qsTr("User name")
                                 font.bold: true
                                 opacity: 0.7
                             }
@@ -478,7 +478,7 @@ Rectangle {
                             }
 
                             Text {
-                                text: "Password"
+                                text: qsTr("Password")
                                 font.bold: true
                                 opacity: 0.7
                             }
@@ -492,7 +492,7 @@ Rectangle {
                             }
 
                             Text {
-                                text: "Confirm password"
+                                text: qsTr("Confirm password")
                                 font.bold: true
                                 opacity: 0.7
                             }
@@ -506,7 +506,7 @@ Rectangle {
                             }
 
                             Text {
-                                text: "Login shell"
+                                text: qsTr("Login shell")
                                 font.bold: true
                                 opacity: 0.7
                             }
@@ -525,14 +525,14 @@ Rectangle {
                             CheckBox {
                                 id: createHomeDirectoryAddForm
                                 objectName: "createHomeDirectoryAddForm"
-                                text: "Create home directory"
+                                text: qsTr("Create home directory")
                                 checked: true
                                 width: 200
                                 KeyNavigation.tab: homeDirectoryAddForm
                             }
 
                             Text {
-                                text: "Home directory"
+                                text: qsTr("Home directory")
                                 font.bold: true
                                 opacity: 0.7
                             }
@@ -551,7 +551,7 @@ Rectangle {
                             CheckBox {
                                 id: createPrivateGroupAddForm
                                 objectName: "createPrivateGroupAddForm"
-                                text: "Create a private group for the user"
+                                text: qsTr("Create a private group for the user")
                                 checked: true
                                 width: 250
                                 KeyNavigation.tab: specifyUserIdAddForm
@@ -564,7 +564,7 @@ Rectangle {
                             CheckBox {
                                 id: specifyUserIdAddForm
                                 objectName: "specifyUserIdAddForm"
-                                text: "Specify user ID manually"
+                                text: qsTr("Specify user ID manually")
                                 checked: false
                                 width: 250
                                 onCheckedChanged: !checked ? userIdAddForm.opacity = 0.6: userIdAddForm.opacity = 1
@@ -572,7 +572,7 @@ Rectangle {
                             }
 
                             Text {
-                                text: "User ID"
+                                text: qsTr("User ID")
                                 font.bold: true
                                 opacity: 0.7
                             }
@@ -601,8 +601,8 @@ Rectangle {
                             anchors.rightMargin: 6
 
                             Button {
-                                text:"Save"
-                                width:60
+                                text: qsTr("Save")
+                                width: 60
                                 height: 30
                                 onClicked: {
                                     scrollFormUser.state = ""
@@ -612,8 +612,8 @@ Rectangle {
                             }
 
                             Button {
-                                text:"Close"
-                                width:60
+                                text: qsTr("Close")
+                                width: 60
                                 height: 30
                                 onClicked: scrollFormUser.state = ""
                             }
@@ -737,7 +737,7 @@ Rectangle {
                                 spacing: 6
 
                                 Text {
-                                    text: "Group name"
+                                    text: qsTr("Group name")
                                     font.bold: true
                                     opacity: 0.7
                                 }
@@ -750,7 +750,7 @@ Rectangle {
                             }
 
                             Text {
-                                text: "Select the user to join this group"
+                                text: qsTr("Select the user to join this group")
                                 font.bold: true
                                 opacity: 0.7
                             }
@@ -821,8 +821,8 @@ Rectangle {
                             anchors.rightMargin: 6
 
                             Button {
-                                text:"Delete"
-                                width:60
+                                text: qsTr("Delete")
+                                width: 60
                                 height: 30
                                 onClicked: {
                                     scrollFormGroup.state = ""
@@ -831,8 +831,8 @@ Rectangle {
                             }
 
                             Button {
-                                text:"Save"
-                                width:60
+                                text: qsTr("Save")
+                                width: 60
                                 height: 30
                                 onClicked: {
                                     scrollFormGroup.state = ""
@@ -841,8 +841,8 @@ Rectangle {
                             }
 
                             Button {
-                                text:"Close"
-                                width:60
+                                text: qsTr("Close")
+                                width: 60
                                 height: 30
                                 onClicked: scrollFormGroup.state = ""
                             }
@@ -872,7 +872,7 @@ Rectangle {
                             spacing: 6
 
                             Text {
-                                text: "Group name"
+                                text: qsTr("Group name")
                                 font.bold: true
                                 opacity: 0.7
                             }
@@ -891,7 +891,7 @@ Rectangle {
                             CheckBox {
                                 id: specifyGidAddForm
                                 objectName: "specifyGidAddForm"
-                                text: "Specify group ID manually"
+                                text: qsTr("Specify group ID manually")
                                 checked: false
                                 width: 300
                                 onCheckedChanged: !checked ? groupIdAddForm.opacity = 0.6: groupIdAddForm.opacity = 1
@@ -899,7 +899,7 @@ Rectangle {
                             }
 
                             Text {
-                                text: "Group Id"
+                                text: qsTr("Group Id")
                                 font.bold: true
                                 opacity: 0.7
                             }
@@ -928,8 +928,8 @@ Rectangle {
                             anchors.rightMargin: 6
 
                             Button {
-                                text:"Save"
-                                width:60
+                                text: qsTr("Save")
+                                width: 60
                                 height: 30
                                 onClicked: {
                                     scrollFormGroup.state = ""
@@ -938,8 +938,8 @@ Rectangle {
                             }
 
                             Button {
-                                text:"Close"
-                                width:60
+                                text: qsTr("Close")
+                                width: 60
                                 height: 30
                                 onClicked: scrollFormGroup.state = ""
                             }
@@ -997,7 +997,7 @@ Rectangle {
                 color: tab.currentIndex == 0 ? "#4d4d4d" : "#666666"
 
                 Text {
-                    text: "Users"
+                    text: qsTr("Users")
                     font.bold: true
                     anchors.centerIn: parent
                     opacity: 0.7
@@ -1018,7 +1018,7 @@ Rectangle {
                 color: tab.currentIndex == 1 ? "#4d4d4d" : "#666666"
 
                 Text {
-                    text: "Groups"
+                    text: qsTr("Groups")
                     font.bold: true
                     anchors.centerIn: parent
                     opacity: 0.7
@@ -1042,7 +1042,7 @@ Rectangle {
             spacing: 10
 
             Button {
-                text:"Add user"
+                text: qsTr("Add user")
                 width: 70
                 height: 30
                 onClicked: {
@@ -1055,7 +1055,7 @@ Rectangle {
             }
 
             Button {
-                text:"Add group"
+                text: qsTr("Add group")
                 width: 80
                 height: 30
                 onClicked: {
