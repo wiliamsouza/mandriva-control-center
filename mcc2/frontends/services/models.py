@@ -1,29 +1,37 @@
-#from PySide import QtCore
-from PyQt4 import QtCore
-
 import dbus
 import dbus.mainloop.glib
+
+from PyQt4 import QtCore
+
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
-bus = dbus.SystemBus()#private=True)
+bus = dbus.SystemBus()
 proxy = bus.get_object('org.mandrivalinux.mcc2.Services',
                        '/org/mandrivalinux/mcc2/Services')
 interface = dbus.Interface(proxy, 'org.mandrivalinux.mcc2.Services')
 
-proxy2 = bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1')
+proxy2 = bus.get_object('org.freedesktop.systemd1',
+                        '/org/freedesktop/systemd1')
 interface2 = dbus.Interface(proxy2, 'org.freedesktop.systemd1.Manager')
 interface2.Subscribe()
+
+
+
 
 class Service(QtCore.QObject):
 
     def __init__(self, servicePath, serviceDetails, parent):
         QtCore.QObject.__init__(self, parent)
+
         self.__servicePath = servicePath
         self.__serviceDetails = serviceDetails
 
-        self.properties_proxy = bus.get_object('org.freedesktop.systemd1', self.__servicePath)
-        self.properties_interface = dbus.Interface(self.properties_proxy, 'org.freedesktop.DBus.Properties')
-        self.properties_interface.connect_to_signal('PropertiesChanged', self.on_properties_changed)
+        self.proxy = bus.get_object('org.freedesktop.systemd1',
+                                    self.__servicePath)
+        self.interface = dbus.Interface(self.proxy,
+                                        'org.freedesktop.DBus.Properties')
+        self.interface.connect_to_signal('PropertiesChanged',
+                                        self.on_properties_changed)
 
     def __getName(self):
         return self.__serviceDetails['Id']
@@ -74,7 +82,6 @@ class Service(QtCore.QObject):
         self.__serviceDetails = interface.ServiceDetails(self.__servicePath)
         self.changed.emit()
 
-    #changed = QtCore.Signal()
     changed = QtCore.pyqtSignal()
 
     name = QtCore.pyqtProperty(unicode, __getName, notify=changed)
@@ -82,6 +89,7 @@ class Service(QtCore.QObject):
     loadState = QtCore.pyqtProperty(unicode, __getLoadState, notify=changed)
     activeState = QtCore.pyqtProperty(unicode, __getActiveState, notify=changed)
     subState = QtCore.pyqtProperty(unicode, __getSubState, notify=changed)
+
 
 class ServiceModel(QtCore.QAbstractListModel):
     COLUMNS = ('service',)
@@ -116,8 +124,10 @@ class ServiceModel(QtCore.QAbstractListModel):
         services = []
         for servicePath in interface.List():
             serviceDetails = interface.ServiceDetails(servicePath[6])
-            # This filtering is done to avoid show up more than one .device unit
-            # under different names
+            # This filtering is done to avoid show up more than one .device
+            # unit under different names
             if serviceDetails['Following'] == "":
-                services.append(Service(servicePath[6], serviceDetails, parent=self.parent))
+                services.append(Service(servicePath[6],
+                                        serviceDetails,
+                                        parent=self.parent))
         self.__services = sorted(services, key=lambda service: service.name)
