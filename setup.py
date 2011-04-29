@@ -54,7 +54,7 @@ setup(name='mandriva-control-center',
     classifiers=[
         'Development Status :: 1 - Planning',
         'Intended Audience :: Developers',
-        'License :: ',
+        'License :: GPL',
         'Operating System :: POSIX :: Linux',
         'Programming Language :: Python',
         'Topic :: Libraries :: Python Modules',]
