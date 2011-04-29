@@ -254,7 +254,7 @@ Rectangle {
 
                                 TextField {
                                     id: expirationDate
-                                    objectName: qsTr("expirationDate")
+                                    objectName: "expirationDate"
                                     text: ""
                                     opacity: 0.6
                                     enabled: shadowExpire.checked
