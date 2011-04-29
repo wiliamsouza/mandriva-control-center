@@ -1,111 +1,60 @@
-#from PySide import QtCore, QtGui, QtDeclarative
+#!/usr/bin/env python
+
+import sys
+
 from PyQt4 import QtCore, QtGui, QtDeclarative
 
-from mcc2.frontends.users.models import UserModel, SystemUserModel, GroupModel, SystemGroupModel
 from mcc2.frontends.users.controllers import Controller
+from mcc2.frontends.users.models import (UserModel, SystemUserModel,
+                                         GroupModel, SystemGroupModel)
 
+
+class UsersView(QtDeclarative.QDeclarativeView):
+
+    def __init__(self, parent=None):
+        QtDeclarative.QDeclarativeView.__init__(self, parent)
+        
+        self.userModel = UserModel(self)
+        self.userModel.populate()
+        self.systemUserModel = SystemUserModel(self)
+        self.systemUserModel.populate()
+        self.groupModel = GroupModel(self)
+        self.groupModel.populate()
+        self.systemGroupModel = SystemGroupModel(self)
+        self.systemGroupModel.populate()
+
+        self.controller = Controller(self)
+
+        self.context = self.rootContext()
+        self.context.setContextProperty('groupModel', self.groupModel)
+        self.context.setContextProperty('systemGroupModel', self.systemGroupModel)
+        self.context.setContextProperty('userModel', self.userModel)
+        self.context.setContextProperty('systemUserModel', self.systemUserModel)
+        self.context.setContextProperty('controller', self.controller)
+
+        self.setSource(QtCore.QUrl('/usr/share/mandriva/mcc2/frontends/users/views/UsersAndGroups.qml'))
+        
+        self.setResizeMode(QtDeclarative.QDeclarativeView.SizeRootObjectToView)
+        self.setWindowTitle('Mandriva Control Center - Users and Groups')
+        
 
 def start():
-    import sys
+
     app = QtGui.QApplication(sys.argv)
-    view = QtDeclarative.QDeclarativeView()
 
-    userModel = UserModel(view)
-    userModel.populate()
-    systemUserModel = SystemUserModel(view)
-    systemUserModel.populate()
-    groupModel = GroupModel(view)
-    groupModel.populate()
-    systemGroupModel = SystemGroupModel(view)
-    systemGroupModel.populate()
+    locale = QtCore.QLocale.system()
+    translator = QtCore.QTranslator()
 
-    controller = Controller(view)
+    i18n_file = 'UsersAndGroups_' + locale.name() + '.qm'
+    i18n_path = '/usr/share/mandriva/mcc2/frontends/users/views/i18n/'
 
-    context = view.rootContext()
-    context.setContextProperty('groupModel', groupModel)
-    context.setContextProperty('systemGroupModel', systemGroupModel)
-    context.setContextProperty('userModel', userModel)
-    context.setContextProperty('systemUserModel', systemUserModel)
-    context.setContextProperty('controller', controller)
+    if (translator.load(i18n_file, i18n_path)):
+        app.installTranslator(translator)
 
-    view.setSource(QtCore.QUrl('/usr/share/mandriva/mcc2/frontends/users/views/UsersAndGroups.qml'))
-    view.setResizeMode(QtDeclarative.QDeclarativeView.SizeRootObjectToView)
-    view.setWindowTitle('Mandriva Control Center - Users and Groups')
-    view.connect(view.engine(), QtCore.SIGNAL('quit()'), app, QtCore.SLOT('quit()'));
+    view = UsersView()
     view.show()
     app.exec_()
 
 
 if __name__ == '__main__':
     start()
-
-
-
-
-    """
-    flags = QtCore.Qt.WindowFlags()
-    flags |= QtCore.Qt.FramelessWindowHint
- 
-    app = QtGui.QApplication(sys.argv)
-    window = QtGui.QMainWindow()
-    window.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-    window.setWindowFlags(flags)
-    view = QtDeclarative.QDeclarativeView()
-    view.setSource('views/UsersAndGroups.qml')
-    
-    userModel = UserModel()
-    userModel.populate()
-    systemUserModel = SystemUserModel()
-    systemUserModel.populate()
-    groupModel = GroupModel()
-    groupModel.populate()
-    systemGroupModel = SystemGroupModel()
-    systemGroupModel.populate()
-
-    controller = Controller()
-
-    context = view.rootContext()
-    context.setContextProperty('groupModel', groupModel)
-    context.setContextProperty('systemGroupModel', systemGroupModel)
-    context.setContextProperty('userModel', userModel)
-    context.setContextProperty('systemUserModel', systemUserModel)
-    
-    context.setContextProperty('controller', controller)
-    
-    widget = QtGui.QWidget()
-    widget.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-    widget.setWindowFlags(flags)
-    view.setViewport(widget)
-    window.setCentralWidget(view)
-    view.setResizeMode(QtDeclarative.QDeclarativeView.SizeRootObjectToView)
-    window.show()
-    app.exec_()
-    """
-"""
-class UsersAndGroupView(QtDeclarative.QDeclarativeView):
-
-    def __init__(self):
-        QtDeclarative.QDeclarativeView.__init__(self)
-        self.ResizeMode = QtDeclarative.QDeclarativeView.SizeRootObjectToView
-        self.setWindowTitle('Mandriva Control Center - Users and Groups')
-        self.groupListModel = GroupListModel()
-        self.groupListModel.populate()
-        self.context = self.rootContext()
-        self.context.setContextProperty('groupListModel', self.groupListModel)
-        self.setSource('views/UsersAndGroups.qml')
-
-    def closeEvent(self, event):
-        print 'close event'
-        event.accept()
-
-
-class UsersAndGroupsGui(object):
-
-    def __init__(self, argv):
-        self.app = QtGui.QApplication(argv)
-        self.view = UsersAndGroupView()
-        self.view.show()
-
-    def run(self):
-        return self.app.exec_()
-"""
