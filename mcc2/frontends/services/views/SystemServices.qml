@@ -22,13 +22,14 @@ Rectangle {
             anchors.leftMargin: 12
             anchors.verticalCenter: parent.verticalCenter
         }
-
+        /*
         TextField {
             anchors.right: parent.right
             anchors.rightMargin: 12
             anchors.verticalCenter: parent.verticalCenter
             onTextChanged: controller.search(serviceModel, text)
         }
+        */
     }
 
     Rectangle {
