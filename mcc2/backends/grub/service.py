@@ -5,7 +5,7 @@ import dbus.service
 import dbus.mainloop.glib
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 from mcc2.parsers.grub.GrubConfig import GrubConfig
-from mcc2.backends.policykit import check_authorization
+from mcc2.backends.policykit import checkAuthorization
 
 __all__ = ['Grub']
 
@@ -53,7 +53,7 @@ class Grub(dbus.service.Object):
     def ChangeDefaultBoot(self, name, sender, connection):
         """
         Change the default booted option to name.
-    
+
         -1 set it to savedefault.
         Return 0 if successful.
         Return 1 if failed.
@@ -67,9 +67,9 @@ class Grub(dbus.service.Object):
                          out_signature='v')
     def DefaultBoot(self):
         """Return the name of the default booted option.
-        
+
         Return -1 if it is savedefault.
-        
+
         """
         return self.__grub.get_default_boot()
 
@@ -122,9 +122,9 @@ class Grub(dbus.service.Object):
                          connection_keyword='connection')
     def ChangePasswordProtection(self, active, sender, connection):
         """Change whether the Grub menu is password protected
-        
+
         @param active: boolean
-        
+
         @return dbus.Bollean
         """
         check_authorization(sender, connection, self.__action)
@@ -188,7 +188,7 @@ class Grub(dbus.service.Object):
     def UpdatePassword(self, password, active, sender, connection):
         """Change password for grub menu, and whether
         password protection is active
-        
+
         active = boolean
         password = string, must be at least four characters
         """
