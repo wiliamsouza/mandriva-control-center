@@ -9,7 +9,7 @@ from menu import *
 class GrubConfig(GrubLegacy):
     """Class to get menu.lst information"""
     
-    def __init__(self,menufile = "/tmp/augeas-sandbox/etc/grub.conf"):
+    def __init__(self, menufile="/boot/grub/menu.lst"):
         #self.menu = menufile
         self.title_blocks = {}
         GrubLegacy.__init__(self)

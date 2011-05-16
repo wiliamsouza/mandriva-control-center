@@ -31,7 +31,7 @@ class GrubLegacy:
     """Represent the Grub configuration."""
 
     def __init__(self):
-        self.menu = '/tmp/augeas-sandbox/etc/grub.conf'
+        self.menu = '/boot/grub/menu.lst'
         self.fstab = '/etc/fstab'
         self.mounted_splashdir = '/boot/grub/splashimages/'
         if self.__has_separate_boot_partition():
