@@ -40,7 +40,6 @@ Rectangle {
         color: "#4d4d4d"
         clip: true
 
-
         Component {
             id: serviceDelegate
 
@@ -168,8 +167,8 @@ Rectangle {
 
                         Button {
                             text: qsTr("Start")
-                            width: 70
-                            height: 30
+                            //width: 70
+                            //height: 30
                             onClicked: {
                                 controller.start_service(serviceModel, index)
                             }
@@ -177,8 +176,8 @@ Rectangle {
 
                         Button {
                             text: qsTr("Stop")
-                            width: 70
-                            height: 30
+                            //width: 70
+                            //height: 30
                             onClicked: {
                                 controller.stop_service(serviceModel, index)
                             }
@@ -186,8 +185,8 @@ Rectangle {
 
                         Button {
                             text: qsTr("Restart")
-                            width: 70
-                            height: 30
+                            //width: 70
+                            //height: 30
                             onClicked: controller.restart_service(serviceModel, index)
                         }
                     }
