@@ -35,15 +35,23 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%{_bindir}/mcc2
+%{_bindir}/mcc2-users
 %{_bindir}/mcc2-services
 %{_sysconfdir}/dbus-1/system.d/org.mandrivalinux.mcc2.Services.conf
 %{_sysconfdir}/dbus-1/system.d/org.mandrivalinux.mcc2.Sshd.conf
 %{_sysconfdir}/dbus-1/system.d/org.mandrivalinux.mcc2.Users.conf
+%{_sysconfdir}/dbus-1/system.d/org.mandrivalinux.mcc2.Grub.conf
 %{_datadir}/dbus-1/system-services/org.mandrivalinux.mcc2.Services.service
 %{_datadir}/dbus-1/system-services/org.mandrivalinux.mcc2.Sshd.service
 %{_datadir}/dbus-1/system-services/org.mandrivalinux.mcc2.Users.service
+%{_datadir}/dbus-1/system-services/org.mandrivalinux.mcc2.Grub.service
+%{_datadir}/polkit-1/actions/org.mandrivalinux.mcc2.policy
 %{_datadir}/polkit-1/actions/org.mandrivalinux.mcc2.services.policy
 %{_datadir}/polkit-1/actions/org.mandrivalinux.mcc2.sshd.policy
+%{_datadir}/polkit-1/actions/org.mandrivalinux.mcc2.grub.policy
 %{_datadir}/polkit-1/actions/org.mandrivalinux.mcc2.users.policy
+%{_datadir}/kde4/services/settings-mandriva.desktop
+%{_datadir}/apps/mandriva-control-center/*
+%{_datadir}/applications/kde4/mcc2-services.desktop
+%{_datadir}/applications/kde4/mcc2-users.desktop
 %{_datadir}/mandriva/*
