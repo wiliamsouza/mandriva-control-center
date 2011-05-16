@@ -47,7 +47,7 @@ Rectangle {
 
                         Image {
                             id: photo
-                            source: "images/default.png"
+                            source: status == Image.Error ? "/usr/share/faces/default.png" : "/usr/share/faces/" + model.user.userName + ".png"
                             anchors.horizontalCenter: parent.horizontalCenter
                             //fillMode: Image.PreserveAspectCrop
                             sourceSize.width: 96
@@ -161,6 +161,7 @@ Rectangle {
                                 TextField {
                                     id: fullName
                                     objectName: "fullName"
+                                    height: 26
                                     text: ""
                                     KeyNavigation.tab: userName
                                 }
@@ -174,6 +175,7 @@ Rectangle {
                                 TextField {
                                     id: userName
                                     objectName: "userName"
+                                    height: 26
                                     text: ""
                                     KeyNavigation.tab: password
                                 }
@@ -187,6 +189,7 @@ Rectangle {
                                 TextField {
                                     id: password
                                     objectName: "password"
+                                    height: 26
                                     text: ""
                                     echoMode: TextInput.Password
                                     KeyNavigation.tab: confirmPassword
@@ -201,6 +204,7 @@ Rectangle {
                                 TextField {
                                     id: confirmPassword
                                     objectName: "confirmPassword"
+                                    height: 26
                                     text: ""
                                     echoMode: TextInput.Password
                                     KeyNavigation.tab: loginShell
@@ -215,6 +219,7 @@ Rectangle {
                                 TextField {
                                     id: loginShell
                                     objectName: "loginShell"
+                                    height: 26
                                     text: ""
                                     KeyNavigation.tab: homeDirectory
                                 }
@@ -228,6 +233,7 @@ Rectangle {
                                 TextField {
                                     id: homeDirectory
                                     objectName: "homeDirectory"
+                                    height: 26
                                     text: ""
                                     KeyNavigation.tab: shadowExpire
                                 }
@@ -255,6 +261,7 @@ Rectangle {
                                 TextField {
                                     id: expirationDate
                                     objectName: "expirationDate"
+                                    height: 26
                                     text: ""
                                     opacity: 0.6
                                     enabled: shadowExpire.checked
@@ -283,6 +290,7 @@ Rectangle {
                                 TextField {
                                     id: shadowMin
                                     objectName: "shadowMin"
+                                    height: 26
                                     text: ""
                                     KeyNavigation.tab: shadowMax
                                 }
@@ -296,6 +304,7 @@ Rectangle {
                                 TextField {
                                     id: shadowMax
                                     objectName: "shadowMax"
+                                    height: 26
                                     text: ""
                                     KeyNavigation.tab: shadowWarning
                                 }
@@ -309,6 +318,7 @@ Rectangle {
                                 TextField {
                                     id: shadowWarning
                                     objectName: "shadowWarning"
+                                    height: 26
                                     text: ""
                                     KeyNavigation.tab: shadowInactive
                                 }
@@ -322,6 +332,7 @@ Rectangle {
                                 TextField {
                                     id: shadowInactive
                                     objectName: "shadowInactive"
+                                    height: 26
                                     text: ""
                                 }
                             }
@@ -400,8 +411,8 @@ Rectangle {
 
                             Button {
                                 text: qsTr("Delete")
-                                width: 60
-                                height: 30
+                                //width: 60
+                                //height: 30
                                 onClicked: {
                                     scrollFormUser.state = ""
                                     controller.deleteUser(userModel, userGridView.currentItem, userGridView.currentIndex)
@@ -410,8 +421,8 @@ Rectangle {
 
                             Button {
                                 text: qsTr("Save")
-                                width: 60
-                                height: 30
+                                //width: 60
+                                //height: 30
                                 onClicked: {
                                     scrollFormUser.state = ""
                                     controller.modifyUser(userModel, editFormUser, userGridView.currentIndex)
@@ -420,8 +431,8 @@ Rectangle {
 
                             Button {
                                 text: qsTr("Close")
-                                width: 60
-                                height: 30
+                                //width: 60
+                                //height: 30
                                 onClicked: scrollFormUser.state = ""
                             }
                         }
@@ -459,6 +470,7 @@ Rectangle {
                             TextField {
                                 id: fullNameAddForm
                                 objectName: "fullNameAddForm"
+                                height: 26
                                 text: ""
                                 KeyNavigation.tab: userNameAddForm
                             }
@@ -472,6 +484,7 @@ Rectangle {
                             TextField {
                                 id: userNameAddForm
                                 objectName: "userNameAddForm"
+                                height: 26
                                 text: ""
                                 onTextChanged: homeDirectoryAddForm.text = "/home/" + text
                                 KeyNavigation.tab: passwordAddForm
@@ -486,6 +499,7 @@ Rectangle {
                             TextField {
                                 id: passwordAddForm
                                 objectName: "passwordAddForm"
+                                height: 26
                                 text: ""
                                 echoMode: TextInput.Password
                                 KeyNavigation.tab: confirmPasswordAddForm
@@ -500,6 +514,7 @@ Rectangle {
                             TextField {
                                 id: confirmPasswordAddForm
                                 objectName: "confirmPasswordAddForm"
+                                height: 26
                                 text: ""
                                 echoMode: TextInput.Password
                                 KeyNavigation.tab: loginShellAddForm
@@ -514,6 +529,7 @@ Rectangle {
                             TextField {
                                 id: loginShellAddForm
                                 objectName: "loginShellAddForm"
+                                height: 26
                                 text: "/bin/bash"
                                 KeyNavigation.tab: createHomeDirectoryAddForm
                             }
@@ -540,6 +556,7 @@ Rectangle {
                             TextField {
                                 id: homeDirectoryAddForm
                                 objectName: "homeDirectoryAddForm"
+                                height: 26
                                 text: "/home/"
                                 KeyNavigation.tab: createPrivateGroupAddForm
                             }
@@ -580,6 +597,7 @@ Rectangle {
                             TextField {
                                 id: userIdAddForm
                                 objectName: "userIdAddForm"
+                                height: 26
                                 text: ""
                                 opacity: 0.6
                                 enabled: specifyUserIdAddForm.checked
@@ -602,8 +620,8 @@ Rectangle {
 
                             Button {
                                 text: qsTr("Save")
-                                width: 60
-                                height: 30
+                                //width: 60
+                                //height: 30
                                 onClicked: {
                                     scrollFormUser.state = ""
                                     // We pass groupModel here to be used to add a private group
@@ -613,8 +631,8 @@ Rectangle {
 
                             Button {
                                 text: qsTr("Close")
-                                width: 60
-                                height: 30
+                                //width: 60
+                                //height: 30
                                 onClicked: scrollFormUser.state = ""
                             }
                         }
@@ -745,6 +763,7 @@ Rectangle {
                                 TextField {
                                     id: groupName
                                     objectName: "groupName"
+                                    height: 26
                                     text: ""
                                 }
                             }
@@ -822,8 +841,8 @@ Rectangle {
 
                             Button {
                                 text: qsTr("Delete")
-                                width: 60
-                                height: 30
+                                //width: 60
+                                //height: 30
                                 onClicked: {
                                     scrollFormGroup.state = ""
                                     controller.deleteGroup(groupModel, groupListView.currentItem, groupListView.currentIndex)
@@ -832,8 +851,8 @@ Rectangle {
 
                             Button {
                                 text: qsTr("Save")
-                                width: 60
-                                height: 30
+                                //width: 60
+                                //height: 30
                                 onClicked: {
                                     scrollFormGroup.state = ""
                                     controller.modifyGroup(groupModel, systemUserModel, editGroupForm, groupListView.currentIndex)
@@ -842,8 +861,8 @@ Rectangle {
 
                             Button {
                                 text: qsTr("Close")
-                                width: 60
-                                height: 30
+                                //width: 60
+                                //height: 30
                                 onClicked: scrollFormGroup.state = ""
                             }
                         }
@@ -880,6 +899,7 @@ Rectangle {
                             TextField {
                                 id: groupNameAddForm
                                 objectName: "groupNameAddForm"
+                                height: 26
                                 text: ""
                                 KeyNavigation.tab: specifyGidAddForm
                             }
@@ -907,6 +927,7 @@ Rectangle {
                             TextField {
                                 id: groupIdAddForm
                                 objectName: "groupIdAddForm"
+                                height: 26
                                 text: ""
                                 opacity: 0.6
                                 enabled: specifyGidAddForm.checked
@@ -929,8 +950,8 @@ Rectangle {
 
                             Button {
                                 text: qsTr("Save")
-                                width: 60
-                                height: 30
+                                //width: 60
+                                //height: 30
                                 onClicked: {
                                     scrollFormGroup.state = ""
                                     controller.addGroup(groupModel, addGroupForm)
@@ -939,8 +960,8 @@ Rectangle {
 
                             Button {
                                 text: qsTr("Close")
-                                width: 60
-                                height: 30
+                                //width: 60
+                                //height: 30
                                 onClicked: scrollFormGroup.state = ""
                             }
                         }
@@ -1043,8 +1064,8 @@ Rectangle {
 
             Button {
                 text: qsTr("Add user")
-                width: 70
-                height: 30
+                //width: 70
+                //height: 30
                 onClicked: {
                     tab.currentIndex = 0
                     scrollFormUser.state = "show"
@@ -1056,8 +1077,8 @@ Rectangle {
 
             Button {
                 text: qsTr("Add group")
-                width: 80
-                height: 30
+                //width: 80
+                //height: 30
                 onClicked: {
                     tab.currentIndex = 1
                     scrollFormGroup.state = "show"
