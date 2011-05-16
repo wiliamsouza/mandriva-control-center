@@ -6,11 +6,11 @@ dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
 def checkAuthorization(sender, connection, action):
     """Check policykit authorization.
-        
+
     @param sender:
     @param connection:
     @param action:
-        
+
     @raise dbus.DBusException: org.mandrivalinux.mcc2.Error.NotAuthorized.
     """
 

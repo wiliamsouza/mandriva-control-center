@@ -1,9 +1,11 @@
 import dbus
 import dbus.mainloop.glib
+#import dbus.mainloop.qt
 
 from PyQt4 import QtCore
 
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+#dbus.mainloop.qt.DBusQtMainLoop(set_as_default=True)
 
 bus = dbus.SystemBus()
 proxy = bus.get_object('org.mandrivalinux.mcc2.Services',
@@ -14,8 +16,6 @@ proxy2 = bus.get_object('org.freedesktop.systemd1',
                         '/org/freedesktop/systemd1')
 interface2 = dbus.Interface(proxy2, 'org.freedesktop.systemd1.Manager')
 interface2.Subscribe()
-
-
 
 
 class Service(QtCore.QObject):
@@ -31,7 +31,7 @@ class Service(QtCore.QObject):
         self.interface = dbus.Interface(self.proxy,
                                         'org.freedesktop.DBus.Properties')
         self.interface.connect_to_signal('PropertiesChanged',
-                                        self.on_properties_changed)
+                                         self.on_properties_changed)
 
     def __getName(self):
         return self.__serviceDetails['Id']
@@ -107,11 +107,11 @@ class ServiceModel(QtCore.QAbstractListModel):
         if index.isValid() and role == ServiceModel.COLUMNS.index('service'):
             return self.__services[index.row()]
         return None
- 
+
     def start(self, row):
         service = self.__services[row]
         service.start()
-    
+
     def stop(self, row):
         service = self.__services[row]
         service.stop()

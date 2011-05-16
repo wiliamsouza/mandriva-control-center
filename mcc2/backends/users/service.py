@@ -120,7 +120,7 @@ class Users(dbus.service.Object):
         #    'org.mandrivalinux.mcc2.users.adduser')
 
         user_entity = self.__libuser.initUser(user_info['userName'])
-        
+
         # libuser won't respect that always the fullname will be set by username
         # if a fullname was not set.
         if user_info.has_key('fullName'):
@@ -298,8 +298,8 @@ class Users(dbus.service.Object):
             if uid >= 500 and uid <= 65530:
                 users.append(user)
         return users
-                
-	  
+
+
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
                          out_signature='as')
     def ListAllUsers(self):
@@ -310,7 +310,7 @@ class Users(dbus.service.Object):
         @rtype: dbus.Array: All users
         """
         return self.__libuser.enumerateUsers()
-        
+
 
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
                          in_signature='s',

@@ -67,7 +67,7 @@ class Services(dbus.service.Object):
                          connection_keyword='connection')
     def Start(self, name, mode, sender, connection):
         """Start unit.
-        
+
         @param name: Unit name (ie: network.service).
         @param mode: Must be one of "fail" or "replace".
 
@@ -90,12 +90,12 @@ class Services(dbus.service.Object):
                          connection_keyword='connection')
     def Stop(self, name, mode, sender, connection):
         """Stop unit.
-        
+
         @param name: Unit name (ie: network.service).
         @param mode:  Must be one of "fail" or "replace".
-        
+
         @raise dbus.DBusException:
-        
+
         @rtype dbus.Interface: Job path.
         """
         if not self.is_systemd_running:
@@ -113,12 +113,12 @@ class Services(dbus.service.Object):
                          connection_keyword='connection')
     def Restart(self, name, mode, sender, connection):
         """Restart unit.
-        
+
         @param name: Unit name (ie: network.service).
         @param mode: Must be one of "fail", "replace" or "isolate".
-        
+
         @raise dbus.DBusException
-        
+
         @rtype dbus.Interface: Job path.
         """
         if not self.is_systemd_running:
@@ -133,9 +133,9 @@ class Services(dbus.service.Object):
                          out_signature='a(ssssssouso)')
     def List(self):
         """List all units, inactive units too.
-        
+
         @raise dbus.DBusException.
-        
+
         @rtype dbus.Array:
         """
         if not self.is_systemd_running:
@@ -149,11 +149,11 @@ class Services(dbus.service.Object):
                          out_signature='a{sv}')
     def ServiceDetails(self, path):
         """Services Detail.
-        
+
         @param path: Unit path.
-        
+
         @raise dbus.DBusException.
-        
+
         @rtype dbus.Array:
         """
         if not self.is_systemd_running:

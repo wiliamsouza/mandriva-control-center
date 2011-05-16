@@ -3,7 +3,7 @@ from PyQt4 import QtGui
 
 
 class ProxyServiceModel(QtGui.QSortFilterProxyModel):
-    
+
     def __init__(self, parent=None):
         QtGui.QSortFilterProxyModel.__init__(self, parent)
         self.setDynamicSortFilter(True)
@@ -19,7 +19,7 @@ class ProxyServiceModel(QtGui.QSortFilterProxyModel):
 
     def start(self, row):
         self.serviceModel.start(row)
-    
+
     def stop(self, row):
         self.serviceModel.stop(row)
 
