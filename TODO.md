@@ -9,16 +9,16 @@ CODE
 
 Backend
 -------
- 
+
  * [DONE] Add a common policykit authentication for privileged method execution
    then user can't enter the root passwors for each privileged task for
    a sort period of time. By now the user may enter the root password for
    stop, restar and start services we should change that.
 
  * [DONE] Add an exception handler to dbus connection in all classes.
- 
+
  * [DONE] Add backends dbus interface method stop.
- 
+
  * Add support to rpm stop dbus interfaces when updating or removing packages.
 
  * Merge sshd key options because it's only used in sshd_config to ensure
@@ -35,14 +35,17 @@ Backend
 Frontend
 --------
 
- *
+ * Add support to change users avatar.
+ * add i18n to Users and Services.
+ * Solve qt-components-desktop ChoiceList bug.
+ * Change the UI rosa mockups.
 
 RPM
 ---
 
- *   
+ *
 
 TESTS
 =====
 
- * 
+ *
