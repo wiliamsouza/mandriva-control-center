@@ -1,7 +1,7 @@
 import QtQuick 1.0
 
-import "components"
-import "components/plugin"
+import "/usr/share/mandriva/qt-components/desktop/components"
+import "/usr/share/mandriva/qt-components/desktop/components/plugin"
 
 Rectangle {
     id: window
