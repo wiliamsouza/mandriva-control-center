@@ -139,7 +139,6 @@ Rectangle {
                             }
                             **/
 
-
                             Text {
                                 text: qsTr("Boot device")
                                 font.bold: true
@@ -540,11 +539,11 @@ Rectangle {
 
             Rectangle {
                 width: content.width
-                height: 130
+                height: 30
                 color: ((index % 2 == 0) ? "#808080": "#999999")
                 clip: true
 
-                Column {
+                Row {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.top: parent.top
                     anchors.topMargin: 12
@@ -552,7 +551,7 @@ Rectangle {
                     anchors.leftMargin: 12
                     spacing: 6
                     children: [
-
+                        /**
                         Text {
                             text: "✔"
                             font.pixelSize: 18
@@ -560,9 +559,9 @@ Rectangle {
                             opacity: ((model.isDefault) ? 1.0 : 0.1)
                             color: "white"
                         },
-
+                        **/
                         Text {
-                            width: content.width
+                            width: content.width / 4
                             elide: Text.ElideRight
                             text: model.name
                             opacity: 0.7
@@ -570,21 +569,21 @@ Rectangle {
                         },
 
                         Text {
-                            width: content.width
+                            width: content.width / 4
                             elide: Text.ElideRight
                             text: model.image
                             opacity: 0.7
                         },
 
                         Text {
-                            width: content.width
+                            width: content.width / 4
                             elide: Text.ElideRight
                             text: model.root
                             opacity: 0.7
                         },
 
                         Text {
-                            width: content.width
+                            width: content.width / 4
                             elide: Text.ElideRight
                             text: model.initrd
                             opacity: 0.7
