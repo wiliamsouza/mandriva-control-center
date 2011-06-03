@@ -13,15 +13,16 @@ class ProxyServiceModel(QtGui.QSortFilterProxyModel):
         index = self.serviceModel.index(sourceRow, self.serviceModel.COLUMNS.index('service'))
         service = self.serviceModel.data(index, self.serviceModel.COLUMNS.index('service'))
         regex = self.filterRegExp()
-        if regex.indexIn(service.name) != -1:
+        if regex.indexIn(service.name) != -1 or \
+	    regex.indexIn(service.activeState) != -1:
             return True
         return False
 
-    def start(self, row):
-        self.serviceModel.start(row)
+    def start(self, row, serviceName):
+        self.serviceModel.start(row, serviceName)
 
-    def stop(self, row):
-        self.serviceModel.stop(row)
+    def stop(self, row, serviceName):
+        self.serviceModel.stop(row, serviceName)
 
-    def restart(self, row):
-        self.serviceModel.restart(row)
+    def restart(self, row, serviceName):
+        self.serviceModel.restart(row, serviceName)

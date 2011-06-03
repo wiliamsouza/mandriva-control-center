@@ -108,16 +108,24 @@ class ServiceModel(QtCore.QAbstractListModel):
             return self.__services[index.row()]
         return None
 
-    def start(self, row):
-        service = self.__services[row]
+    def _getService(self, row, serviceName):
+	service = self.__services[row]
+	if service.name != serviceName:
+	    for service_ in self.__services:
+		if service_.name == serviceName:
+		    service = service_
+	return service
+
+    def start(self, row, serviceName):
+        service = self._getService(row, serviceName)
         service.start()
 
-    def stop(self, row):
-        service = self.__services[row]
+    def stop(self, row, serviceName):
+        service = self._getService(row, serviceName)
         service.stop()
 
-    def restart(self, row):
-        service = self.__services[row]
+    def restart(self, row, serviceName):
+        service = self._getService(row, serviceName)
         service.restart()
 
     def populate(self):
