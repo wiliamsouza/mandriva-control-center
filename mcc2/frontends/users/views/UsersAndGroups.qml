@@ -4,25 +4,76 @@ import "/usr/share/mandriva/qt-components/desktop/components"
 import "/usr/share/mandriva/qt-components/desktop/components/plugin"
 
 Rectangle {
+
+    SystemPalette {
+        id: palette
+        colorGroup: SystemPalette.Active
+    }
+
     id: window
     width: 640
     height: 480
-    color: "#4d4d4d"
+    color: palette.window
 
     /** Header ****************************************************************/
     Rectangle {
         id: header
         width: window.width
-        height: 100
-        color: "#333333"
-        Image {
-            id: mandrivaLogo
-            source: "images/mandriva_logo.png"
-            anchors.left: parent.left
-            anchors.leftMargin: 12
-            anchors.verticalCenter: parent.verticalCenter
-        }
+        height: 50
+        color: palette.window
 
+        Row {
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.leftMargin: 6
+            spacing: 12
+
+            Row {
+                anchors.verticalCenter: parent.verticalCenter
+
+                Button {
+                    text: qsTr("Users")
+                    onClicked: {
+                        scrollFormGroup.state = ""
+                        tab.currentIndex = 0
+                    }
+                }
+
+                Button {
+                    text: qsTr("Groups")
+                    onClicked: {
+                        scrollFormUser.state = ""
+                        tab.currentIndex = 1
+                    }
+                }
+            }
+
+            Row {
+                anchors.verticalCenter: parent.verticalCenter
+
+                Button {
+                    text: qsTr("Add user")
+                    onClicked: {
+                        tab.currentIndex = 0
+                        scrollFormUser.state = "show"
+                            editFormUser.visible = false
+                        addFormUser.visible = true
+                        scrollFormGroup.state = ""
+                    }
+                }
+
+                Button {
+                    text: qsTr("Add group")
+                    onClicked: {
+                        tab.currentIndex = 1
+                        scrollFormGroup.state = "show"
+                        scrollFormUser.state = ""
+                        editGroupForm.visible = false
+                        addGroupForm.visible = true
+                    }
+                }
+            }
+        }
     }
 
     VisualItemModel {
@@ -33,7 +84,7 @@ Rectangle {
             id: userTab
             width: tab.width
             height: tab.height
-            color: "#4d4d4d"
+            color: palette.alternateBase
 
             Component {
                 id: userDelegate
@@ -44,6 +95,7 @@ Rectangle {
 
                     Column {
                         anchors.fill: parent
+                        anchors.topMargin: 6
 
                         Image {
                             id: photo
@@ -108,9 +160,8 @@ Rectangle {
                 y: -height
                 z: 10
                 width: userTab.width - 100
-                height: userTab.height //- 25
-                color: "#b3b3b3"
-                //opacity: 0.6
+                height: userTab.height - 50
+                color: palette.base
                 clip: true
                 anchors.horizontalCenter: parent.horizontalCenter
 
@@ -401,23 +452,26 @@ Rectangle {
                         width: addFormUser.width
                         anchors.bottom: parent.bottom
                         anchors.right: parent.right
-                        color: "#333333"
+                        color: palette.base
+
+                        Button {
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.left: parent.left
+                            anchors.leftMargin: 6
+                            text: qsTr("Delete")
+                            //width: 60
+                            //height: 30
+                            onClicked: {
+                                scrollFormUser.state = ""
+                                controller.deleteUser(userModel, userGridView.currentItem, userGridView.currentIndex)
+                            }
+                        }
 
                         Row {
                             spacing: 12
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.right: parent.right
                             anchors.rightMargin: 6
-
-                            Button {
-                                text: qsTr("Delete")
-                                //width: 60
-                                //height: 30
-                                onClicked: {
-                                    scrollFormUser.state = ""
-                                    controller.deleteUser(userModel, userGridView.currentItem, userGridView.currentIndex)
-                                }
-                            }
 
                             Button {
                                 text: qsTr("Save")
@@ -610,7 +664,7 @@ Rectangle {
                         width: addFormUser.width
                         anchors.bottom: parent.bottom
                         anchors.right: parent.right
-                        color: "#333333"
+                        color: palette.base
 
                         Row {
                             spacing: 12
@@ -655,15 +709,15 @@ Rectangle {
             id: groupTab
             width: tab.width
             height: tab.height
-            color: "#4d4d4d"
+            color: palette.alternateBase
 
             Component {
                 id: groupDelegate
 
-                Rectangle {
+                Item {
                     height: 40
                     width: groupTab.width
-                    color: ((index % 2 == 0) ? "#808080": "#999999")
+                    //color: ((index % 2 == 0) ? "#808080": "#999999")
 
                     Row {
                         spacing: 10
@@ -712,21 +766,34 @@ Rectangle {
                 }
             }
 
+            Component {
+                id: highlightServices
+
+                Rectangle {
+                    width: groupTab.width
+                    height: 40
+                    color: palette.highlight
+                    y: groupListView.currentItem.y;
+                    Behavior on y { SpringAnimation { spring: 2; damping: 0.4 } }
+                }
+            }
+
             ListView {
                 id: groupListView
                 anchors.fill: parent
                 model: groupModel
                 delegate: groupDelegate
+                highlight: highlightServices
+                highlightFollowsCurrentItem: false
             }
 
             Rectangle {
                 id: scrollFormGroup
                 y: -height
                 z: 10
-                color: "#b3b3b3"
-                //opacity: 0.6
+                color: palette.base
                 width: groupTab.width - 100
-                height: groupTab.height// - 25
+                height: groupTab.height - 50
                 clip: true
                 anchors.horizontalCenter: parent.horizontalCenter
 
@@ -831,23 +898,26 @@ Rectangle {
                         width: editGroupForm.width
                         anchors.bottom: parent.bottom
                         anchors.right: parent.right
-                        color: "#333333"
+                        color: palette.base
+
+                        Button {
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.left: parent.left
+                            anchors.leftMargin: 6
+                            text: qsTr("Delete")
+                            //width: 60
+                            //height: 30
+                            onClicked: {
+                                scrollFormGroup.state = ""
+                                controller.deleteGroup(groupModel, groupListView.currentItem, groupListView.currentIndex)
+                            }
+                        }
 
                         Row {
                             spacing: 12
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.right: parent.right
                             anchors.rightMargin: 6
-
-                            Button {
-                                text: qsTr("Delete")
-                                //width: 60
-                                //height: 30
-                                onClicked: {
-                                    scrollFormGroup.state = ""
-                                    controller.deleteGroup(groupModel, groupListView.currentItem, groupListView.currentIndex)
-                                }
-                            }
 
                             Button {
                                 text: qsTr("Save")
@@ -940,7 +1010,7 @@ Rectangle {
                         width: addFormUser.width
                         anchors.bottom: parent.bottom
                         anchors.right: parent.right
-                        color: "#333333"
+                        color: palette.base
 
                         Row {
                             spacing: 12
@@ -983,8 +1053,8 @@ Rectangle {
     ListView {
         id: tab
         clip: true
-        y: (header.height + toolBar.height)
-        height: window.height - (header.height + toolBar.height)
+        y: header.height
+        height: window.height - header.height
         width: window.width
         model: tabModel
         preferredHighlightBegin: 0
@@ -992,101 +1062,5 @@ Rectangle {
         highlightRangeMode: ListView.StrictlyEnforceRange
         orientation: ListView.Horizontal
         snapMode: ListView.SnapOneItem
-    }
-
-    // TODO: see what this code do
-    //ListView.onRemove: SequentialAnimation {
-    //             PropertyAction { target: wrapper; property: "ListView.delayRemove"; value: true }
-    //             NumberAnimation { target: wrapper; property: "scale"; to: 0; duration: 250; easing.type: Easing.InOutQuad }
-    //             PropertyAction { target: wrapper; property: "ListView.delayRemove"; value: false }
-    //         }
-
-    Rectangle {
-        id: toolBar
-        width: window.width
-        height: 30
-        y: header.height
-        color: "#999999"
-
-        /** Toolbar left buttons **********************************************/
-        Row {
-            anchors.verticalCenter: parent.verticalCenter
-
-            Rectangle {
-                width: 60
-                height: 30
-                color: tab.currentIndex == 0 ? "#4d4d4d" : "#666666"
-
-                Text {
-                    text: qsTr("Users")
-                    font.bold: true
-                    anchors.centerIn: parent
-                    opacity: 0.7
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        scrollFormGroup.state = ""
-                        tab.currentIndex = 0
-                    }
-                }
-            }
-
-            Rectangle {
-                width: 60
-                height: 30
-                color: tab.currentIndex == 1 ? "#4d4d4d" : "#666666"
-
-                Text {
-                    text: qsTr("Groups")
-                    font.bold: true
-                    anchors.centerIn: parent
-                    opacity: 0.7
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        scrollFormUser.state = ""
-                        tab.currentIndex = 1
-                    }
-                }
-            }
-        }
-
-        /** Toolbar right buttons *********************************************/
-        Row {
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
-            anchors.rightMargin: 10
-            spacing: 10
-
-            Button {
-                text: qsTr("Add user")
-                //width: 70
-                //height: 30
-                onClicked: {
-                    tab.currentIndex = 0
-                    scrollFormUser.state = "show"
-                    editFormUser.visible = false
-                    addFormUser.visible = true
-                    scrollFormGroup.state = ""
-                }
-            }
-
-            Button {
-                text: qsTr("Add group")
-                //width: 80
-                //height: 30
-                onClicked: {
-                    tab.currentIndex = 1
-                    scrollFormGroup.state = "show"
-                    scrollFormUser.state = ""
-                    editGroupForm.visible = false
-                    addGroupForm.visible = true
-                }
-            }
-        }
     }
 }
