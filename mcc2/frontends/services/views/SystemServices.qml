@@ -4,14 +4,18 @@ import "/usr/share/mandriva/qt-components/desktop/components"
 import "/usr/share/mandriva/qt-components/desktop/components/plugin"
 
 Rectangle {
-    id: window
-    width: 640
-    height: 480
 
     SystemPalette {
         id: palette
         colorGroup: SystemPalette.Active
     }
+
+    id: window
+    width: 640
+    height: 480
+    color: palette.window
+
+
 
     Rectangle {
         id: header
@@ -58,6 +62,7 @@ Rectangle {
         }
 
         TextField {
+            id: searchField
             anchors.right: parent.right
             anchors.rightMargin: 6
             anchors.verticalCenter: parent.verticalCenter
@@ -70,7 +75,7 @@ Rectangle {
         y: header.height
         height: window.height - header.height
         width: window.width
-        color: palette.base
+        color: palette.alternateBase
         clip: true
 
         Component {
