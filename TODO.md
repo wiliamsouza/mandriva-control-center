@@ -37,7 +37,7 @@ Frontend
 
  * Add support to change users avatar.
  * add i18n to Users and Services.
- * Solve qt-components-desktop ChoiceList bug.
+ * [DONE]Solve qt-components-desktop ChoiceList bug.
  * Change the UI rosa mockups.
 
 RPM
