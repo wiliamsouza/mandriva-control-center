@@ -509,3 +509,40 @@ class SystemGroup(QtCore.QObject):
 
     groupName = QtCore.pyqtProperty(unicode, __getGroupName, notify=changed)
     isChecked = QtCore.pyqtProperty(bool, __isChecked, notify=changed)
+
+
+class ShellModel(QtCore.QAbstractListModel):
+
+    COLUMNS = ('shell',)
+
+    def __init__(self, parent=None):
+        QtCore.QAbstractListModel.__init__(self, parent=parent)
+        self.__shells = []
+        self.setRoleNames(dict(enumerate(ShellModel.COLUMNS)))
+
+    def rowCount(self, parent=QtCore.QModelIndex()):
+        return len(self.__shells)
+
+    def data(self, index, role):
+        if index.isValid() and role == ShellModel.COLUMNS.index('shell'):
+            return self.__shells[index.row()]
+        return None
+
+    def populate(self):
+        for shell in interface.ListUserShells():
+            self.__shells.append(Shell(shell, self))
+	print self.__shells
+
+class Shell(QtCore.QObject):
+
+    def __init__(self, shell, parent):
+        QtCore.QObject.__init__(self, parent=parent)
+
+        self.__shell = shell 
+
+    def __getShellName(self):
+        return self.__group
+
+    changed = QtCore.pyqtSignal()
+
+    name = QtCore.pyqtProperty(unicode, __getShellName, notify=changed)

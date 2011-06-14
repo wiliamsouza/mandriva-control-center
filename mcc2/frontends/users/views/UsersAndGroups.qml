@@ -15,6 +15,13 @@ Rectangle {
     height: 480
     color: palette.window
 
+    ListModel {
+        id: shellChoices
+        ListElement { text: "/bin/bash" }
+        ListElement { text: "/bin/dash" }
+        ListElement { text: "/bin/sh" }
+    }
+
     /** Header ****************************************************************/
     Rectangle {
         id: header
@@ -101,7 +108,6 @@ Rectangle {
                             id: photo
                             source: status == Image.Error ? "/usr/share/faces/default.png" : "/usr/share/faces/" + model.user.userName + ".png"
                             anchors.horizontalCenter: parent.horizontalCenter
-                            //fillMode: Image.PreserveAspectCrop
                             sourceSize.width: 96
                             sourceSize.height: 96
                         }
@@ -109,7 +115,7 @@ Rectangle {
                         Text {
                             objectName: "delegateUserName"
                             text: model.user.userName
-                            opacity: 0.7
+                            color: palette.text
                             width: 96
                             elide: Text.ElideRight
                             font.bold: true
@@ -193,20 +199,20 @@ Rectangle {
                                 Text {
                                     text: qsTr("User last changed password on")
                                     font.bold: true
-                                    opacity: 0.7
+                                    color: palette.text
                                 }
 
                                 Text {
                                     id: shadowLastChange
                                     text: ""
                                     font.bold: true
-                                    opacity: 0.7
+                                    color: palette.text
                                 }
 
                                 Text {
                                     text: qsTr("Full name")
                                     font.bold: true
-                                    opacity: 0.7
+                                    color: palette.text
                                 }
 
                                 TextField {
@@ -220,7 +226,7 @@ Rectangle {
                                 Text {
                                     text: qsTr("User name")
                                     font.bold: true
-                                    opacity: 0.7
+                                    color: palette.text
                                 }
 
                                 TextField {
@@ -234,7 +240,7 @@ Rectangle {
                                 Text {
                                     text: qsTr("Password")
                                     font.bold: true
-                                    opacity: 0.7
+                                    color: palette.text
                                 }
 
                                 TextField {
@@ -249,7 +255,7 @@ Rectangle {
                                 Text {
                                     text: qsTr("Confirm password")
                                     font.bold: true
-                                    opacity: 0.7
+                                    color: palette.text
                                 }
 
                                 TextField {
@@ -264,7 +270,7 @@ Rectangle {
                                 Text {
                                     text: qsTr("Login shell")
                                     font.bold: true
-                                    opacity: 0.7
+                                    color: palette.text
                                 }
 
                                 TextField {
@@ -278,7 +284,7 @@ Rectangle {
                                 Text {
                                     text: qsTr("Home directory")
                                     font.bold: true
-                                    opacity: 0.7
+                                    color: palette.text
                                 }
 
                                 TextField {
@@ -306,7 +312,7 @@ Rectangle {
                                 Text {
                                     text: qsTr("Account expires")
                                     font.bold: true
-                                    opacity: 0.7
+                                    color: palette.text
                                 }
 
                                 TextField {
@@ -335,7 +341,7 @@ Rectangle {
                                 Text {
                                     text: qsTr("Days before change allowed")
                                     font.bold: true
-                                    opacity: 0.7
+                                    color: palette.text
                                 }
 
                                 TextField {
@@ -349,7 +355,7 @@ Rectangle {
                                 Text {
                                     text: qsTr("Days before change required")
                                     font.bold: true
-                                    opacity: 0.7
+                                    color: palette.text
                                 }
 
                                 TextField {
@@ -363,7 +369,7 @@ Rectangle {
                                 Text {
                                     text: qsTr("Days warning before change")
                                     font.bold: true
-                                    opacity: 0.7
+                                    color: palette.text
                                 }
 
                                 TextField {
@@ -377,7 +383,7 @@ Rectangle {
                                 Text {
                                     text: qsTr("Days before account inactive")
                                     font.bold: true
-                                    opacity: 0.7
+                                    color: palette.text
                                 }
 
                                 TextField {
@@ -392,7 +398,7 @@ Rectangle {
                             Text {
                                 text: qsTr("Select the groups that the user will be a member of")
                                 font.bold: true
-                                opacity: 0.7
+                                color: palette.text
                             }
 
                             Component {
@@ -421,7 +427,7 @@ Rectangle {
                                         Text {
                                             text: model.group.groupName
                                             anchors.verticalCenter: parent.verticalCenter
-                                            opacity: 0.7
+                                            color: palette.text
                                         }
                                     }
 
@@ -518,7 +524,7 @@ Rectangle {
                             Text {
                                 text: qsTr("Full name")
                                 font.bold: true
-                                opacity: 0.7
+                                color: palette.text
                             }
 
                             TextField {
@@ -532,7 +538,7 @@ Rectangle {
                             Text {
                                 text: qsTr("User name")
                                 font.bold: true
-                                opacity: 0.7
+                                color: palette.text
                             }
 
                             TextField {
@@ -547,7 +553,7 @@ Rectangle {
                             Text {
                                 text: qsTr("Password")
                                 font.bold: true
-                                opacity: 0.7
+                                color: palette.text
                             }
 
                             TextField {
@@ -562,7 +568,7 @@ Rectangle {
                             Text {
                                 text: qsTr("Confirm password")
                                 font.bold: true
-                                opacity: 0.7
+                                color: palette.text
                             }
 
                             TextField {
@@ -577,8 +583,19 @@ Rectangle {
                             Text {
                                 text: qsTr("Login shell")
                                 font.bold: true
-                                opacity: 0.7
+                                color: palette.text
                             }
+
+                            /**
+                            ChoiceList {
+                                id: loginShellAddForm
+                                objectName: "loginShellAddForm"
+                                width: 200
+                                focus: false
+                                model: shellModel
+                                KeyNavigation.tab: createHomeDirectoryAddForm
+                            }
+                            **/
 
                             TextField {
                                 id: loginShellAddForm
@@ -604,7 +621,7 @@ Rectangle {
                             Text {
                                 text: qsTr("Home directory")
                                 font.bold: true
-                                opacity: 0.7
+                                color: palette.text
                             }
 
                             TextField {
@@ -645,7 +662,7 @@ Rectangle {
                             Text {
                                 text: qsTr("User ID")
                                 font.bold: true
-                                opacity: 0.7
+                                color: palette.text
                             }
 
                             TextField {
@@ -717,38 +734,41 @@ Rectangle {
                 Item {
                     height: 40
                     width: groupTab.width
-                    //color: ((index % 2 == 0) ? "#808080": "#999999")
 
                     Row {
-                        spacing: 10
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.left: parent.left
-                        anchors.leftMargin: 10
+                        spacing: 0
+                        children: [
 
+                            Item {
+                                width: 50
+                                height: 40
 
-                        Text {
-                            text: model.group.gid
-                            width: 40
-                            elide: Text.ElideRight
-                            opacity: 0.7
-                        }
+                                Text {
+                                    text: model.group.gid
+                                    elide: Text.ElideRight
+                                    color: palette.text
+                                    anchors.centerIn: parent
+                                }
+                            },
 
-                        Text {
-                            objectName: "delegateGroupName"
-                            text: model.group.groupName
-                            width: 150
-                            elide: Text.ElideRight
-                            font.bold: true
-                            opacity: 0.7
-                        }
+                            Text {
+                                objectName: "delegateGroupName"
+                                text: model.group.groupName
+                                width: 150
+                                elide: Text.ElideRight
+                                font.bold: true
+                                color: palette.text
+                                anchors.verticalCenter: parent.verticalCenter
+                            },
 
-
-                        Text {
-                            text: model.group.strMembers
-                            width: 420
-                            elide: Text.ElideRight
-                            opacity: 0.7
-                        }
+                            Text {
+                                text: model.group.strMembers
+                                width: 440
+                                elide: Text.ElideRight
+                                color: palette.text
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+                        ]
                     }
 
                     MouseArea {
@@ -778,6 +798,40 @@ Rectangle {
                 }
             }
 
+            Component {
+                id: headerDelegate
+
+                Row {
+                    spacing: 0
+                    children: [
+
+                        QStyleItem {
+                            elementType: "header"
+                            raised: true
+                            width: 50
+                            height: 30
+                            text: qsTr("ID")
+                        },
+
+                        QStyleItem {
+                            elementType: "header"
+                            raised: true
+                            width: 150 //(content.width - 50) / 2
+                            height: 30
+                            text: qsTr("Group name")
+                        },
+
+                        QStyleItem {
+                            elementType: "header"
+                            raised: true
+                            width: 440 //(content.width - 50) / 2
+                            height: 30
+                            text: qsTr("Members")
+                        }
+                    ]
+                }
+            }
+
             ListView {
                 id: groupListView
                 anchors.fill: parent
@@ -785,6 +839,7 @@ Rectangle {
                 delegate: groupDelegate
                 highlight: highlightServices
                 highlightFollowsCurrentItem: false
+                header: headerDelegate
             }
 
             Rectangle {
@@ -824,7 +879,7 @@ Rectangle {
                                 Text {
                                     text: qsTr("Group name")
                                     font.bold: true
-                                    opacity: 0.7
+                                    color: palette.text
                                 }
 
                                 TextField {
@@ -838,7 +893,7 @@ Rectangle {
                             Text {
                                 text: qsTr("Select the user to join this group")
                                 font.bold: true
-                                opacity: 0.7
+                                color: palette.text
                             }
 
                             Component {
@@ -867,7 +922,7 @@ Rectangle {
                                         Text {
                                             text: model.user.userName
                                             anchors.verticalCenter: parent.verticalCenter
-                                            opacity: 0.7
+                                            color: palette.text
                                         }
                                     }
 
@@ -963,7 +1018,7 @@ Rectangle {
                             Text {
                                 text: qsTr("Group name")
                                 font.bold: true
-                                opacity: 0.7
+                                color: palette.text
                             }
 
                             TextField {
@@ -991,7 +1046,7 @@ Rectangle {
                             Text {
                                 text: qsTr("Group Id")
                                 font.bold: true
-                                opacity: 0.7
+                                color: palette.text
                             }
 
                             TextField {
