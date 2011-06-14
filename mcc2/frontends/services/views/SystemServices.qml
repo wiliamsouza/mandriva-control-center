@@ -15,8 +15,6 @@ Rectangle {
     height: 480
     color: palette.window
 
-
-
     Rectangle {
         id: header
         width: window.width
@@ -46,17 +44,17 @@ Rectangle {
 
             Button {
                 text: qsTr("Inactive")
-                    onClicked: {
-                        controller.search(serviceModel, "^inactive$")
-                        servicesListView.currentIndex = 0
+                onClicked: {
+                    controller.search(serviceModel, "^inactive$")
+                    servicesListView.currentIndex = 0
                 }
             }
 
             Button {
                 text: qsTr("Failed")
-                    onClicked: {
-                        controller.search(serviceModel, "^failed$")
-                        servicesListView.currentIndex = 0
+                onClicked: {
+                    controller.search(serviceModel, "^failed$")
+                    servicesListView.currentIndex = 0
                 }
             }
         }
@@ -83,41 +81,44 @@ Rectangle {
 
             Item {
                 id: serviceRect
-                width: content.width
+                width: content.width - vscrollbar.width
                 height: 40
 
                 Row {
                     id: serviceItem
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.left: parent.left
-                    anchors.leftMargin: 12
-                    spacing: 12
+                    spacing: 0
                     children: [
 
-                    Image {
-                        id: icon
-                        width: 16
-                        height: 16
-                        source: "images/" + model.service.activeState + ".png"
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.leftMargin: 4
+                        Item {
+                            id: icon
+                            width: 50
+                            height: serviceRect.height
+
+                            Image {
+                                width: 16
+                                height: 16
+                                source: "images/" + model.service.activeState + ".png"
+                                anchors.centerIn: parent
+                            }
                         },
 
                         Text {
                             id: title
-                            width: (content.width - icon.height) / 2
+                            width: ((content.width - icon.width) - vscrollbar.width) / 2
                             elide: Text.ElideRight
                             text: model.service.name
                             color: palette.text
                             font.bold: true
+                            anchors.verticalCenter: parent.verticalCenter
                         },
 
                         Text {
                             id: subtitle
-                            width: (content.width - icon.height) / 2
+                            width: ((content.width - icon.width) - vscrollbar.width) / 2
                             elide: Text.ElideRight
                             text: model.service.description
                             color: palette.text
+                            anchors.verticalCenter: parent.verticalCenter
                         }
                     ]
                 }
@@ -177,11 +178,48 @@ Rectangle {
             id: highlightServices
 
             Rectangle {
-                width: content.width
+                width: content.width - vscrollbar.width
                 height: 40
                 color: palette.highlight
                 y: servicesListView.currentItem.y;
                 Behavior on y { SpringAnimation { spring: 2; damping: 0.4 } }
+            }
+        }
+
+        Component {
+            id: headerDelegate
+
+            Row {
+                id: headerRow
+                spacing: 0
+                property int headerHeight: 30
+                property int headerMinWidth: 50
+                children: [
+
+                    QStyleItem {
+                        elementType: "header"
+                        raised: true
+                        width: headerMinWidth
+                        height: headerHeight
+                        text: qsTr("Status")
+                    },
+
+                    QStyleItem {
+                        elementType: "header"
+                        raised: true
+                        width: ((content.width - headerMinWidth) - vscrollbar.width) / 2
+                        height: headerHeight
+                        text: qsTr("Service")
+                    },
+
+                    QStyleItem {
+                        elementType: "header"
+                        raised: true
+                        width: ((content.width - headerMinWidth) - vscrollbar.width)/ 2
+                        height: headerHeight
+                        text: qsTr("Description")
+                    }
+                ]
             }
         }
 
@@ -190,8 +228,27 @@ Rectangle {
             anchors.fill: parent
             model: serviceModel
             delegate: serviceDelegate
+            header: headerDelegate
             highlight: highlightServices
             highlightFollowsCurrentItem: false
-       }
+            focus: true
+            onContentYChanged:  {
+                vscrollbar.value = servicesListView.contentY
+            }
+        }
+
+        ScrollBar {
+            id: vscrollbar
+            property int availableHeight : content.height - 30
+            orientation: Qt.Vertical
+            maximumValue: servicesListView.contentHeight > availableHeight ? servicesListView.contentHeight - availableHeight : 0
+            minimumValue: 0
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            onValueChanged: {
+                servicesListView.contentY = value
+            }
+        }
     }
 }
