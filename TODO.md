@@ -36,11 +36,12 @@ Frontend
 --------
 
  * Add support to change users avatar.
- * Add scrollbar.
- * Change size of users and groups forms.
+ * [DONE] Add scrollbar.
+ * [DONE] Change size of users and groups forms.
  * [DONE] Add i18n to Users and Services.
  * [DONE] Solve qt-components-desktop ChoiceList bug.
  * [InProgress]Change the UI to rosa mockups.
+ * Make system groups and users updated when a new group or user was added.
 
 RPM
 ---
