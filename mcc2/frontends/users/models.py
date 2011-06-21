@@ -531,7 +531,7 @@ class ShellModel(QtCore.QAbstractListModel):
     def populate(self):
         for shell in interface.ListUserShells():
             self.__shells.append(Shell(shell, self))
-	print self.__shells
+
 
 class Shell(QtCore.QObject):
 
