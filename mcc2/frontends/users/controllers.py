@@ -42,7 +42,7 @@ class Controller(QtCore.QObject):
         for user in systemUserModel.checked():
             members.append(user.userName)
         groupModel.modify(str(groupName.property('text').toString()), members, currentIndex)
- 
+
     #@QtCore.Slot(QtCore.QObject, QtCore.QObject, int)
     @QtCore.pyqtSlot(QtCore.QObject, QtCore.QObject, int)
     def deleteGroup(self, groupModel, currentItem, currentIndex):
@@ -125,9 +125,10 @@ class Controller(QtCore.QObject):
         userId.setProperty('text', '')
 
     #@QtCore.Slot(QtCore.QObject, QtCore.QObject, int)
-    @QtCore.pyqtSlot(QtCore.QObject, QtCore.QObject, int)
-    def modifyUser(self, userModel, editUserForm, currentIndex):
+    @QtCore.pyqtSlot(QtCore.QObject, QtCore.QObject, QtCore.QObject, int)
+    def modifyUser(self, userModel, systemGroupModel, editUserForm, currentIndex):
         modifyUserDetails = {}
+        userPhoto = editUserForm.findChild(QDeclarativeItem, 'userPhoto')
         fullName = editUserForm.findChild(QDeclarativeItem, 'fullName')
         userName = editUserForm.findChild(QDeclarativeItem, 'userName')
         password = editUserForm.findChild(QDeclarativeItem, 'password')
@@ -142,20 +143,23 @@ class Controller(QtCore.QObject):
         shadowWarning = editUserForm.findChild(QDeclarativeItem, 'shadowWarning')
         shadowInactive = editUserForm.findChild(QDeclarativeItem, 'shadowInactive')
 
-        modifyUserDetails['fullName'] = fullName.property('text')
+        modifyUserDetails['fullName'] = str(fullName.property('text').toString())
 
-        if userName.property('text') != '':
-            modifyUserDetails['userName'] = userName.property('text')
+        if userName.property('text').toString() != '':
+            modifyUserDetails['userName'] = str(userName.property('text').toString())
         else:
             #TODO Show up an error message to warn the user
             # test if minimum user name length was entered
             pass
 
-        if password.property('text') == confirmPassword.property('text'):
-            modifyUserDetails['password'] = password.property('text')
+        modifyUserDetails['userPhoto'] = str(userPhoto.property('source').toUrl().toLocalFile())
+        print userPhoto.property('source').toUrl().toLocalFile()
+
+        if password.property('text').toString() == confirmPassword.property('text').toString():
+            modifyUserDetails['password'] = str(password.property('text').toString())
             """
             if password.property('text') != '':
-                
+
             else:
                 #TODO Show up an error message to warn the user
                 # test if minimum user name length was entered
@@ -166,37 +170,41 @@ class Controller(QtCore.QObject):
             # test if minimum user name length was entered
             pass
 
-        if loginShell.property('text') != '':
-            modifyUserDetails['loginShell'] = loginShell.property('text')
+        if loginShell.property('text').toString() != '':
+            modifyUserDetails['loginShell'] = str(loginShell.property('text').toString())
         else:
             #TODO Show up an error message to warn the user
             pass
 
-        modifyUserDetails['homeDirectory'] = homeDirectory.property('text')
+        modifyUserDetails['homeDirectory'] = str(homeDirectory.property('text').toString())
 
         #TODO: Implement the possibility to chose the primary group membership
 
-        if shadowExpire.property('checked'):
-            modifyUserDetails['expirationDate'] = expirationDate.property('text')
+        if shadowExpire.property('checked').toBool():
+            modifyUserDetails['expirationDate'] = str(expirationDate.property('text').toString())
 
-        if blockAccount.property('checked'):
+        if blockAccount.property('checked').toBool():
             userModel.lock(currentIndex)
         else:
             userModel.unLock(currentIndex)
-        
-        modifyUserDetails['shadowMin'] = shadowMin.property('text')
-        modifyUserDetails['shadowMax'] = shadowMax.property('text')
-        modifyUserDetails['shadowWarning'] = shadowWarning.property('text') 
-        modifyUserDetails['shadowInactive'] = shadowInactive.property('text')
 
-        userModel.modify(modifyUserDetails, currentIndex)
+        modifyUserDetails['shadowMin'] = str(shadowMin.property('text').toString())
+        modifyUserDetails['shadowMax'] = str(shadowMax.property('text').toString())
+        modifyUserDetails['shadowWarning'] = str(shadowWarning.property('text').toString())
+        modifyUserDetails['shadowInactive'] = str(shadowInactive.property('text').toString())
+
+	groups = []
+	for group in systemGroupModel.checked():
+              groups.append(group.groupName)
+
+        userModel.modify(modifyUserDetails, groups, currentIndex)
 
     #@QtCore.Slot(QtCore.QObject, QtCore.QObject, int)
     @QtCore.pyqtSlot(QtCore.QObject, QtCore.QObject, int)
     def deleteUser(self, userModel, currentItem, currentIndex):
         userName = currentItem.findChild(QDeclarativeItem, 'delegateUserName')
         userModel.delete(str(userName.property('text').toString()), currentIndex)
-        
+
     #@QtCore.Slot(QtCore.QObject, QtCore.QObject)
     @QtCore.pyqtSlot(QtCore.QObject, QtCore.QObject)
     def toggledGroup(self, systemGroupModel, group):

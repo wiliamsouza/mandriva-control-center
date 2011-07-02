@@ -41,19 +41,21 @@ class UserModel(QtCore.QAbstractListModel):
         self.__users.append(user)
         self.endInsertRows()
 
-    def modify(self, modifyUserDetails, row):
+    def modify(self, modifyUserDetails, groups, row):
         user = self.__users[row]
         user.fullName = modifyUserDetails['fullName']
         user.userName = modifyUserDetails['userName']
+	user.userPhoto = modifyUserDetails['userPhoto']
         user.password = modifyUserDetails['password']
         user.loginShell = modifyUserDetails['loginShell']
         user.homeDirectory = modifyUserDetails['homeDirectory']
-        user.expirationDate = modifyUserDetails['expirationDate']
+	if modifyUserDetails.has_key('expirationDate'):
+            user.expirationDate = modifyUserDetails['expirationDate']
         user.shadowMin = modifyUserDetails['shadowMin']
         user.shadowMax = modifyUserDetails['shadowMax']
         user.shadowWarning = modifyUserDetails['shadowWarning'] 
         user.shadowInactive = modifyUserDetails['shadowInactive']
-        user.save()
+        user.save(groups)
 
     def lock(self, row):
         user = self.__users[row]
@@ -107,6 +109,15 @@ class User(QtCore.QObject):
     def __setFullName(self, fullName):
         self.__modifyUserDetails['fullName'] = fullName
 
+    def __getUserPhoto(self):
+        return self.__userDetails['userPhoto']
+
+    def __setUserPhoto(self, photo):
+        print '__setUserPhoto'
+        self.__modifyUserDetails['userPhoto'] = photo
+	self.changed.emit()
+
+
     def __getHomeDirectory(self):
         return self.__userDetails['homeDirectory']
 
@@ -133,7 +144,7 @@ class User(QtCore.QObject):
         year = None
         month = None
         day = None
-        (year, month, day) = date.split('-')
+        (year, month, day) = expirationDate.split('-')
         try:
             tmp = time.mktime([int(year), int(month), int(day), 0, 0, 0, 0, 0, -1])
         except OverflowError:
@@ -201,8 +212,9 @@ class User(QtCore.QObject):
         self.__isLocked = False
         self.changed.emit()
 
-    def save(self):
+    def save(self, groups):
         self.__modifyUserDetails['oldUserName'] = self.__user
+	self.__modifyUserDetails['groups'] = groups
         interface.ModifyUser(self.__modifyUserDetails)
         try:
             self.__user = self.__modifyUserDetails['newUserName']
@@ -222,7 +234,7 @@ class User(QtCore.QObject):
 
     #changed = QtCore.Signal()
     changed = QtCore.pyqtSignal()
-    
+
     """
     uid = QtCore.Property(unicode, __uid, notify=changed)
     gid = QtCore.Property(unicode, __gid, notify=changed)
@@ -245,6 +257,7 @@ class User(QtCore.QObject):
     gid = QtCore.pyqtProperty(unicode, __gid, notify=changed)
     userName = QtCore.pyqtProperty(unicode, __getUserName, __setUserName, notify=changed)
     fullName = QtCore.pyqtProperty(unicode, __getFullName, __setFullName, notify=changed)
+    userPhoto = QtCore.pyqtProperty(unicode, __getUserPhoto, __setUserPhoto, notify=changed)
     homeDirectory = QtCore.pyqtProperty(unicode, __getHomeDirectory, __setHomeDirectory, notify=changed)
     loginShell = QtCore.pyqtProperty(unicode, __getLoginShell, __setLoginShell, notify=changed)
     shadowExpire = QtCore.pyqtProperty(bool, __getShadowExpire, __setShadowExpire, notify=changed)
@@ -407,7 +420,7 @@ class Group(QtCore.QObject):
         try:
             self.__group = self.__modifyGroupDetails['newGroupName']
         except KeyError:
-            self.__group = self.__modifyGroupDetails['oldGroupName'] 
+            self.__group = self.__modifyGroupDetails['oldGroupName']
         self.update()
 
     def update(self):
@@ -538,7 +551,7 @@ class Shell(QtCore.QObject):
     def __init__(self, shell, parent):
         QtCore.QObject.__init__(self, parent=parent)
 
-        self.__shell = shell 
+        self.__shell = shell
 
     def __getShellName(self):
         return self.__group

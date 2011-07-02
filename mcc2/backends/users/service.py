@@ -1,3 +1,5 @@
+import os
+import shutil
 import ConfigParser
 import gobject
 import dbus
@@ -631,7 +633,26 @@ class Users(dbus.service.Object):
         if user_info.has_key('password'):
             self.__libuser.setpassUser(user_entity, user_info['password'], 0)
 
-        return self.__libuser.modifyUser(user_entity)
+        result = self.__libuser.modifyUser(user_entity)
+
+	for group in self.__libuser.enumerateGroups():
+            members = self.__libuser.enumerateUsersByGroup(group)
+            groupEntity = self.__libuser.lookupGroupByName(group)
+            username = user_entity.get(libuser.USERNAME)[0]
+	    if group in user_info['groups']:
+                if username not in members:
+                    members.append(username)
+		    groupEntity.set(libuser.MEMBERNAME, members)
+                    self.__libuser.modifyGroup(groupEntity)
+            else:
+                if username in members:
+                    members.remove(username)
+                    groupEntity.set(libuser.MEMBERNAME, members)
+                    self.__libuser.modifyGroup(groupEntity)
+        print user_info['userPhoto']
+        shutil.copy2(user_info['userPhoto'], '/usr/share/faces/%s.png' % user_entity.get(libuser.USERNAME)[0])
+
+        return result
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Users",
@@ -647,7 +668,7 @@ class Users(dbus.service.Object):
         if not groups:
             groups = ['']
 
-        return dbus.Dictionary(
+        result = dbus.Dictionary(
             {
             'uid': userEntity.get(libuser.UIDNUMBER)[0],
             'gid': userEntity.get(libuser.GIDNUMBER)[0],
@@ -663,6 +684,14 @@ class Users(dbus.service.Object):
             'shadowInactive': userEntity.get(libuser.SHADOWINACTIVE)[0],
             'shadowLastChange': userEntity.get(libuser.SHADOWLASTCHANGE)[0],
             }, signature=dbus.Signature('sv'))
+
+        photo = '/usr/share/faces/%s.png' % userName
+	if os.path.exists(photo):
+            result['userPhoto'] = photo
+        else:
+            result['userPhoto'] = '/usr/share/faces/default.png'
+
+        return result
 
 
     @dbus.service.method("org.mandrivalinux.mcc2.Users",

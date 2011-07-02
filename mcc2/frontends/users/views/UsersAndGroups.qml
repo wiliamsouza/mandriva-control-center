@@ -33,7 +33,7 @@ Rectangle {
 
                 Button {
                     text: qsTr("Users")
-                    height: 25
+                    height: 27
                     onClicked: {
                         editGroupForm.visible = false
                         addGroupForm.visible = false
@@ -45,7 +45,7 @@ Rectangle {
 
                 Button {
                     text: qsTr("Groups")
-                    height: 25
+                    height: 27
                     onClicked: {
                         editGroupForm.visible = false
                         addGroupForm.visible = false
@@ -61,7 +61,7 @@ Rectangle {
 
                 Button {
                     text: qsTr("Add user")
-                    height: 25
+                    height: 27
                     onClicked: {
                         tab.currentIndex = 0
                         editGroupForm.visible = false
@@ -73,7 +73,7 @@ Rectangle {
 
                 Button {
                     text: qsTr("Add group")
-                    height: 25
+                    height: 27
                     onClicked: {
                         tab.currentIndex = 1
                         editFormUser.visible = false
@@ -109,11 +109,11 @@ Rectangle {
 
                         Image {
                             id: photo
-                            source: status == Image.Error ? "/usr/share/faces/default.png" : "/usr/share/faces/" + model.user.userName + ".png"
+                            source: model.user.userPhoto
                             anchors.horizontalCenter: parent.horizontalCenter
                             sourceSize.width: 96
                             sourceSize.height: 96
-                        }
+                         }
 
                         Text {
                             objectName: "delegateUserName"
@@ -133,6 +133,7 @@ Rectangle {
 
                             fullName.text = model.user.fullName
                             userName.text = model.user.userName
+                            userPhoto.source = model.user.userPhoto
                             loginShell.text = model.user.loginShell
                             homeDirectory.text = model.user.homeDirectory
                             shadowExpire.checked = model.user.shadowExpire
@@ -163,6 +164,7 @@ Rectangle {
                 anchors.fill: parent
                 model: userModel
                 delegate: userDelegate
+
             }
 
             /** User add form ********************************************/
@@ -344,7 +346,7 @@ Rectangle {
 
                         Button {
                             text: qsTr("Save")
-                            height: 25
+                            height: 27
                             onClicked: {
                                 addFormUser.visible = false
                                 // We pass groupModel here to be used to add a private group
@@ -354,7 +356,7 @@ Rectangle {
 
                         Button {
                             text: qsTr("Close")
-                            height: 25
+                            height: 27
                             onClicked: addFormUser.visible = false
                         }
                     }
@@ -398,6 +400,25 @@ Rectangle {
                             Column {
                                 id: editUserFromColumn2
                                 spacing: 12
+
+                                Image {
+                                    id: userPhoto
+                                    objectName: "userPhoto"
+                                    property int numphoto: 1
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    sourceSize.width: 96
+                                    sourceSize.height: 96
+
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: {
+                                            userPhoto.source = "/usr/share/mdk/faces/user-" + userPhoto.numphoto  + ".png"
+                                            if (userPhoto.numphoto == 10)
+                                                userPhoto.numphoto = 0
+                                            userPhoto.numphoto = userPhoto.numphoto + 1
+                                        }
+                                    }
+                                }
 
                                 Grid {
                                     columns: 2
@@ -694,7 +715,7 @@ Rectangle {
                                     height: 25
                                     onClicked: {
                                         editFormUser.visible = false
-                                        controller.modifyUser(userModel, editFormUser, userGridView.currentIndex)
+                                        controller.modifyUser(userModel,  systemGroupModel, editFormUser, userGridView.currentIndex)
                                     }
                                 }
 
@@ -1091,5 +1112,6 @@ Rectangle {
         highlightRangeMode: ListView.StrictlyEnforceRange
         orientation: ListView.Horizontal
         snapMode: ListView.SnapOneItem
+        interactive: false
     }
 }
