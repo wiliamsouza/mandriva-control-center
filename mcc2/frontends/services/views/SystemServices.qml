@@ -28,6 +28,7 @@ Rectangle {
 
             Button {
                 text: qsTr("All")
+                height: 27
                 onClicked: {
                     controller.search(serviceModel, "")
                     servicesListView.currentIndex = 0
@@ -36,6 +37,7 @@ Rectangle {
 
             Button {
                 text: qsTr("Active")
+                height: 27
                 onClicked: {
                     controller.search(serviceModel, "^active$")
                     servicesListView.currentIndex = 0
@@ -44,6 +46,7 @@ Rectangle {
 
             Button {
                 text: qsTr("Inactive")
+                height: 27
                 onClicked: {
                     controller.search(serviceModel, "^inactive$")
                     servicesListView.currentIndex = 0
@@ -52,6 +55,7 @@ Rectangle {
 
             Button {
                 text: qsTr("Failed")
+                height: 27
                 onClicked: {
                     controller.search(serviceModel, "^failed$")
                     servicesListView.currentIndex = 0
@@ -61,6 +65,7 @@ Rectangle {
 
         TextField {
             id: searchField
+            height: 27
             anchors.right: parent.right
             anchors.rightMargin: 6
             anchors.verticalCenter: parent.verticalCenter
