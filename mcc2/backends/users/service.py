@@ -649,8 +649,8 @@ class Users(dbus.service.Object):
                     members.remove(username)
                     groupEntity.set(libuser.MEMBERNAME, members)
                     self.__libuser.modifyGroup(groupEntity)
-        print user_info['userPhoto']
-        shutil.copy2(user_info['userPhoto'], '/usr/share/faces/%s.png' % user_entity.get(libuser.USERNAME)[0])
+
+	shutil.copy2(user_info['userPhoto'], '/usr/share/faces/%s.png' % user_entity.get(libuser.USERNAME)[0])
 
         return result
 
@@ -684,12 +684,6 @@ class Users(dbus.service.Object):
             'shadowInactive': userEntity.get(libuser.SHADOWINACTIVE)[0],
             'shadowLastChange': userEntity.get(libuser.SHADOWLASTCHANGE)[0],
             }, signature=dbus.Signature('sv'))
-
-        photo = '/usr/share/faces/%s.png' % userName
-	if os.path.exists(photo):
-            result['userPhoto'] = photo
-        else:
-            result['userPhoto'] = '/usr/share/faces/default.png'
 
         return result
 

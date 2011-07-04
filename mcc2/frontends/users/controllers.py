@@ -153,7 +153,6 @@ class Controller(QtCore.QObject):
             pass
 
         modifyUserDetails['userPhoto'] = str(userPhoto.property('source').toUrl().toLocalFile())
-        print userPhoto.property('source').toUrl().toLocalFile()
 
         if password.property('text').toString() == confirmPassword.property('text').toString():
             modifyUserDetails['password'] = str(password.property('text').toString())

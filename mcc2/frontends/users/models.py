@@ -1,3 +1,4 @@
+import os
 import time
 import math
 
@@ -87,6 +88,7 @@ class User(QtCore.QObject):
         self.__isLocked = False
         self.__expirationDate = ''
         self.__shadowExpire = False
+	self.__userPhoto = ''
         self.update()
 
     def __uid(self):
@@ -110,13 +112,19 @@ class User(QtCore.QObject):
         self.__modifyUserDetails['fullName'] = fullName
 
     def __getUserPhoto(self):
-        return self.__userDetails['userPhoto']
+        if self.__userPhoto  == "":
+	    photo = '/usr/share/faces/%s.png' % self.__userDetails['userName']
+	    if os.path.exists(photo):
+	        return photo
+	    else:
+	        return '/usr/share/faces/default.png'
+        else:
+	    return self.__userPhoto
 
     def __setUserPhoto(self, photo):
-        print '__setUserPhoto'
+        self.__userPhoto = photo
         self.__modifyUserDetails['userPhoto'] = photo
 	self.changed.emit()
-
 
     def __getHomeDirectory(self):
         return self.__userDetails['homeDirectory']
