@@ -1,11 +1,9 @@
 import dbus
 import dbus.mainloop.glib
-#import dbus.mainloop.qt
 
 from PyQt4 import QtCore
 
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-#dbus.mainloop.qt.DBusQtMainLoop(set_as_default=True)
 
 bus = dbus.SystemBus()
 proxy = bus.get_object('org.mandrivalinux.mcc2.Services',
@@ -25,13 +23,7 @@ class Service(QtCore.QObject):
 
         self.__servicePath = servicePath
         self.__serviceDetails = serviceDetails
-
-        self.proxy = bus.get_object('org.freedesktop.systemd1',
-                                    self.__servicePath)
-        self.interface = dbus.Interface(self.proxy,
-                                        'org.freedesktop.DBus.Properties')
-        self.interface.connect_to_signal('PropertiesChanged',
-                                         self.on_properties_changed)
+	self.path = servicePath
 
     def __getName(self):
         return self.__serviceDetails['Id']
@@ -75,9 +67,6 @@ class Service(QtCore.QObject):
             if error.get_dbus_name() == "org.mandrivalinux.mcc2.Services.Error.NotAuthorized":
                 print 'Not Authorized'
 
-    def on_properties_changed(self, *args, **kargs):
-        self.update()
-
     def update(self):
         self.__serviceDetails = interface.ServiceDetails(self.__servicePath)
         self.changed.emit()
@@ -99,6 +88,19 @@ class ServiceModel(QtCore.QAbstractListModel):
         self.parent = parent
         self.__services = []
         self.setRoleNames(dict(enumerate(ServiceModel.COLUMNS)))
+
+        bus.add_signal_receiver(
+                    self.on_properties_changed,
+                    path_keyword='unit_path',
+                    signal_name='PropertiesChanged',
+                    dbus_interface='org.freedesktop.DBus.Properties',
+                    bus_name='org.freedesktop.systemd1')
+
+
+    def on_properties_changed(self, *args, **kargs):
+        for service in self.__services:
+            if service.path == kargs['unit_path']:
+                service.update()
 
     def rowCount(self, parent=QtCore.QModelIndex()):
         return len(self.__services)
